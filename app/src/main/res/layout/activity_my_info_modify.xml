@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.InfoActivity.MyInfoModifyActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:text="@string/my_info_mod"
+                        android:textColor="@color/title_color"
+                        android:textSize="24sp" />
+
+                    <ImageView
+                        android:id="@+id/my_info_mod_prev_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        app:srcCompat="@drawable/prev_black_btn" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.25">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="0.4">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="200dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_weight="1">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginBottom="20dp"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="horizontal">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/textView19"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_vertical"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/my_id"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="16sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.5">
+
+                                                <TextView
+                                                    android:id="@+id/my_info_mod_id"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_vertical"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:textSize="16sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="horizontal">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/textView20"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_vertical"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/my_name"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="16sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.5">
+
+                                                <TextView
+                                                    android:id="@+id/my_info_mod_name"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_vertical"
+                                                    android:ellipsize="end"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:textSize="16sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+                                    </FrameLayout>
+
+                                </LinearLayout>
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.6">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginBottom="10dp"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/input_text">
+
+                                        <EditText
+                                            android:id="@+id/myinfo_mod_pwd"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_gravity="center_vertical"
+                                            android:background="@drawable/input_text"
+                                            android:fontFamily="@font/pretendard_regular"
+                                            android:gravity="center_vertical"
+                                            android:hint="@string/user_pwd"
+                                            android:paddingLeft="20dp"
+                                            android:paddingRight="20dp"
+                                            android:textColor="@color/text_color"
+                                            android:textSize="16sp" />
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginBottom="10dp"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/input_text">
+
+                                        <EditText
+                                            android:id="@+id/myinfo_mod_confirm_pwd"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_gravity="center_vertical"
+                                            android:background="@drawable/input_text"
+                                            android:fontFamily="@font/pretendard_regular"
+                                            android:gravity="center_vertical"
+                                            android:hint="@string/confirm_pwd"
+                                            android:paddingLeft="20dp"
+                                            android:paddingRight="20dp"
+                                            android:textColor="@color/text_color"
+                                            android:textSize="16sp" />
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginBottom="10dp"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/input_text">
+
+                                        <Spinner
+                                            android:id="@+id/myinfo_mod_company_spinner"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_gravity="center_horizontal|center_vertical"
+                                            android:background="@drawable/dropdown_border"
+                                            android:spinnerMode="dropdown"
+                                            android:theme="@style/SpinnerTheme"
+                                            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+                                    </FrameLayout>
+                                </LinearLayout>
+                            </FrameLayout>
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/my_info_mod_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/button2" />
+
+                    <TextView
+                        android:id="@+id/textView22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:text="@string/modify_text"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3">
+
+                </FrameLayout>
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,1217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_color"
+    tools:context=".ui.MainListActivity.DashboardActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/top2_bg">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:text="@string/vehicle_gauge"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/dash_prev_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    app:srcCompat="@drawable/prev_white_btn" />
+            </FrameLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/gauge_frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.22">
+
+            <RelativeLayout
+                android:id="@+id/dash_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <!-- 속도 -->
+                <FrameLayout
+                    android:id="@+id/gauge_speed_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <ImageView
+                                    android:id="@+id/speed_close_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    app:srcCompat="@drawable/close_state" />
+
+                                <TextView
+                                    android:id="@+id/textView33"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:text="@string/gauge_menu1"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="140dp">
+
+                                <ImageView
+                                    android:id="@+id/gauge_speed_img"
+                                    android:layout_width="120dp"
+                                    android:layout_height="120dp"
+                                    android:layout_gravity="center_horizontal"
+                                    app:srcCompat="@drawable/gauge" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="60dp">
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:background="@color/white">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8">
+
+                                                <TextView
+                                                    android:id="@+id/textView31"
+                                                    android:layout_width="103dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="right"
+                                                    android:textColor="@color/disable_color"
+                                                    android:textSize="48sp" />
+
+                                                <TextView
+                                                    android:id="@+id/gauge_speed_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="center"
+                                                    android:textColor="@color/title_color"
+                                                    android:textSize="48sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/textView34"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/unit_1"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="14sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+                <!-- 엔진 부하 -->
+                <FrameLayout
+                    android:id="@+id/gauge_engine_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <ImageView
+                                    android:id="@+id/engine_close_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    app:srcCompat="@drawable/close_state" />
+
+                                <TextView
+                                    android:id="@+id/text_engine"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:text="@string/gauge_menu2"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="140dp">
+
+                                <ImageView
+                                    android:id="@+id/gauge_engine_img"
+                                    android:layout_width="120dp"
+                                    android:layout_height="120dp"
+                                    android:layout_gravity="center_horizontal"
+                                    app:srcCompat="@drawable/gauge" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="60dp">
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:background="@color/white">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8">
+
+                                                <TextView
+                                                    android:id="@+id/engine_bg_text"
+                                                    android:layout_width="93dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:textColor="@color/disable_color"
+                                                    android:textSize="48sp" />
+
+                                                <TextView
+                                                    android:id="@+id/gauge_engine_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="center"
+                                                    android:textColor="@color/title_color"
+                                                    android:textSize="48sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/unit_engine"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/unit_2"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="14sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+                <!-- RPM -->
+                <FrameLayout
+                    android:id="@+id/gauge_rpm_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <ImageView
+                                    android:id="@+id/rpm_close_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    app:srcCompat="@drawable/close_state" />
+
+                                <TextView
+                                    android:id="@+id/text_rpm"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:text="@string/gauge_menu3"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="140dp">
+
+                                <ImageView
+                                    android:id="@+id/gauge_rpm_img"
+                                    android:layout_width="120dp"
+                                    android:layout_height="120dp"
+                                    android:layout_gravity="center_horizontal"
+                                    app:srcCompat="@drawable/gauge" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="60dp">
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:background="@color/white">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="0.8">
+
+                                                <TextView
+                                                    android:id="@+id/rpm_bg_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="right"
+                                                    android:textColor="@color/disable_color"
+                                                    android:textSize="48sp" />
+
+                                                <TextView
+                                                    android:id="@+id/gauge_rpm_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="center"
+                                                    android:textColor="@color/title_color"
+                                                    android:textSize="48sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/unit_rpm"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/unit_3"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="14sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+                <!-- 주행 거리 -->
+                <FrameLayout
+                    android:id="@+id/gauge_mileage_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <ImageView
+                                    android:id="@+id/mileage_close_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    app:srcCompat="@drawable/close_state" />
+
+                                <TextView
+                                    android:id="@+id/text_mileage"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:text="@string/gauge_menu4"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="140dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="40dp"
+                                        android:paddingLeft="10dp"
+                                        android:paddingRight="10dp">
+
+                                        <TextView
+                                            android:id="@+id/mileage_date"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="30dp"
+                                            android:background="@drawable/gray_bg"
+                                            android:fontFamily="@font/pretendard_regular"
+                                            android:gravity="center_horizontal|center_vertical"
+                                            android:text="2023.11.22(수)"
+                                            android:textColor="@color/title_color"
+                                            android:textSize="14sp" />
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:background="@color/white">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/mileage_bg_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="right"
+                                                    android:textColor="@color/disable_color"
+                                                    android:textSize="48sp" />
+
+                                                <TextView
+                                                    android:id="@+id/gauge_mileage_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="center"
+                                                    android:textColor="@color/title_color"
+                                                    android:textSize="48sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/unit_mileage"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/unit_4"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="14sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+                <!-- 순간 연료 소모량 -->
+                <FrameLayout
+                    android:id="@+id/gauge_real_fuel_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <ImageView
+                                    android:id="@+id/real_fuel_close_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    app:srcCompat="@drawable/close_state" />
+
+                                <TextView
+                                    android:id="@+id/text_real_fuel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:text="@string/gauge_menu5"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="140dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1">
+
+                                        <ImageView
+                                            android:id="@+id/imageView10"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_horizontal|center_vertical"
+                                            app:srcCompat="@drawable/gauge_5" />
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.7"
+                                        android:background="@color/white">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/real_fuel_bg_text"
+                                                    android:layout_width="103dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="right"
+                                                    android:textColor="@color/disable_color"
+                                                    android:textSize="48sp" />
+
+                                                <TextView
+                                                    android:id="@+id/gauge_real_fuel_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="center"
+                                                    android:textColor="@color/title_color"
+                                                    android:textSize="48sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/unit_real_fuel"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/unit_5"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="14sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+                <!-- 연료 소모량 -->
+                <FrameLayout
+                    android:id="@+id/gauge_fuel_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <ImageView
+                                    android:id="@+id/fuel_close_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    app:srcCompat="@drawable/close_state" />
+
+                                <TextView
+                                    android:id="@+id/text_fuel"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:text="@string/gauge_menu6"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="140dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1">
+
+                                        <ImageView
+                                            android:id="@+id/imageView11"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_horizontal|center_vertical"
+                                            app:srcCompat="@drawable/gauge_6" />
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.7"
+                                        android:background="@color/white">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/fuel_bg_text"
+                                                    android:layout_width="103dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="right"
+                                                    android:textColor="@color/disable_color"
+                                                    android:textSize="48sp" />
+
+                                                <TextView
+                                                    android:id="@+id/gauge_fuel_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="center"
+                                                    android:textColor="@color/title_color"
+                                                    android:textSize="48sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/unit_fuel"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/unit_6"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="14sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+                <!-- 냉각수 온도 -->
+                <FrameLayout
+                    android:id="@+id/gauge_temp_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <ImageView
+                                    android:id="@+id/temp_close_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    app:srcCompat="@drawable/close_state" />
+
+                                <TextView
+                                    android:id="@+id/text_temp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:text="@string/gauge_menu7"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="140dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1">
+
+                                        <ImageView
+                                            android:id="@+id/imageView12"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_horizontal|center_vertical"
+                                            app:srcCompat="@drawable/gauge_7" />
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.7"
+                                        android:background="@color/white">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/temp_bg_text"
+                                                    android:layout_width="113dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="right"
+                                                    android:textColor="@color/disable_color"
+                                                    android:textSize="48sp" />
+
+                                                <TextView
+                                                    android:id="@+id/gauge_temp_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="center"
+                                                    android:textColor="@color/title_color"
+                                                    android:textSize="48sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/unit_temp"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/unit_7"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="14sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+                <!-- 배터리 전압 -->
+                <FrameLayout
+                    android:id="@+id/gauge_battery_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <ImageView
+                                    android:id="@+id/battery_close_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    app:srcCompat="@drawable/close_state" />
+
+                                <TextView
+                                    android:id="@+id/text_battery"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:text="@string/gauge_menu8"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="140dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1">
+
+                                        <ImageView
+                                            android:id="@+id/imageView13"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_horizontal|center_vertical"
+                                            app:srcCompat="@drawable/gauge_8" />
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.7"
+                                        android:background="@color/white">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/battery_bg_text"
+                                                    android:layout_width="103dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="right"
+                                                    android:textColor="@color/disable_color"
+                                                    android:textSize="48sp" />
+
+                                                <TextView
+                                                    android:id="@+id/gauge_battery_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="center"
+                                                    android:textColor="@color/title_color"
+                                                    android:textSize="48sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/unit_battery"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_gravity="center_horizontal"
+                                                    android:fontFamily="@font/pretendard_regular"
+                                                    android:text="@string/unit_8"
+                                                    android:textColor="@color/text_color"
+                                                    android:textSize="14sp" />
+                                            </FrameLayout>
+                                        </LinearLayout>
+
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+                <!-- 주행 시간 -->
+                <FrameLayout
+                    android:id="@+id/gauge_dtime_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <ImageView
+                                    android:id="@+id/dtime_close_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="right"
+                                    app:srcCompat="@drawable/close_state" />
+
+                                <TextView
+                                    android:id="@+id/text_dtime"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:text="@string/gauge_menu9"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="140dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1">
+
+                                        <ImageView
+                                            android:id="@+id/imageView14"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_horizontal|center_vertical"
+                                            app:srcCompat="@drawable/gauge_9" />
+
+                                    </FrameLayout>
+
+                                    <FrameLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="0.7"
+                                        android:background="@color/white">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:orientation="vertical">
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1">
+
+                                                <TextView
+                                                    android:id="@+id/dtime_bg_text"
+                                                    android:layout_width="133dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="right"
+                                                    android:textColor="@color/disable_color"
+                                                    android:textSize="48sp" />
+
+                                                <TextView
+                                                    android:id="@+id/gauge_dtime_text"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:fontFamily="@font/digital_bold"
+                                                    android:gravity="center"
+                                                    android:textColor="@color/title_color"
+                                                    android:textSize="48sp" />
+                                            </FrameLayout>
+
+                                            <FrameLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="match_parent"
+                                                android:layout_weight="1"></FrameLayout>
+                                        </LinearLayout>
+
+                                    </FrameLayout>
+                                </LinearLayout>
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+                <!-- 추가 버튼 -->
+                <FrameLayout
+                    android:id="@+id/gauge_add_layout"
+                    android:layout_width="170dp"
+                    android:layout_height="180dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+
+                        <ImageView
+                            android:id="@+id/gauge_add_btn"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:background="@drawable/gauge_add_state" />
+
+
+                    </FrameLayout>
+
+                </FrameLayout>
+
+            </RelativeLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom">
+
+                <ImageView
+                    android:id="@+id/dash_page_navigation_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    app:srcCompat="@drawable/button_disable" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/guage_navigation_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:gravity="center"
+                        android:text="@string/next"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+                </FrameLayout>
+
+            </FrameLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
