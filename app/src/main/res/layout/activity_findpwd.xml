@@ -70,7 +70,8 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="0.7">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -84,14 +85,14 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:background="@drawable/input_text"
                                 android:orientation="horizontal">
 
                                 <EditText
                                     android:id="@+id/find_name_text"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="50sp"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:background="@drawable/input_text"
@@ -99,6 +100,7 @@
                                     android:fontFamily="@font/pretendard_regular"
                                     android:hint="@string/sign_name"
                                     android:inputType="textEmailAddress"
+                                    android:maxLines="1"
                                     android:paddingLeft="15dp"
                                     android:paddingRight="15dp"
                                     android:textColor="@color/text_color"
@@ -114,14 +116,14 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:background="@drawable/input_text"
                                 android:orientation="horizontal">
 
                                 <EditText
                                     android:id="@+id/find_id_text"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="50sp"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
                                     android:background="@drawable/input_text"
@@ -129,6 +131,7 @@
                                     android:fontFamily="@font/pretendard_regular"
                                     android:hint="@string/user_id"
                                     android:inputType="number"
+                                    android:maxLines="1"
                                     android:paddingLeft="15dp"
                                     android:paddingRight="15dp"
                                     android:textColor="@color/text_color"
@@ -151,6 +154,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/button2" />
+
                                 <TextView
                                     android:id="@+id/textView3"
                                     android:layout_width="wrap_content"
@@ -174,7 +178,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_weight="1">
+            android:layout_weight="0.9">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -187,102 +191,57 @@
                     android:layout_weight="1">
 
                     <LinearLayout
-                        android:id="@+id/auth_confirm_layout"
+                        android:id="@+id/auth_code_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="47dp"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1">
-
-                        </FrameLayout>
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
+                            android:layout_marginLeft="15dp"
+                            android:layout_weight="0.7">
 
                             <LinearLayout
-                                android:id="@+id/auth_code_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/input_text"
                                 android:orientation="horizontal">
 
                                 <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginLeft="15dp"
-                                    android:layout_marginBottom="12dp"
-                                    android:layout_weight="0.7">
+                                    android:layout_weight="0.8">
 
-                                    <LinearLayout
+                                    <EditText
+                                        android:id="@+id/auth_code_text"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:layout_gravity="center_vertical"
                                         android:background="@drawable/input_text"
-                                        android:orientation="horizontal">
-
-                                        <FrameLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:layout_weight="0.8">
-
-                                            <EditText
-                                                android:id="@+id/auth_code_text"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:background="@drawable/input_text"
-                                                android:ems="10"
-                                                android:gravity="center_horizontal|center_vertical"
-                                                android:hint="@string/auth_code"
-                                                android:inputType="textEmailAddress"
-                                                android:textColor="@color/text_color"
-                                                android:textSize="18sp" />
-                                        </FrameLayout>
-
-                                        <FrameLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:layout_weight="1">
-
-                                            <TextView
-                                                android:id="@+id/auth_time_text"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_gravity="center_horizontal|center_vertical"
-                                                android:fontFamily="@font/pretendard_regular"
-                                                android:textColor="@color/text_color"
-                                                android:textSize="18sp" />
-                                        </FrameLayout>
-                                    </LinearLayout>
+                                        android:ems="10"
+                                        android:gravity="center_horizontal|center_vertical"
+                                        android:hint="@string/auth_code"
+                                        android:inputType="textEmailAddress"
+                                        android:maxLines="1"
+                                        android:textColor="@color/text_color"
+                                        android:textSize="18sp" />
                                 </FrameLayout>
 
                                 <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginRight="15dp"
-                                    android:layout_marginBottom="10dp"
                                     android:layout_weight="1">
 
-                                    <ImageView
-                                        android:id="@+id/complete_btn"
+                                    <TextView
+                                        android:id="@+id/auth_time_text"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_horizontal"
-                                        app:srcCompat="@drawable/button3" />
-
-                                    <TextView
-                                        android:id="@+id/complete_text"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
                                         android:layout_gravity="center_horizontal|center_vertical"
-                                        android:fontFamily="@font/pretendard_semibold"
-                                        android:gravity="center_horizontal|center_vertical"
-                                        android:text="@string/complete_text"
-                                        android:textColor="@color/white"
-                                        android:textSize="20sp" />
+                                        android:fontFamily="@font/pretendard_regular"
+                                        android:textColor="@color/text_color"
+                                        android:textSize="18sp" />
                                 </FrameLayout>
                             </LinearLayout>
                         </FrameLayout>
@@ -292,15 +251,115 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1">
 
+                            <ImageView
+                                android:id="@+id/complete_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                app:srcCompat="@drawable/button3" />
+
+                            <TextView
+                                android:id="@+id/complete_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_horizontal|center_vertical"
+                                android:fontFamily="@font/pretendard_semibold"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:text="@string/confirm_text"
+                                android:textColor="@color/white"
+                                android:textSize="20sp" />
                         </FrameLayout>
                     </LinearLayout>
+
                 </FrameLayout>
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="0.3">
 
+                    <LinearLayout
+                        android:id="@+id/setting_new_pwd_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/find_new_pwd"
+                                android:layout_width="match_parent"
+                                android:layout_height="50sp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:background="@drawable/input_text"
+                                android:ems="10"
+                                android:fontFamily="@font/pretendard_regular"
+                                android:hint="@string/new_password"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                android:textColor="@color/text_color"
+                                android:textSize="18sp" />
+
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/find_new_pwd_conf"
+                                android:layout_width="match_parent"
+                                android:layout_height="50sp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:background="@drawable/input_text"
+                                android:ems="10"
+                                android:fontFamily="@font/pretendard_regular"
+                                android:hint="@string/confirm_pwd"
+                                android:inputType="textPassword"
+                                android:maxLines="1"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="15dp"
+                                android:textColor="@color/text_color"
+                                android:textSize="18sp" />
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="30dp">
+
+                                <ImageView
+                                    android:id="@+id/auth_code_btn2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/button2" />
+
+                                <TextView
+                                    android:id="@+id/textView46"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal|center_vertical"
+                                    android:fontFamily="@font/pretendard_semibold"
+                                    android:text="@string/complete_text"
+                                    android:textColor="@color/white"
+                                    android:textSize="20sp" />
+                            </FrameLayout>
+
+                        </FrameLayout>
+                    </LinearLayout>
                 </FrameLayout>
 
             </LinearLayout>

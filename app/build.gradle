@@ -42,6 +42,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.github.pires:obd-java-api:1.0'
 
-    implementation group: 'org.apache.axis', name: 'axis', version: '1.4'
-    implementation group: 'org.apache.axis', name: 'axis-jaxrpc', version: '1.4'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
 }

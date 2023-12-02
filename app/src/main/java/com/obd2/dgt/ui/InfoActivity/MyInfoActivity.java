@@ -40,7 +40,6 @@ public class MyInfoActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info);
 
-        MyInfoTable.getMyInfoTable();
         if (MyUtils.carInfo.size() == 0) {
             CarInfoTable.getCarInfoTable();
         }

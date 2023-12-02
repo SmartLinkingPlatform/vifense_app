@@ -23,15 +23,29 @@ public class MyInfoTable {
             e.printStackTrace();
         }
     }
-    public static void updateMyInfoTable(String d_name, String d_mac, String paired, String socketed) {
+    public static int getMyInfoTableCount() {
         try {
-            String[][] fields = new String[][]{
-                    {"name", d_name},
-                    {"mac_address", d_mac},
-                    {"paired_status", paired},
-                    {"socket_status", socketed},
-                    {"connected_method", MyUtils.con_method}
-            };
+            Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "*", "");
+            if (cursor != null && cursor.getCount() > 0) {
+                return cursor.getCount();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+        return 0;
+    }
+
+    public static void insertMyInfoTable(String[][] fields) {
+        try {
+            MyUtils.db_connect.sqlInsert(table_name, fields);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateMyInfoTable(String[][] fields) {
+        try {
             MyUtils.db_connect.sqlUpdate(table_name, fields, "");
         } catch (Exception e) {
             e.printStackTrace();

@@ -27,6 +27,7 @@ import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.AddGauge.GaugeAdapter;
 import com.obd2.dgt.ui.ListAdapter.AddGauge.GaugeItem;
 import com.obd2.dgt.ui.MainActivity;
+import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.GaugeViewInfo;
 import com.obd2.dgt.utils.MyUtils;
 
@@ -162,7 +163,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_mileage_layout.setOnTouchListener(onTouchEventListener);
         gauge_mileage_layout.setVisibility(View.GONE);
         mileage_date = findViewById(R.id.mileage_date);
-        mileage_date.setText(MyUtils.getCurrentDate() + "(" + getString(MyUtils.getCurrentWeek()) + ")");
+        mileage_date.setText(CommonFunc.getCurrentDate() + "(" + getString(CommonFunc.getCurrentWeek()) + ")");
         gauge_mileage_text = findViewById(R.id.gauge_mileage_text);
         gauge_mileage_text.setText(MyUtils.ecu_mileage);
         mileage_close_btn = findViewById(R.id.mileage_close_btn);
@@ -330,8 +331,9 @@ public class DashboardActivity extends AppBaseActivity {
         int show_cnt = viewInfo.size();
         //한 화면에 다 보일때
         if (show_cnt < 6) {
-            gauge_add_layout.setX(MyUtils.gauge_pos[show_cnt].x);
-            gauge_add_layout.setY(MyUtils.gauge_pos[show_cnt].y);
+            PointF pointF = new PointF(setScaleX(MyUtils.gauge_pos[show_cnt].x), setScaleY(MyUtils.gauge_pos[show_cnt].y));
+            gauge_add_layout.setX(pointF.x);
+            gauge_add_layout.setY(pointF.y);
             gauge_add_layout.setVisibility(View.VISIBLE);
             int hiddenGaugeCnt = GaugeInfoTable.getGaugeDisableCount();
             if(hiddenGaugeCnt == 0) {
@@ -654,7 +656,7 @@ public class DashboardActivity extends AppBaseActivity {
                     gauge_rpm_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_rpm), 16400));
                     gauge_rpm_text.setText(MyUtils.ecu_engine_rpm);
                     //주행 거리
-                    mileage_date.setText(MyUtils.getCurrentDate() + "(" + getString(MyUtils.getCurrentWeek()) + ")");
+                    mileage_date.setText(CommonFunc.getCurrentDate() + "(" + getString(CommonFunc.getCurrentWeek()) + ")");
                     gauge_mileage_text.setText(MyUtils.ecu_mileage);
                     //순간 연료 소모량
                     //순간 연료 소모량이 0이면 "PID 0110 - 스로틀 위치" 와 "PID 010D - 연료 압력"으로 계산한다.

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vifense</string>
-    <string name="app_running">DGT 앱이 실행 중 입니다.</string>
+    <string name="app_running">Vifense 앱이 실행 중 입니다.</string>
     <string name="user_id">아이디</string>
     <string name="user_pwd">비밀번호</string>
     <string name="find_pwd">비밀번호 찾기</string>
@@ -41,6 +41,7 @@
     <string name="cancel_text">취소</string>
     <string name="auth_code">인증번호</string>
     <string name="get_auth_number">인증번호 받기</string>
+    <string name="new_password">신규 비밀번호</string>
     <string name="warning_text_1">회원 가입 시 등록한 이름과 ID가 같아야 문자 인증번호를 받을수 있습니다.</string>
     <string name="alarm_text_1">올바른 내용을 입력해 주세요.</string>
     <string name="alarm_text_2">인증이 완료되였습니다.</string>
@@ -52,6 +53,12 @@
     <string name="confirm_reg_message">등록이 완료되였습니다.</string>
     <string name="confirm_mod_message">변경이 완료되였습니다.</string>
     <string name="error_pwd_message">비밀번호를 다시 입력하세요.</string>
+    <string name="check_network_error">인터넷 연결이 원활하지 않습니다.</string>
+    <string name="error_auth">휴대폰 인증을 하여야 합니다.</string>
+    <string name="error_login">로그인 실패 하였습니다.</string>
+    <string name="error_input_pwd">비밀번호 확인과 일치하지 않습니다.</string>
+    <string name="error_view_conditions">이용약관을 확인하십시오.</string>
+    <string name="error_register_user">이미 등록된 사용자 입니다.</string>
 
     <string name="mileage_month">월 주행 거리</string>
     <string name="mileage_today">오늘 주행 거리</string>

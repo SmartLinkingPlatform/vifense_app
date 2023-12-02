@@ -179,7 +179,8 @@
                                     android:ems="10"
                                     android:fontFamily="@font/pretendard_regular"
                                     android:hint="@string/user_pwd"
-                                    android:inputType="textEmailAddress"
+                                    android:inputType="textPassword"
+                                    android:maxLines="1"
                                     android:paddingLeft="15dp"
                                     android:paddingRight="15dp"
                                     android:textColor="@color/text_color"
@@ -209,7 +210,8 @@
                                     android:ems="10"
                                     android:fontFamily="@font/pretendard_regular"
                                     android:hint="@string/confirm_pwd"
-                                    android:inputType="textEmailAddress"
+                                    android:inputType="textPassword"
+                                    android:maxLines="1"
                                     android:paddingLeft="15dp"
                                     android:paddingRight="15dp"
                                     android:textColor="@color/text_color"
@@ -328,7 +330,7 @@
                                 android:orientation="horizontal">
 
                                 <Spinner
-                                    android:id="@+id/reg_belong_company"
+                                    android:id="@+id/reg_company_spinner"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center_horizontal|center_vertical"

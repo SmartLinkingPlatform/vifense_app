@@ -2,21 +2,32 @@ package com.obd2.dgt.ui;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
+import com.obd2.dgt.network.WebHttpConnect;
+import com.obd2.dgt.utils.CommonFunc;
+import com.obd2.dgt.utils.Crypt;
+import com.obd2.dgt.utils.MyUtils;
 
 public class SignupActivity extends AppBaseActivity {
     TextView reg_name_text, reg_id_text;
     EditText reg_pwd_text, reg_pwd_confirm;
     ImageView reg_auth_real_btn, reg_view_condition_btn;
     ImageView check_box, reg_user_btn;
-    Spinner reg_belong_company;
+    Spinner reg_company_spinner;
     boolean isChecked = false;
     boolean isRegister = false;
+
+    String name_txt = "";
+    String phone_txt = "";
+    String password_txt = "";
 
 
     @Override
@@ -45,8 +56,14 @@ public class SignupActivity extends AppBaseActivity {
         reg_user_btn = findViewById(R.id.reg_user_btn);
         reg_user_btn.setOnClickListener(view -> onRegisterUserClick());
 
-        reg_belong_company = findViewById(R.id.reg_belong_company);
-
+        reg_company_spinner = findViewById(R.id.reg_company_spinner);
+        String[] companys = new String[MyUtils.companyInfo.size()];
+        for (int i = 0; i < MyUtils.companyInfo.size(); i++) {
+            String c_name = MyUtils.companyInfo.get(i)[2];
+            companys[i] = c_name;
+        }
+        ArrayAdapter<String> mf_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, companys);
+        reg_company_spinner.setAdapter(mf_adapter);
     }
 
     //휴대폰 인증하기 버튼
@@ -67,13 +84,78 @@ public class SignupActivity extends AppBaseActivity {
 
     //회원 가입하기 버튼
     private void onRegisterUserClick(){
-        reg_user_btn.setBackgroundResource(R.drawable.button_press);
-        reg_name_text.setEnabled(false);
-        reg_id_text.setEnabled(false);
-        reg_pwd_text.setEnabled(false);
-        reg_pwd_confirm.setEnabled(false);
-        reg_belong_company.setEnabled(false);
-        check_box.setEnabled(false);
+        pageStatus(false);
+        name_txt = reg_name_text.getText().toString();
+        phone_txt = reg_id_text.getText().toString();
+        password_txt = reg_pwd_text.getText().toString();
+        if (name_txt.isEmpty() || phone_txt.isEmpty()) {
+            Toast.makeText(getApplicationContext(), R.string.error_auth, Toast.LENGTH_SHORT).show();
+            pageStatus(true);
+            return;
+        }
+        if (password_txt.isEmpty()) {
+            Toast.makeText(getApplicationContext(), R.string.error_pwd_message, Toast.LENGTH_SHORT).show();
+            pageStatus(true);
+            return;
+        }
+        if (!password_txt.equals(reg_pwd_confirm.getText().toString())) {
+            Toast.makeText(getApplicationContext(), R.string.error_input_pwd, Toast.LENGTH_SHORT).show();
+            pageStatus(true);
+            return;
+        }
+        if (!isChecked) {
+            Toast.makeText(getApplicationContext(), R.string.error_view_conditions, Toast.LENGTH_SHORT).show();
+            pageStatus(true);
+            return;
+        }
+
+        String msg = getString(R.string.check_network_error);
+        String btnText = getString(R.string.confirm_text);
+        boolean isNetwork = CommonFunc.checkNetworkStatus(SignupActivity.this, msg, btnText);
+        if (isNetwork) {
+            if (MyInfoTable.getMyInfoTableCount() > 0) {
+                Toast.makeText(getApplicationContext(), R.string.error_register_user, Toast.LENGTH_SHORT).show();
+            } else {
+
+                String encode_pwd = Crypt.encrypt(password_txt);
+
+                String[][] fields = new String[][]{
+                        {"name", name_txt},
+                        {"phone", phone_txt},
+                        {"password", encode_pwd},
+                        {"company", reg_company_spinner.getSelectedItem().toString()},
+                        {"condition", "1"}
+                };
+                MyInfoTable.insertMyInfoTable(fields);
+
+                //서버에 등록
+                String[][] params = new String[][]{
+                        {"user_name", name_txt},
+                        {"user_id", phone_txt},
+                        {"user_pwd", encode_pwd},
+                        {"user_type", "0"},
+                        {"user_class", "1"},
+                        {"company_name", reg_company_spinner.getSelectedItem().toString()}
+                };
+                WebHttpConnect.onSignUpRequest(params);
+
+                onLRChangeLayount(SignupActivity.this, LoginActivity.class);
+                finish();
+            }
+        }
+    }
+    private void pageStatus(boolean status) {
+        if (!status) {
+            reg_user_btn.setBackgroundResource(R.drawable.button_press);
+        } else {
+            reg_user_btn.setBackgroundResource(R.drawable.button);
+        }
+        reg_name_text.setEnabled(status);
+        reg_id_text.setEnabled(status);
+        reg_pwd_text.setEnabled(status);
+        reg_pwd_confirm.setEnabled(status);
+        reg_company_spinner.setEnabled(status);
+        check_box.setEnabled(status);
     }
 
     //이용 약관 보기

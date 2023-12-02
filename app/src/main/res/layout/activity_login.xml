@@ -114,6 +114,7 @@
                                 android:fontFamily="@font/pretendard_regular"
                                 android:hint="@string/user_id"
                                 android:inputType="textEmailAddress"
+                                android:maxLines="1"
                                 android:textColor="@color/text_color" />
                         </FrameLayout>
                     </LinearLayout>
@@ -160,6 +161,7 @@
                                 android:fontFamily="@font/pretendard_regular"
                                 android:hint="@string/user_pwd"
                                 android:inputType="textPassword"
+                                android:maxLines="1"
                                 android:textColor="@color/text_color" />
                         </FrameLayout>
                     </LinearLayout>

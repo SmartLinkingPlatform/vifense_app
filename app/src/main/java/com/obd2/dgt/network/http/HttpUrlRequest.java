@@ -49,6 +49,7 @@ public class HttpUrlRequest extends AsyncTask<HttpCall, String, String> {
             }
             urlConnection.setRequestMethod(method);
             urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            urlConnection.setRequestProperty("Accept", "application/json;");
             urlConnection.setReadTimeout(10000 /* milliseconds */);
             urlConnection.setConnectTimeout(10000 /* milliseconds */);
             if(httpCall.getParams() != null && httpCall.getMethodtype() != HttpCall.GET){

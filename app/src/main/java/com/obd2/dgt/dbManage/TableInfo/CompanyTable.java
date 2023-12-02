@@ -20,12 +20,10 @@ public class CompanyTable {
                         cursor.moveToFirst();
                     else
                         cursor.moveToNext();
-                    String[] info = new String[5];
-                    info[0] = cursor.getString(0); //msg ID
-                    info[1] = cursor.getString(1); //msg date
-                    info[2] = cursor.getString(2); //msg user
-                    info[3] = cursor.getString(3); //msg title
-                    info[4] = cursor.getString(4); //msg content
+                    String[] info = new String[3];
+                    info[0] = cursor.getString(0); //ID
+                    info[1] = cursor.getString(1); //company id
+                    info[2] = cursor.getString(2); //company name
                     MyUtils.companyInfo.add(info);
                 }
             }
@@ -34,16 +32,15 @@ public class CompanyTable {
         }
     }
 
-    public static void deleteMessageInfoTable(String id) {
+    public static void insertCompanyInfoTable(String[][] fields) {
         try {
-            String where = "id = " + id;
-            MyUtils.db_connect.sqlDelete(table_name, where);
+            MyUtils.db_connect.sqlInsert(table_name, fields);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void deleteAllMessageInfoTable() {
+    public static void deleteAllCompanyInfoTable() {
         try {
             MyUtils.db_connect.sqlDeleteAll(table_name);
         } catch (Exception e) {

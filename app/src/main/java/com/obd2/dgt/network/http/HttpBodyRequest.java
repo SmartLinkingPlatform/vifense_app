@@ -41,16 +41,16 @@ public class HttpBodyRequest extends AsyncTask<HttpCall, String, String> {
                     method = "PUT";
                     break;
             }
-            /*urlConnection.setRequestMethod(method);
+            urlConnection.setRequestMethod(method);
             urlConnection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             urlConnection.setRequestProperty("Accept", "application/json;");
-            String Authorization = "Bearer " + MyUtils.ACCESS_TOKEN;
-            urlConnection.setRequestProperty("Authorization", Authorization);
+            //String Authorization = "Bearer " + MyUtils.ACCESS_TOKEN;
+            //urlConnection.setRequestProperty("Authorization", Authorization);
             urlConnection.setReadTimeout(20000); //milliseconds
             urlConnection.setConnectTimeout(30000); //milliseconds
             if(httpCall.getMethodtype() != HttpCall.GET){
                 OutputStream os = urlConnection.getOutputStream();
-                os.write(SendDataPacket.sendMqttDataPackage().getBytes(StandardCharsets.UTF_8));
+                //os.write(SendDataPacket.sendMqttDataPackage().getBytes(StandardCharsets.UTF_8));
                 os.close();
             }
             int responseCode = urlConnection.getResponseCode();
@@ -60,7 +60,7 @@ public class HttpBodyRequest extends AsyncTask<HttpCall, String, String> {
                 while ((line = br.readLine()) != null){
                     response.append(line);
                 }
-            }*/
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {

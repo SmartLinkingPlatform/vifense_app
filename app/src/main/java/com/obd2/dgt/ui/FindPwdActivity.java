@@ -21,6 +21,7 @@ public class FindPwdActivity extends AppBaseActivity {
     EditText auth_code_text;
     TextView auth_time_text;
     LinearLayout auth_code_layout;
+    LinearLayout setting_new_pwd_layout;
     Dialog dialog;
 
     @Override
@@ -39,6 +40,9 @@ public class FindPwdActivity extends AppBaseActivity {
 
         auth_code_layout = findViewById(R.id.auth_code_layout);
         auth_code_layout.setVisibility(View.GONE);
+
+        setting_new_pwd_layout = findViewById(R.id.setting_new_pwd_layout);
+        setting_new_pwd_layout.setVisibility(View.GONE);
 
         auth_code_text = findViewById(R.id.auth_code_text);
         auth_time_text = findViewById(R.id.auth_time_text);

@@ -22,7 +22,11 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class MyUtils {
-    public static String server_url = "http://dgt.vifense.com";
+    public static String server_url = "http://192.168.1.6"; //dgt.vifense.com
+    public static String call_company = "/mobile.companyInfo";
+    public static String user_signup = "/mobile.userSignup";
+    public static String user_login = "/mobile.userLogin";
+    public static String user_modify = "/mobile.userInfoModify";
     public static AppBaseActivity appBase = null;
     public static Activity currentActivity = null;
     public static Context mContext = null;
@@ -184,45 +188,5 @@ public class MyUtils {
             R.string.fuel_type_17, R.string.fuel_type_18, R.string.fuel_type_19, R.string.fuel_type_20
     };
 
-    public static String getCurrentDate() {
-        Date dateNow = Calendar.getInstance().getTime();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd", Locale.getDefault());
-
-        return format.format(dateNow);
-    }
-    public static int getCurrentWeek() {
-        Date currentDate = new Date();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-
-        int week_resid = R.string.week_1;
-        int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
-        switch (dayOfWeekNumber) {
-            case 1:
-                week_resid = R.string.week_1;
-                break;
-            case 2:
-                week_resid = R.string.week_2;
-                break;
-            case 3:
-                week_resid = R.string.week_3;
-                break;
-            case 4:
-                week_resid = R.string.week_4;
-                break;
-            case 5:
-                week_resid = R.string.week_5;
-                break;
-            case 6:
-                week_resid = R.string.week_6;
-                break;
-            case 7:
-                week_resid = R.string.week_7;
-                break;
-        }
-
-        return week_resid;
-    }
 
 }
