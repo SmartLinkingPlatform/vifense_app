@@ -28,12 +28,16 @@ public class SignupActivity extends AppBaseActivity {
     String name_txt = "";
     String phone_txt = "";
     String password_txt = "";
-
+    private static SignupActivity instance;
+    public static SignupActivity getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        instance = this;
         initLayout();
     }
 
@@ -83,10 +87,13 @@ public class SignupActivity extends AppBaseActivity {
     }
 
     //회원 가입하기 버튼
+    String encode_pwd = "";
     private void onRegisterUserClick(){
         pageStatus(false);
         name_txt = reg_name_text.getText().toString();
+        name_txt = "ksi";
         phone_txt = reg_id_text.getText().toString();
+        phone_txt = "15524206580";
         password_txt = reg_pwd_text.getText().toString();
         if (name_txt.isEmpty() || phone_txt.isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.error_auth, Toast.LENGTH_SHORT).show();
@@ -116,18 +123,7 @@ public class SignupActivity extends AppBaseActivity {
             if (MyInfoTable.getMyInfoTableCount() > 0) {
                 Toast.makeText(getApplicationContext(), R.string.error_register_user, Toast.LENGTH_SHORT).show();
             } else {
-
-                String encode_pwd = Crypt.encrypt(password_txt);
-
-                String[][] fields = new String[][]{
-                        {"name", name_txt},
-                        {"phone", phone_txt},
-                        {"password", encode_pwd},
-                        {"company", reg_company_spinner.getSelectedItem().toString()},
-                        {"condition", "1"}
-                };
-                MyInfoTable.insertMyInfoTable(fields);
-
+                encode_pwd = Crypt.encrypt(password_txt);
                 //서버에 등록
                 String[][] params = new String[][]{
                         {"user_name", name_txt},
@@ -138,9 +134,6 @@ public class SignupActivity extends AppBaseActivity {
                         {"company_name", reg_company_spinner.getSelectedItem().toString()}
                 };
                 WebHttpConnect.onSignUpRequest(params);
-
-                onLRChangeLayount(SignupActivity.this, LoginActivity.class);
-                finish();
             }
         }
     }
@@ -157,7 +150,25 @@ public class SignupActivity extends AppBaseActivity {
         reg_company_spinner.setEnabled(status);
         check_box.setEnabled(status);
     }
+    public void onSuccessSignup() {
+        String[][] fields = new String[][]{
+                {"name", name_txt},
+                {"phone", phone_txt},
+                {"password", encode_pwd},
+                {"company", reg_company_spinner.getSelectedItem().toString()},
+                {"condition", "1"}
+        };
+        MyInfoTable.insertMyInfoTable(fields);
 
+        onLRChangeLayount(SignupActivity.this, LoginActivity.class);
+        finish();
+    }
+    public void onDuplicateSignup() {
+        Toast.makeText(getApplicationContext(), R.string.error_signup_duplicate, Toast.LENGTH_SHORT).show();
+    }
+    public void onFailedSignup() {
+        Toast.makeText(getApplicationContext(), R.string.error_signup_fail, Toast.LENGTH_SHORT).show();
+    }
     //이용 약관 보기
     private void onViewConditionClick(){
 

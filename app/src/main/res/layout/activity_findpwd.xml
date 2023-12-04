@@ -236,10 +236,11 @@
 
                                     <TextView
                                         android:id="@+id/auth_time_text"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_horizontal|center_vertical"
                                         android:fontFamily="@font/pretendard_regular"
+                                        android:gravity="center"
                                         android:textColor="@color/text_color"
                                         android:textSize="18sp" />
                                 </FrameLayout>
@@ -256,7 +257,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                app:srcCompat="@drawable/button3" />
+                                android:background="@drawable/button3" />
 
                             <TextView
                                 android:id="@+id/complete_text"
@@ -342,7 +343,7 @@
                                 android:layout_marginTop="30dp">
 
                                 <ImageView
-                                    android:id="@+id/auth_code_btn2"
+                                    android:id="@+id/find_pwd_complete_btn"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/button2" />

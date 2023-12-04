@@ -13,6 +13,9 @@ import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.Crypt;
+import com.obd2.dgt.utils.MyUtils;
+
+import java.time.LocalDate;
 
 public class LoginActivity extends AppBaseActivity {
     EditText login_id_text, login_pwd_text;
@@ -46,6 +49,16 @@ public class LoginActivity extends AppBaseActivity {
             getWindowsSize();
             getCompanyInfoFromServer();
         }
+        //년도
+        LocalDate now = null;
+        int year = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            now = LocalDate.now();
+            year = now.getYear();
+        }
+        for (int i = 1990; i <= year; i++) {
+            MyUtils.create_years.add(String.valueOf(i));
+        }
     }
 
     private void initLayout() {
@@ -78,7 +91,7 @@ public class LoginActivity extends AppBaseActivity {
             id_txt = login_id_text.getText().toString();
             pwd_txt = login_pwd_text.getText().toString();
             String encode_pwd = Crypt.encrypt(pwd_txt);
-            //서버에 등록
+
             String[][] params = new String[][]{
                     {"user_id", id_txt},
                     {"user_pwd", encode_pwd}

@@ -321,7 +321,7 @@
                                 android:layout_weight="0.4">
 
                                 <EditText
-                                    android:id="@+id/reg_car_displacement_text"
+                                    android:id="@+id/reg_car_gas_text"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:background="@drawable/input_text"

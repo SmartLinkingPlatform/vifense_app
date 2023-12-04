@@ -56,9 +56,14 @@
     <string name="check_network_error">인터넷 연결이 원활하지 않습니다.</string>
     <string name="error_auth">휴대폰 인증을 하여야 합니다.</string>
     <string name="error_login">로그인 실패 하였습니다.</string>
-    <string name="error_input_pwd">비밀번호 확인과 일치하지 않습니다.</string>
+    <string name="error_signup_duplicate">이미 등록된 사용자 입니다.</string>
+    <string name="error_signup_fail">사용자 등록에 실패하였습니다.</string>
+    <string name="error_reg_car_duplicate">이미 등록된 차량 입니다.</string>
+    <string name="error_reg_car_fail">차량 등록에 실패 하였습니다.</string>
+    <string name="error_input_pwd">비밀번호가 일치하지 않습니다.</string>
     <string name="error_view_conditions">이용약관을 확인하십시오.</string>
     <string name="error_register_user">이미 등록된 사용자 입니다.</string>
+    <string name="error_input_auth_code">인증번호 확인 시간이 지났습니다.</string>
 
     <string name="mileage_month">월 주행 거리</string>
     <string name="mileage_today">오늘 주행 거리</string>
@@ -89,6 +94,8 @@
     <string name="register_text">등록하기</string>
     <string name="modify_text">수정하기</string>
     <string name="delete_text">삭제하기</string>
+    <string name="year_unit">년식</string>
+    <string name="gas_unit">cc</string>
 
     <string name="gauge_menu1">속도</string>
     <string name="gauge_menu2">엔진 부하</string>

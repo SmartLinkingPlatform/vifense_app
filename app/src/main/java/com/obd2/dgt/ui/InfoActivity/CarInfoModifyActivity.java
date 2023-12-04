@@ -80,7 +80,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         mod_date_spinner.setAdapter(dt_adapter);
         mod_date_spinner.setSelection(year_idx);
 
-        mod_fuel_type_spinner = findViewById(R.id.car_fuel_type_spinner);
+        mod_fuel_type_spinner = findViewById(R.id.mod_fuel_type_spinner);
         String[] fuel_types = new String[MyUtils.fuel_types.length];
         for (int i = 0; i < MyUtils.fuel_types.length; i++) {
             fuel_types[i] = getString(MyUtils.fuel_types[i]);

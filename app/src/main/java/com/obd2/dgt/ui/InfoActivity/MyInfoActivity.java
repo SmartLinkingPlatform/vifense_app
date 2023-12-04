@@ -34,11 +34,16 @@ public class MyInfoActivity extends AppBaseActivity {
     RecyclerView my_info_car_recycle_view;
     CarAdapter carAdapter;
     ArrayList<CarItem> carItems = new ArrayList<>();
+    private static MyInfoActivity instance;
+    public static MyInfoActivity getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info);
+        instance = this;
 
         if (MyUtils.carInfo.size() == 0) {
             CarInfoTable.getCarInfoTable();
@@ -84,7 +89,10 @@ public class MyInfoActivity extends AppBaseActivity {
             my_info_car_recycle_view.setLayoutManager(verticalLayoutManager);
             CarItem item;
             for (int i = 0; i < MyUtils.carInfo.size(); i++) {
-                item = new CarItem(MyUtils.carInfo.get(i)[0], MyUtils.carInfo.get(i)[2], MyUtils.carInfo.get(i)[4], MyUtils.carInfo.get(i)[3], MyUtils.carInfo.get(i)[6]);
+                String model = getString(MyUtils.model_names[Integer.parseInt(MyUtils.carInfo.get(i)[0])]);
+                String year = MyUtils.create_years.get(Integer.parseInt(MyUtils.carInfo.get(i)[3])) + getString(R.string.year_unit);
+                String gas = MyUtils.carInfo.get(i)[6] + getString(R.string.gas_unit);
+                item = new CarItem(MyUtils.carInfo.get(i)[0], model, MyUtils.carInfo.get(i)[4], year, gas);
                 carItems.add(item);
             }
             carAdapter = new CarAdapter(getContext(), carItems, carListListener);
@@ -116,9 +124,15 @@ public class MyInfoActivity extends AppBaseActivity {
         onRLChangeLayount(MyInfoActivity.this, CarInfoActivity.class);
         finish();
     }
-    //차량추가
+    //차량 추가
     private void onMyInfoAddCarClick(){
         onRLChangeLayount(MyInfoActivity.this, CarInfoActivity.class);
+        finish();
+    }
+    //차량 정보 수정
+    public void onCarModifyClick(int id){
+        MyUtils.sel_car_id = id;
+        onRLChangeLayount(MyInfoActivity.this, CarInfoModifyActivity.class);
         finish();
     }
 

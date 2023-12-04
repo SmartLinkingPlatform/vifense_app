@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 import com.obd2.dgt.R;
 import com.obd2.dgt.btManage.BtService;
 import com.obd2.dgt.btManage.OBD2ApiCommand;
+import com.obd2.dgt.ui.FindPwdActivity;
 import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.utils.MyUtils;
 
@@ -59,6 +60,7 @@ public class RealService extends Service {
                             showErrorDialog();
                         }
                     }
+
                     SystemClock.sleep(1000); // 1000 milisecond (1 second)
                 } else {
                     boolean interrupted = Thread.interrupted();

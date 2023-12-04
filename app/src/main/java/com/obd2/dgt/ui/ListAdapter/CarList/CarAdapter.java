@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
+import com.obd2.dgt.ui.InfoActivity.MyInfoActivity;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.util.ArrayList;
@@ -57,18 +58,26 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     @NonNull
     @Override
     public CarAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_add_gauge, parent, false);
+        View view = mInflater.inflate(R.layout.item_car, parent, false);
         return new CarAdapter.ViewHolder(view);
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint({"ResourceAsColor", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull CarAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        holder.car_image.setImageResource(R.drawable.car_default);
         holder.car_info_text_1.setText(itemList.get(position).model);
         holder.car_info_text_2.setText(itemList.get(position).number);
         holder.car_info_text_3.setText(itemList.get(position).cYear);
         holder.car_info_text_4.setText(itemList.get(position).gas);
-        holder.car_info_mod_btn.setOnClickListener(view -> onCarInfoModifyClick());
+        holder.car_info_mod_btn.setImageResource(R.drawable.pen_state2);
+        holder.car_info_mod_btn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View v) {
+                MyInfoActivity.getInstance().onCarModifyClick(Integer.parseInt(itemList.get(position).id));
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceAsColor")
@@ -86,10 +95,5 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
 
     public interface ItemClickListener {
         void onItemClick(View v, int position);
-    }
-    public void onCarInfoModifyClick() {
-        if (!selected_id.isEmpty()) {
-            MessageInfoTable.deleteMessageInfoTable(selected_id);
-        }
     }
 }

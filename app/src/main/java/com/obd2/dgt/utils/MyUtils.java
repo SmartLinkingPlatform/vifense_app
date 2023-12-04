@@ -27,6 +27,8 @@ public class MyUtils {
     public static String user_signup = "/mobile.userSignup";
     public static String user_login = "/mobile.userLogin";
     public static String user_modify = "/mobile.userInfoModify";
+    public static String find_password = "/mobile.userFindPassword";
+    public static String reg_car = "/mobile.regCarInfo";
     public static AppBaseActivity appBase = null;
     public static Activity currentActivity = null;
     public static Context mContext = null;

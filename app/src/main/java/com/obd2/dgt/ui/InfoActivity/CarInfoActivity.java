@@ -2,7 +2,6 @@ package com.obd2.dgt.ui.InfoActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -11,12 +10,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.CarInfoTable;
+import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.AppBaseActivity;
-import com.obd2.dgt.ui.FindPwdActivity;
-import com.obd2.dgt.ui.MainActivity;
+import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.time.LocalDate;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 public class CarInfoActivity extends AppBaseActivity {
     EditText reg_car_number_text;
-    EditText reg_car_displacement_text;
+    EditText reg_car_gas_text;
     Spinner car_manufacturer_spinner;
     Spinner car_model_spinner;
     Spinner reg_car_date_spinner;
@@ -38,18 +38,23 @@ public class CarInfoActivity extends AppBaseActivity {
     int fuel_idx = 0;
     Dialog dialog;
 
+    private static CarInfoActivity instance;
+    public static CarInfoActivity getInstance() {
+        return instance;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info);
-
+        instance = this;
         initLayout();
     }
 
     private void initLayout() {
         reg_car_number_text = findViewById(R.id.reg_car_number_text);
 
-        reg_car_displacement_text = findViewById(R.id.reg_car_displacement_text);
+        reg_car_gas_text = findViewById(R.id.reg_car_gas_text);
 
         car_manufacturer_spinner = findViewById(R.id.car_manufacturer_spinner);
         String[] mf_names = new String[MyUtils.company_names.length];
@@ -69,18 +74,8 @@ public class CarInfoActivity extends AppBaseActivity {
         car_model_spinner.setAdapter(md_adapter);
         car_model_spinner.setSelection(model_idx);
 
-        LocalDate now = null;
-        int year = 0;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            now = LocalDate.now();
-            year = now.getYear();
-        }
-        ArrayList<String> cYears = new ArrayList<>();
-        for (int i = 1990; i <= year; i++) {
-            cYears.add(String.valueOf(i));
-        }
         reg_car_date_spinner = findViewById(R.id.reg_car_date_spinner);
-        ArrayAdapter<String> dt_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, cYears);
+        ArrayAdapter<String> dt_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, MyUtils.create_years);
         reg_car_date_spinner.setAdapter(dt_adapter);
         reg_car_date_spinner.setSelection(year_idx);
 
@@ -101,22 +96,50 @@ public class CarInfoActivity extends AppBaseActivity {
     }
 
     private void onRegisterCarClick() {
+        String msg = getString(R.string.check_network_error);
+        String btnText = getString(R.string.confirm_text);
+        boolean isNetwork = CommonFunc.checkNetworkStatus(CarInfoActivity.this, msg, btnText);
+        if (isNetwork) {
+            //서버에 등록
+            String[][] params = new String[][]{
+                    {"number", reg_car_number_text.getText().toString()},
+                    {"manufacturer", car_manufacturer_spinner.getSelectedItem().toString()},
+                    {"car_model", car_model_spinner.getSelectedItem().toString()},
+                    {"car_date", reg_car_date_spinner.getSelectedItem().toString()},
+                    {"car_fuel", car_fuel_type_spinner.getSelectedItem().toString()},
+                    {"car_gas", reg_car_gas_text.getText().toString()},
+                    {"user_id", MyUtils.my_id},
+                    {"company", MyUtils.my_company}
+            };
+            WebHttpConnect.onCarRegisterRequest(params);
+        }
+
+    }
+
+    public void onSuccessRegisterCar() {
         String[][] fields = new String[][]{
                 {"manufacturer", String.valueOf(car_manufacturer_spinner.getSelectedItemPosition())},
                 {"model", String.valueOf(car_model_spinner.getSelectedItemPosition())},
                 {"create_date", String.valueOf(reg_car_date_spinner.getSelectedItemPosition())},
                 {"number", reg_car_number_text.getText().toString()},
                 {"fuel_type", String.valueOf(car_fuel_type_spinner.getSelectedItemPosition())},
-                {"displacement", reg_car_displacement_text.getText().toString()}
+                {"gas", reg_car_gas_text.getText().toString()}
         };
         CarInfoTable.insertCarInfoTable(fields);
-        CarInfoTable.getCarInfoTable();
 
         dialog = new Dialog(CarInfoActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         showConfirmDialog();
     }
+    public void onDuplicationRegisterCar() {
+        Toast.makeText(getApplicationContext(), R.string.error_reg_car_duplicate, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onFailedRegisterCar() {
+        Toast.makeText(getApplicationContext(), R.string.error_reg_car_fail, Toast.LENGTH_SHORT).show();
+    }
+
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     public void showConfirmDialog() {
         dialog.setContentView(R.layout.dlg_normal);
