@@ -32,6 +32,8 @@ public class MessageInfoTable {
                     info[4] = cursor.getString(4); //msg content
                     MyUtils.messageInfo.add(info);
                 }
+            } else {
+                MyUtils.messageInfo = new ArrayList<>();
             }
         } catch (Exception e) {
             e.printStackTrace();

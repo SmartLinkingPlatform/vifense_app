@@ -59,7 +59,7 @@ public class ResponseCalculator {
                 MyUtils.ecu_fuel_tank_level = FUEL_TANK_LEVEL.read(firstHex);
                 break;
             case  "FUEL_RATE_LITER":
-                //MyUtils.ecu_fuel_rate = FUEL_RATE_LITER.read(firstHex, secondHex);
+                MyUtils.ecu_fuel_rate = FUEL_RATE_LITER.read(firstHex, secondHex);
                 break;
             case  "FUEL_RATE_GRAM":
                 MyUtils.ecu_fuel_rate_gram = FUEL_RATE_GAL.read(firstHex);

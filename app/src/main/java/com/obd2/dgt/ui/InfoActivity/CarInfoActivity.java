@@ -19,8 +19,6 @@ import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class CarInfoActivity extends AppBaseActivity {
     EditText reg_car_number_text;
@@ -116,8 +114,9 @@ public class CarInfoActivity extends AppBaseActivity {
 
     }
 
-    public void onSuccessRegisterCar() {
+    public void onSuccessRegisterCar(String car_num) {
         String[][] fields = new String[][]{
+                {"car_num", car_num},
                 {"manufacturer", String.valueOf(car_manufacturer_spinner.getSelectedItemPosition())},
                 {"model", String.valueOf(car_model_spinner.getSelectedItemPosition())},
                 {"create_date", String.valueOf(reg_car_date_spinner.getSelectedItemPosition())},

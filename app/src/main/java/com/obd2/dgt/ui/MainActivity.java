@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -11,12 +12,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
+import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.MessageActivity;
 import com.obd2.dgt.ui.InfoActivity.MyInfoActivity;
@@ -41,6 +45,7 @@ public class MainActivity extends AppBaseActivity {
     MainListAdapter mainListAdapter;
     int link_index = 0;
     boolean isRun = false;
+    Dialog dialog;
     private static MainActivity instance;
     public static MainActivity getInstance() {
         return instance;
@@ -100,6 +105,10 @@ public class MainActivity extends AppBaseActivity {
         }
         mainListAdapter = new MainListAdapter(getContext(), mainListItems, mainListListener);
         mainmenu_recycleView.setAdapter(mainListAdapter);
+
+        dialog = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
     }
 
     private MainListAdapter.ItemClickListener mainListListener = new MainListAdapter.ItemClickListener() {
@@ -134,11 +143,26 @@ public class MainActivity extends AppBaseActivity {
     boolean isConClick = true;
     private void onConnectDeviceClick() {
         if(isConClick) {
+            if (MyUtils.carInfo.size() == 0) {
+                showAddCarDialog();
+                return;
+            }
             link_index = 0;
             onRLChangeLayount(MainActivity.this, LinkInfoActivity.class);
         }
     }
-
+    public void showAddCarDialog() {
+        dialog.setContentView(R.layout.dlg_normal);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
+        dialog_normal_text.setText(R.string.show_reg_car);
+        ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
+        dialog_normal_btn.setOnClickListener(view -> {
+            dialog.dismiss();
+            onRLChangeLayount(MainActivity.this, CarInfoActivity.class);
+        });
+        dialog.show();
+    }
     private void onShowMailClick() {
         onRLChangeLayount(MainActivity.this, MessageActivity.class);
     }

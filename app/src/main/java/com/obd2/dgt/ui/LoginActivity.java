@@ -16,6 +16,7 @@ import com.obd2.dgt.utils.Crypt;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class LoginActivity extends AppBaseActivity {
     EditText login_id_text, login_pwd_text;
@@ -99,7 +100,19 @@ public class LoginActivity extends AppBaseActivity {
             WebHttpConnect.onLoginRequest(params);
         }
     }
-    public void onSuccessStart() {
+    public void onSuccessStart(ArrayList<String> user_info) {
+        MyUtils.user_only_num = Integer.parseInt(user_info.get(0));
+        if (MyUtils.my_name.isEmpty()) {
+            String[][] params = new String[][]{
+                    {"phone", user_info.get(1)},
+                    {"password", user_info.get(2)},
+                    {"name", user_info.get(3)},
+                    {"company", user_info.get(4)},
+                    {"condition", "1"}
+            };
+            MyInfoTable.insertMyInfoTable(params);
+            MyInfoTable.getMyInfoTable();
+        }
         ServiceStart();
         onRLChangeLayount(LoginActivity.this, MainActivity.class);
         finish();

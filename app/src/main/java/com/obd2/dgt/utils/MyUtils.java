@@ -29,6 +29,9 @@ public class MyUtils {
     public static String user_modify = "/mobile.userInfoModify";
     public static String find_password = "/mobile.userFindPassword";
     public static String reg_car = "/mobile.regCarInfo";
+    public static String mod_car = "/mobile.modCarInfo";
+    public static String del_car = "/mobile.delCarInfo";
+    public static String driving_info = "/mobile.mtsDrivingInfo";
     public static AppBaseActivity appBase = null;
     public static Activity currentActivity = null;
     public static Context mContext = null;
@@ -41,6 +44,7 @@ public class MyUtils {
     public static BluetoothSocket btSocket = null;
     public static BtService btService = null;
     public static String PID = "01";
+    public static int user_only_num = 0;
     public static final int REQUEST_ENABLE_BT = 10;
     public static final int REQUEST_PAIRED_BT = 11;
     public static int[] main_list_images = {

@@ -284,12 +284,12 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1">
 
-                        <ImageView
+                        <!--<ImageView
                             android:id="@+id/my_info_car_add_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/add_state" />
+                            app:srcCompat="@drawable/add_state" />-->
                     </FrameLayout>
                 </LinearLayout>
 

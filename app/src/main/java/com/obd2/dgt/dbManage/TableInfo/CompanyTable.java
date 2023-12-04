@@ -26,6 +26,8 @@ public class CompanyTable {
                     info[2] = cursor.getString(2); //company name
                     MyUtils.companyInfo.add(info);
                 }
+            } else {
+                MyUtils.companyInfo = new ArrayList<>();
             }
         } catch (Exception e) {
             e.printStackTrace();

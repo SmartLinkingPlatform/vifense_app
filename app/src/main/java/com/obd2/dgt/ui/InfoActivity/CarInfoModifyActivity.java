@@ -5,10 +5,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.CarInfoTable;
+import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.AppBaseActivity;
+import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.time.LocalDate;
@@ -28,14 +31,19 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     int model_idx = 0;
     int year_idx = 0;
     int fuel_idx = 0;
+    String c_num = "";
     String car_number = "";
     String car_gas = "";
+    private static CarInfoModifyActivity instance;
+    public static CarInfoModifyActivity getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info_modify);
-
+        instance = this;
         getSelectedCarInfo();
         initLayout();
     }
@@ -102,24 +110,44 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     private void getSelectedCarInfo() {
         for (String[] infos : MyUtils.carInfo) {
             if (MyUtils.sel_car_id == Integer.parseInt(infos[0])) {
-                manufacturer_idx = Integer.parseInt(infos[1]);
-                model_idx = Integer.parseInt(infos[2]);
-                year_idx = Integer.parseInt(infos[3]);
-                car_number = infos[4];
-                fuel_idx = Integer.parseInt(infos[5]);
-                car_gas = infos[6];
+                c_num = infos[1];
+                manufacturer_idx = Integer.parseInt(infos[2]);
+                model_idx = Integer.parseInt(infos[3]);
+                year_idx = Integer.parseInt(infos[4]);
+                car_number = infos[5];
+                fuel_idx = Integer.parseInt(infos[6]);
+                car_gas = infos[7];
             }
         }
     }
 
     private void onModifyCarClick() {
+        String msg = getString(R.string.check_network_error);
+        String btnText = getString(R.string.confirm_text);
+        boolean isNetwork = CommonFunc.checkNetworkStatus(CarInfoModifyActivity.this, msg, btnText);
+        if (isNetwork) {
+            //서버에 등록
+            String[][] params = new String[][]{
+                    {"c_num", c_num},
+                    {"number", mod_number_text.getText().toString()},
+                    {"manufacturer", mod_manufacturer_spinner.getSelectedItem().toString()},
+                    {"car_model", mod_model_spinner.getSelectedItem().toString()},
+                    {"car_date", mod_date_spinner.getSelectedItem().toString()},
+                    {"car_fuel", mod_fuel_type_spinner.getSelectedItem().toString()},
+                    {"car_gas", mod_gas_text.getText().toString()},
+            };
+            WebHttpConnect.onCarModifyRequest(params);
+        }
+    }
+
+    public void onSuccessModifyCar() {
         String[][] fields = new String[][]{
                 {"manufacturer", String.valueOf(mod_manufacturer_spinner.getSelectedItemPosition())},
                 {"model", String.valueOf(mod_model_spinner.getSelectedItemPosition())},
                 {"create_date", String.valueOf(mod_date_spinner.getSelectedItemPosition())},
                 {"number", mod_number_text.getText().toString()},
                 {"fuel_type", String.valueOf(mod_fuel_type_spinner.getSelectedItemPosition())},
-                {"displacement", mod_gas_text.getText().toString()}
+                {"gas", mod_gas_text.getText().toString()}
         };
 
         CarInfoTable.updateCarInfoTable(MyUtils.sel_car_id, fields);
@@ -129,12 +157,33 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         finish();
     }
 
+    public void onFailedModifyCar() {
+        Toast.makeText(getApplicationContext(), R.string.error_mod_car_fail, Toast.LENGTH_SHORT).show();
+    }
+
     private void onDeleteCarClick() {
+        String msg = getString(R.string.check_network_error);
+        String btnText = getString(R.string.confirm_text);
+        boolean isNetwork = CommonFunc.checkNetworkStatus(CarInfoModifyActivity.this, msg, btnText);
+        if (isNetwork) {
+            //서버에 등록
+            String[][] params = new String[][]{
+                    {"c_num", c_num},
+                    {"number", mod_number_text.getText().toString()},
+                    {"user_num", String.valueOf(MyUtils.user_only_num)}
+            };
+            WebHttpConnect.onCarDeleteRequest(params);
+        }
+    }
+    public void onSuccessDeleteCar() {
         CarInfoTable.deleteCarInfoTable(MyUtils.sel_car_id);
         CarInfoTable.getCarInfoTable();
 
         onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
         finish();
+    }
+    public void onFailedDeleteCar() {
+        Toast.makeText(getApplicationContext(), R.string.error_del_car_fail, Toast.LENGTH_SHORT).show();
     }
 
     private void onModCarInfoPrevClick(){

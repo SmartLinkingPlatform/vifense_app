@@ -100,9 +100,6 @@ public class FindPwdActivity extends AppBaseActivity {
                     }
                 });
             } else {
-                dialog = new Dialog(FindPwdActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setCancelable(false);
                 showWarningDialog();
                 auth_flag = false;
             }

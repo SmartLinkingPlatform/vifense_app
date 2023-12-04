@@ -30,7 +30,8 @@ public class MyInfoActivity extends AppBaseActivity {
     ImageView user_info_mod_btn, my_info_prev_btn;
     ImageView user_info_img;
     FrameLayout my_info_framelayout, my_info_add_layout;
-    ImageView my_info_reg_btn, my_info_car_add_btn;
+    ImageView my_info_reg_btn;
+    //ImageView my_info_car_add_btn;
     RecyclerView my_info_car_recycle_view;
     CarAdapter carAdapter;
     ArrayList<CarItem> carItems = new ArrayList<>();
@@ -89,17 +90,22 @@ public class MyInfoActivity extends AppBaseActivity {
             my_info_car_recycle_view.setLayoutManager(verticalLayoutManager);
             CarItem item;
             for (int i = 0; i < MyUtils.carInfo.size(); i++) {
-                String model = getString(MyUtils.model_names[Integer.parseInt(MyUtils.carInfo.get(i)[0])]);
-                String year = MyUtils.create_years.get(Integer.parseInt(MyUtils.carInfo.get(i)[3])) + getString(R.string.year_unit);
-                String gas = MyUtils.carInfo.get(i)[6] + getString(R.string.gas_unit);
-                item = new CarItem(MyUtils.carInfo.get(i)[0], model, MyUtils.carInfo.get(i)[4], year, gas);
+                String id = MyUtils.carInfo.get(i)[0];
+                String c_num = MyUtils.carInfo.get(i)[1];
+                String manufacturer = getString(MyUtils.company_names[Integer.parseInt(MyUtils.carInfo.get(i)[2])]);
+                String model = getString(MyUtils.model_names[Integer.parseInt(MyUtils.carInfo.get(i)[3])]);
+                String number = MyUtils.carInfo.get(i)[5];
+                String year = MyUtils.create_years.get(Integer.parseInt(MyUtils.carInfo.get(i)[4])) + getString(R.string.year_unit);
+                String fuel = getString(MyUtils.fuel_types[Integer.parseInt(MyUtils.carInfo.get(i)[6])]);
+                String gas = MyUtils.carInfo.get(i)[7] + getString(R.string.gas_unit);
+                item = new CarItem(id, c_num, manufacturer, model, number, year, fuel, gas);
                 carItems.add(item);
             }
             carAdapter = new CarAdapter(getContext(), carItems, carListListener);
             my_info_car_recycle_view.setAdapter(carAdapter);
 
-            my_info_car_add_btn = findViewById(R.id.my_info_car_add_btn);
-            my_info_car_add_btn.setOnClickListener(view -> onMyInfoAddCarClick());
+            //my_info_car_add_btn = findViewById(R.id.my_info_car_add_btn);
+            //my_info_car_add_btn.setOnClickListener(view -> onMyInfoAddCarClick());
         }
     }
     private CarAdapter.ItemClickListener carListListener = new CarAdapter.ItemClickListener() {

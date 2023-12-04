@@ -55,7 +55,7 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:id="@+id/car_info_text_1"
+                                    android:id="@+id/car_manufacturer"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:ellipsize="end"
@@ -64,7 +64,7 @@
                                     android:maxLength="9"
                                     android:maxLines="1"
                                     android:textColor="@color/text_color"
-                                    android:textSize="14sp" />
+                                    android:textSize="12sp" />
                             </FrameLayout>
 
                             <FrameLayout
@@ -73,7 +73,7 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:id="@+id/car_info_text_2"
+                                    android:id="@+id/car_model"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:ellipsize="end"
@@ -82,7 +82,26 @@
                                     android:maxLength="9"
                                     android:maxLines="1"
                                     android:textColor="@color/text_color"
-                                    android:textSize="14sp" />
+                                    android:textSize="12sp" />
+
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/car_number"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:gravity="center_vertical"
+                                    android:maxLength="9"
+                                    android:maxLines="1"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="12sp" />
                             </FrameLayout>
                         </LinearLayout>
 
@@ -104,7 +123,7 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:id="@+id/car_info_text_3"
+                                    android:id="@+id/car_cyear"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:ellipsize="end"
@@ -113,7 +132,7 @@
                                     android:maxLength="9"
                                     android:maxLines="1"
                                     android:textColor="@color/text_color"
-                                    android:textSize="14sp" />
+                                    android:textSize="12sp" />
                             </FrameLayout>
 
                             <FrameLayout
@@ -122,7 +141,7 @@
                                 android:layout_weight="1">
 
                                 <TextView
-                                    android:id="@+id/car_info_text_4"
+                                    android:id="@+id/car_fuel"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:ellipsize="end"
@@ -131,7 +150,25 @@
                                     android:maxLength="9"
                                     android:maxLines="1"
                                     android:textColor="@color/text_color"
-                                    android:textSize="14sp" />
+                                    android:textSize="12sp" />
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/car_gas"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/pretendard_regular"
+                                    android:gravity="center_vertical"
+                                    android:maxLength="9"
+                                    android:maxLines="1"
+                                    android:textColor="@color/text_color"
+                                    android:textSize="12sp" />
                             </FrameLayout>
                         </LinearLayout>
 

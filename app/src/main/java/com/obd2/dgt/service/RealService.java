@@ -16,8 +16,11 @@ import androidx.core.app.NotificationCompat;
 import com.obd2.dgt.R;
 import com.obd2.dgt.btManage.BtService;
 import com.obd2.dgt.btManage.OBD2ApiCommand;
+import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.FindPwdActivity;
+import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.MainActivity;
+import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,7 +29,7 @@ public class RealService extends Service {
     private static Thread mainThread;
     public static Intent serviceIntent = null;
 
-    int speed_time = 0;
+    int idling_time = 0; //공회전 시간
     boolean speed_fast = false;
     boolean speed_quick = false;
     boolean speed_brake = false;
@@ -55,7 +58,7 @@ public class RealService extends Service {
                     } else {
                         if (mainThread != null && MyUtils.isObdSocket) {
                             //MyUtils.btService.setOutStreamPID();
-                            getDrivingTimeAndDistance();
+                            getDrivingStatus();
                             getFuelConsumption();
                             showErrorDialog();
                         }
@@ -76,20 +79,26 @@ public class RealService extends Service {
 
     int time = 0;
     double driving_distance = 0;
-    private void getDrivingTimeAndDistance() {
+    //차량의 움직임 상태
+    private void getDrivingStatus() {
         float speed = Float.parseFloat(MyUtils.ecu_vehicle_speed);
-        if(speed >= 0) {
-            speed_time = 0;
+        float load = Float.parseFloat(MyUtils.ecu_engine_load);
+        if(speed >= 0 && load > 0) { //차량이 엔진을 켠 상태
+            if (speed == 0) { //시동을 켠 상태에서 이동하지 않는 상태
+                idling_time++;
+            } else { //차량이 이동하는 중
+                idling_time = 0;
+            }
             speed_fast = false;
             speed_quick = false;
             speed_brake = false;
-            if (speed > 110) {
+            if (speed > 110) { //속도가 110 km을 초과한 경우
                 speed_fast = true;
             }
-            if (speed - prev_speed > 7) {
+            if (speed - prev_speed > 7) { // 차량 속도가 1초내에 7km 이상 가속된 경우
                 speed_quick = true;
             }
-            if (prev_speed - speed > 9) {
+            if (prev_speed - speed > 9) { // 차량 속도가 1초내에 9km 이상 감소된 경우
                 speed_brake = true;
             }
             time++;
@@ -100,8 +109,8 @@ public class RealService extends Service {
             double distance = speed / (double)3600;
             driving_distance += distance;
             MyUtils.ecu_mileage = String.valueOf(Math.round(driving_distance * 10) / 10.0);
-        } else {
-            speed_time++;
+        } else { // 차량이 정지(엔진이 꺼진 상태)
+            
         }
         prev_speed = speed;
     }
@@ -168,6 +177,7 @@ public class RealService extends Service {
 
         startForeground(1, notification);
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -186,7 +196,7 @@ public class RealService extends Service {
 
     private void showErrorDialog() {
         int err_idx = 0;
-        if (speed_time > 180) {
+        if (idling_time > 180) {
             err_idx = 1;
         }
         if (speed_fast) {

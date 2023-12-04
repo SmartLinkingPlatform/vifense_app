@@ -31,6 +31,8 @@ public class GaugeInfoTable {
                     info[4] = cursor.getString(4); //계기이름
                     MyUtils.gaugeInfo.add(info);
                 }
+            } else {
+                MyUtils.gaugeInfo = new ArrayList<>();
             }
         } catch (Exception e) {
             e.printStackTrace();

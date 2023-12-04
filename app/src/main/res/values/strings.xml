@@ -59,7 +59,10 @@
     <string name="error_signup_duplicate">이미 등록된 사용자 입니다.</string>
     <string name="error_signup_fail">사용자 등록에 실패하였습니다.</string>
     <string name="error_reg_car_duplicate">이미 등록된 차량 입니다.</string>
+    <string name="show_reg_car">차량을 먼저 등록 하십시오.</string>
     <string name="error_reg_car_fail">차량 등록에 실패 하였습니다.</string>
+    <string name="error_mod_car_fail">차량 정보 수정에 실패 하였습니다.</string>
+    <string name="error_del_car_fail">차량 정보 삭제에 실패 하였습니다.</string>
     <string name="error_input_pwd">비밀번호가 일치하지 않습니다.</string>
     <string name="error_view_conditions">이용약관을 확인하십시오.</string>
     <string name="error_register_user">이미 등록된 사용자 입니다.</string>
