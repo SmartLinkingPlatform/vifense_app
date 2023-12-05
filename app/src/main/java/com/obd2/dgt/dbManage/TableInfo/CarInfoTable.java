@@ -20,9 +20,12 @@ public class CarInfoTable {
                         cursor.moveToFirst();
                     else
                         cursor.moveToNext();
+
+                    MyUtils.car_id = cursor.getInt(1); //차량 유일 번호
+
                     String[] info = new String[8];
                     info[0] = cursor.getString(0); //id
-                    info[1] = cursor.getString(1); //차량 유일번호
+                    info[1] = cursor.getString(1); //차량 유일 번호
                     info[2] = cursor.getString(2); //제조사
                     info[3] = cursor.getString(3); //모델
                     info[4] = cursor.getString(4); //연식
@@ -39,9 +42,9 @@ public class CarInfoTable {
         }
     }
 
-    public static void updateCarInfoTable(int id, String[][] fields) {
+    public static void updateCarInfoTable(int car_id, String[][] fields) {
         try {
-            String where = "id = " + id;
+            String where = "car_id = " + car_id;
             MyUtils.db_connect.sqlUpdate(table_name, fields, where);
         } catch (Exception e) {
             e.printStackTrace();

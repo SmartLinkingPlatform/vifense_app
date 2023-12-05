@@ -40,6 +40,7 @@ public class RankingInfoActivity extends AppBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
+        MyUtils.currentActivity = this;
 
         initLayout();
     }

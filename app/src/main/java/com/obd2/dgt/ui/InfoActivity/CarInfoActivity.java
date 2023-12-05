@@ -46,6 +46,7 @@ public class CarInfoActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info);
         instance = this;
+        MyUtils.currentActivity = this;
         initLayout();
     }
 
@@ -106,17 +107,17 @@ public class CarInfoActivity extends AppBaseActivity {
                     {"car_date", reg_car_date_spinner.getSelectedItem().toString()},
                     {"car_fuel", car_fuel_type_spinner.getSelectedItem().toString()},
                     {"car_gas", reg_car_gas_text.getText().toString()},
-                    {"user_id", MyUtils.my_id},
-                    {"company", MyUtils.my_company}
+                    {"user_id", String.valueOf(MyUtils.my_id)},
+                    {"admin_id", String.valueOf(MyUtils.admin_id)}
             };
             WebHttpConnect.onCarRegisterRequest(params);
         }
 
     }
 
-    public void onSuccessRegisterCar(String car_num) {
+    public void onSuccessRegisterCar(String car_id) {
         String[][] fields = new String[][]{
-                {"car_num", car_num},
+                {"car_id", car_id},
                 {"manufacturer", String.valueOf(car_manufacturer_spinner.getSelectedItemPosition())},
                 {"model", String.valueOf(car_model_spinner.getSelectedItemPosition())},
                 {"create_date", String.valueOf(reg_car_date_spinner.getSelectedItemPosition())},

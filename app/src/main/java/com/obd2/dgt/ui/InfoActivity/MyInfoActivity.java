@@ -12,13 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.CarInfoTable;
-import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.CarList.CarAdapter;
 import com.obd2.dgt.ui.ListAdapter.CarList.CarItem;
-import com.obd2.dgt.ui.ListAdapter.MainList.MainListAdapter;
-import com.obd2.dgt.ui.ListAdapter.MainList.MainListItem;
-import com.obd2.dgt.ui.ListAdapter.MessageList.MessageAdapter;
 import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.utils.MyUtils;
 
@@ -26,7 +22,7 @@ import java.util.ArrayList;
 
 public class MyInfoActivity extends AppBaseActivity {
 
-    TextView my_info_id, my_info_name, my_info_company;
+    TextView my_info_phone, my_info_name, my_info_company;
     ImageView user_info_mod_btn, my_info_prev_btn;
     ImageView user_info_img;
     FrameLayout my_info_framelayout, my_info_add_layout;
@@ -45,6 +41,7 @@ public class MyInfoActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info);
         instance = this;
+        MyUtils.currentActivity = this;
 
         if (MyUtils.carInfo.size() == 0) {
             CarInfoTable.getCarInfoTable();
@@ -54,8 +51,8 @@ public class MyInfoActivity extends AppBaseActivity {
     }
 
     private void initLayout() {
-        my_info_id = findViewById(R.id.my_info_id);
-        my_info_id.setText(MyUtils.my_id);
+        my_info_phone = findViewById(R.id.my_info_phone);
+        my_info_phone.setText(MyUtils.my_phone);
 
         my_info_name = findViewById(R.id.my_info_name);
         my_info_name.setText(MyUtils.my_name);

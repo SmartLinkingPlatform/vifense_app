@@ -1,5 +1,7 @@
 package com.obd2.dgt.network;
 
+import android.graphics.Bitmap;
+
 import com.obd2.dgt.dbManage.TableInfo.CompanyTable;
 import com.obd2.dgt.network.http.HttpCall;
 import com.obd2.dgt.network.http.HttpUrlRequest;
@@ -7,6 +9,7 @@ import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.CarInfoModifyActivity;
 import com.obd2.dgt.ui.InfoActivity.MyInfoModifyActivity;
 import com.obd2.dgt.ui.LoginActivity;
+import com.obd2.dgt.ui.MainListActivity.RecordActivity;
 import com.obd2.dgt.ui.SignupActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
@@ -16,6 +19,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class WebHttpConnect {
     static HttpCall httpCallPost = new HttpCall();
@@ -52,7 +57,7 @@ public class WebHttpConnect {
                             JSONObject object = data.getJSONObject(i);
                             String[][] fields = new String[][]{
                                     {"id", String.valueOf(index)},
-                                    {"cid", object.getString("user_num")},
+                                    {"cid", object.getString("admin_id")},
                                     {"name", object.getString("company_name")}
                             };
                             CompanyTable.insertCompanyInfoTable(fields);
@@ -105,11 +110,11 @@ public class WebHttpConnect {
                         String msg = res.getString("msg");
                         if (msg.equals("ok")) {
                             ArrayList<String> user_info = new ArrayList<>();
-                            user_info.add(res.getString("user_num"));
                             user_info.add(res.getString("user_id"));
-                            user_info.add(res.getString("user_pwd"));
+                            user_info.add(res.getString("user_phone"));
                             user_info.add(res.getString("user_name"));
-                            user_info.add(res.getString("company_name"));
+                            user_info.add(res.getString("user_pwd"));
+                            user_info.add(res.getString("admin_id"));
                             LoginActivity.getInstance().onSuccessStart(user_info);
                         } else {
                             LoginActivity.getInstance().onFailedStart();
@@ -156,8 +161,8 @@ public class WebHttpConnect {
                         JSONObject res = new JSONObject(response);
                         String msg = res.getString("msg");
                         if (msg.equals("ok")) {
-                            String car_num = res.getString("car_num");
-                            CarInfoActivity.getInstance().onSuccessRegisterCar(car_num);
+                            String car_id = res.getString("car_id");
+                            CarInfoActivity.getInstance().onSuccessRegisterCar(car_id);
                         } else if (msg.equals("du")){
                             CarInfoActivity.getInstance().onDuplicationRegisterCar();
                         } else {
@@ -240,9 +245,50 @@ public class WebHttpConnect {
         }.execute(httpCallPost);
     }
 
+    public static void onReadDrivingInfoRequest(String[][] values) {
+        serverCallHttpFunc(values, MyUtils.read_driving);
+        new HttpUrlRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (!response.isEmpty()) {
+                    try {
+                        JSONArray data = CommonFunc.AnalysisResponse(response);
+                        String temp_date = "";
+                        LinkedHashMap<String, ArrayList<JSONObject>> driving_info = new LinkedHashMap<>();
+                        ArrayList<JSONObject> infos = new ArrayList<>();
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject res = data.getJSONObject(i);
+                            String driving_date = res.getString("driving_date");
+                            if (infos.size() == 0) {
+                                infos.add(res);
+                            } else {
+                                if (driving_date.equals(temp_date)) {
+                                    infos.add(res);
+                                } else {
+                                    driving_info.put(temp_date, infos);
+                                    infos = new ArrayList<>();
+                                    infos.add(res);
+                                }
+                            }
+                            if (i == data.length() - 1) {
+                                driving_info.put(driving_date, infos);
+                            }
+                            temp_date = driving_date;
+                        }
+
+                        RecordActivity.getInstance().onSuccessDrivingInfo(driving_info);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute(httpCallPost);
+    }
+
     //차량의 주행 정보 보내기
-    public static void onDrivingInfoRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.driving_info);
+    public static void onSaveDrivingInfoRequest(String[][] values) {
+        serverCallHttpFunc(values, MyUtils.save_driving);
         new HttpUrlRequest(){
             @Override
             public void onResponse(String response) {
@@ -252,7 +298,14 @@ public class WebHttpConnect {
                         JSONObject res = new JSONObject(response);
                         String msg = res.getString("msg");
                         if (msg.equals("ok")) {
-
+                            MyUtils.max_speed = 0;
+                            MyUtils.ecu_distance = 0;
+                            MyUtils.ecu_mileage = "0";
+                            MyUtils.fast_speed_cnt = 0;
+                            MyUtils.quick_speed_cnt = 0;
+                            MyUtils.brake_speed_cnt = 0;
+                            MyUtils.idling_time = 0;
+                            MyUtils.ecu_driving_time = "0";
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.obd2.dgt.dbManage.TableInfo.CarInfoTable;
 import com.obd2.dgt.dbManage.TableInfo.CompanyTable;
 import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.R;
@@ -23,8 +24,8 @@ public class LoginActivity extends AppBaseActivity {
     TextView find_pwd_btn, register_btn;
     ImageView login_btn;
     boolean isNetwork = false;
-    String id_txt = "";
-    String pwd_txt = "";
+    String user_phone = "";
+    String user_pwd = "";
 
     private static LoginActivity instance;
     public static LoginActivity getInstance() {
@@ -48,7 +49,8 @@ public class LoginActivity extends AppBaseActivity {
         if (isNetwork) {
             getDatabaseInfo();
             getWindowsSize();
-            getCompanyInfoFromServer();
+            //서버 에서 회사 자료 받기
+            WebHttpConnect.onCompanyInfoRequest();
         }
         //년도
         LocalDate now = null;
@@ -89,25 +91,32 @@ public class LoginActivity extends AppBaseActivity {
     }
     private void gotoMainActivity(){
         if (isNetwork) {
-            id_txt = login_id_text.getText().toString();
-            pwd_txt = login_pwd_text.getText().toString();
-            String encode_pwd = Crypt.encrypt(pwd_txt);
+            user_phone = login_id_text.getText().toString();
+            user_pwd = login_pwd_text.getText().toString();
+            String encode_pwd = Crypt.encrypt(user_pwd);
 
+            String visit_date = CommonFunc.getDateTime();
             String[][] params = new String[][]{
-                    {"user_id", id_txt},
-                    {"user_pwd", encode_pwd}
+                    {"user_phone", user_phone},
+                    {"user_pwd", encode_pwd},
+                    {"visit_date", visit_date}
             };
             WebHttpConnect.onLoginRequest(params);
         }
     }
     public void onSuccessStart(ArrayList<String> user_info) {
-        MyUtils.user_only_num = Integer.parseInt(user_info.get(0));
+        MyInfoTable.getMyInfoTable();
+        DeviceInfoTable.getDeviceInfoTable();
+        CarInfoTable.getCarInfoTable();
+        
+        MyUtils.my_id = Integer.parseInt(user_info.get(0));
+        MyUtils.admin_id = Integer.parseInt(user_info.get(4));
         if (MyUtils.my_name.isEmpty()) {
             String[][] params = new String[][]{
                     {"phone", user_info.get(1)},
-                    {"password", user_info.get(2)},
-                    {"name", user_info.get(3)},
-                    {"company", user_info.get(4)},
+                    {"name", user_info.get(2)},
+                    {"password", user_info.get(3)},
+                    {"cid", user_info.get(4)},
                     {"condition", "1"}
             };
             MyInfoTable.insertMyInfoTable(params);
@@ -123,9 +132,7 @@ public class LoginActivity extends AppBaseActivity {
 
     //DataBase setting
     private void getDatabaseInfo() {
-        CompanyTable.deleteAllCompanyInfoTable();
-        MyInfoTable.getMyInfoTable();
-        DeviceInfoTable.getDeviceInfoTable();
+        CompanyTable.deleteAllCompanyInfoTable();        
     }
 
     @Override
@@ -133,7 +140,4 @@ public class LoginActivity extends AppBaseActivity {
         super.onDestroy();
     }
 
-    private void getCompanyInfoFromServer() {
-        WebHttpConnect.onCompanyInfoRequest();
-    }
 }

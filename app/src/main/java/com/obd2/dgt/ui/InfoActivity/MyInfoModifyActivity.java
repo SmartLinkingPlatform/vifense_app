@@ -36,6 +36,7 @@ public class MyInfoModifyActivity extends AppBaseActivity {
     Spinner myinfo_mod_company_spinner;
     Dialog dialog;
     TextView dialog_normal_text;
+    String[] c_ids;
     private static MyInfoModifyActivity instance;
     public static MyInfoModifyActivity getInstance() {
         return instance;
@@ -46,13 +47,14 @@ public class MyInfoModifyActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info_modify);
         instance = this;
+        MyUtils.currentActivity = this;
 
         initLayout();
     }
 
     private void initLayout() {
         my_info_mod_id = findViewById(R.id.my_info_mod_id);
-        my_info_mod_id.setText(MyUtils.my_id);
+        my_info_mod_id.setText(MyUtils.my_phone);
 
         my_info_mod_name = findViewById(R.id.my_info_mod_name);
         my_info_mod_name.setText(MyUtils.my_name);
@@ -62,11 +64,14 @@ public class MyInfoModifyActivity extends AppBaseActivity {
 
         myinfo_mod_company_spinner = findViewById(R.id.myinfo_mod_company_spinner);
         int selected_idx = 0;
+        c_ids = new String[MyUtils.companyInfo.size()];
         String[] companys = new String[MyUtils.companyInfo.size()];
         for (int i = 0; i < MyUtils.companyInfo.size(); i++) {
+            String c_id = MyUtils.companyInfo.get(i)[1];
+            c_ids[i] = c_id;
             String c_name = MyUtils.companyInfo.get(i)[2];
             companys[i] = c_name;
-            if (MyUtils.my_company.equals(MyUtils.companyInfo.get(i)[2])) {
+            if (MyUtils.admin_id == Integer.parseInt(c_id)) {
                 selected_idx = i;
             }
         }
@@ -101,16 +106,18 @@ public class MyInfoModifyActivity extends AppBaseActivity {
                 String encode_pwd = Crypt.encrypt(pwd);
                 String[][] fields = new String[][]{
                         {"password", encode_pwd},
-                        {"company", myinfo_mod_company_spinner.getSelectedItem().toString()}
+                        {"cid", c_ids[myinfo_mod_company_spinner.getSelectedItemPosition()]}
                 };
                 MyInfoTable.updateMyInfoTable(fields);
                 MyInfoTable.getMyInfoTable();
 
+                String update_date = CommonFunc.getDateTime();
                 //서버에 등록
                 String[][] params = new String[][]{
-                        {"user_id", MyUtils.my_id},
+                        {"user_id", String.valueOf(MyUtils.my_id)},
                         {"user_pwd", encode_pwd},
-                        {"company_name", myinfo_mod_company_spinner.getSelectedItem().toString()}
+                        {"admin_id", c_ids[myinfo_mod_company_spinner.getSelectedItemPosition()]},
+                        {"update_date", update_date},
                 };
                 WebHttpConnect.onModifyUserRequest(params);
             }

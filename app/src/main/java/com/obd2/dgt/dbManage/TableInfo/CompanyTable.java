@@ -34,6 +34,22 @@ public class CompanyTable {
         }
     }
 
+    public static String getCompanyName(int cid) {
+        String cname = "";
+        try {
+            String where = "cid=" + cid;
+            Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "name", where);
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                cname = cursor.getString(0); //소속 회사 이름
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return cname;
+    }
+
     public static void insertCompanyInfoTable(String[][] fields) {
         try {
             MyUtils.db_connect.sqlInsert(table_name, fields);

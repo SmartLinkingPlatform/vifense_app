@@ -88,7 +88,7 @@ public class FindPwdActivity extends AppBaseActivity {
     private void onGetAuthCodeClick() {
         if (!auth_flag) {
             if (MyUtils.my_name.equals(find_name_text.getText().toString()) &&
-                    MyUtils.my_id.equals(find_id_text.getText().toString())) {
+                    MyUtils.my_phone.equals(find_id_text.getText().toString())) {
                 auth_code_btn.setBackgroundResource(R.drawable.button2_disable);
                 auth_code_layout.setVisibility(View.VISIBLE);
                 auth_flag = true;

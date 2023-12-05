@@ -4,12 +4,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.LinkDevice.DeviceAdapter;
 import com.obd2.dgt.ui.ListAdapter.LinkDevice.DeviceItem;
@@ -38,6 +43,7 @@ public class LinkInfoActivity extends AppBaseActivity {
     ArrayList<DeviceItem> deviceItems = new ArrayList<>();
     ArrayList<BluetoothDevice> enableDevices = new ArrayList<>();
     Set<BluetoothDevice> pairedDevices = new HashSet<>();
+    Dialog dialog;
 
 
     private static LinkInfoActivity instance;
@@ -48,8 +54,9 @@ public class LinkInfoActivity extends AppBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = this;
         setContentView(R.layout.activity_link);
+        instance = this;
+        MyUtils.currentActivity = this;
 
         //페어링 된 장치 검색
         onSearchPairedBtDevices();
@@ -266,6 +273,8 @@ public class LinkInfoActivity extends AppBaseActivity {
         onLRChangeLayount(LinkInfoActivity.this, MainActivity.class);
         finish();
     }
+
+
     @SuppressLint("MissingPermission")
     @Override
     protected void onDestroy() {

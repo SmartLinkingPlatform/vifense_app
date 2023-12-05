@@ -31,7 +31,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     int model_idx = 0;
     int year_idx = 0;
     int fuel_idx = 0;
-    String c_num = "";
+    String car_id = "";
     String car_number = "";
     String car_gas = "";
     private static CarInfoModifyActivity instance;
@@ -44,6 +44,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info_modify);
         instance = this;
+        MyUtils.currentActivity = this;
         getSelectedCarInfo();
         initLayout();
     }
@@ -110,7 +111,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     private void getSelectedCarInfo() {
         for (String[] infos : MyUtils.carInfo) {
             if (MyUtils.sel_car_id == Integer.parseInt(infos[0])) {
-                c_num = infos[1];
+                car_id = infos[1];
                 manufacturer_idx = Integer.parseInt(infos[2]);
                 model_idx = Integer.parseInt(infos[3]);
                 year_idx = Integer.parseInt(infos[4]);
@@ -128,7 +129,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         if (isNetwork) {
             //서버에 등록
             String[][] params = new String[][]{
-                    {"c_num", c_num},
+                    {"car_id", car_id},
                     {"number", mod_number_text.getText().toString()},
                     {"manufacturer", mod_manufacturer_spinner.getSelectedItem().toString()},
                     {"car_model", mod_model_spinner.getSelectedItem().toString()},
@@ -150,7 +151,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
                 {"gas", mod_gas_text.getText().toString()}
         };
 
-        CarInfoTable.updateCarInfoTable(MyUtils.sel_car_id, fields);
+        CarInfoTable.updateCarInfoTable(Integer.parseInt(car_id), fields);
         CarInfoTable.getCarInfoTable();
 
         onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
@@ -168,9 +169,9 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         if (isNetwork) {
             //서버에 등록
             String[][] params = new String[][]{
-                    {"c_num", c_num},
+                    {"car_id", car_id},
                     {"number", mod_number_text.getText().toString()},
-                    {"user_num", String.valueOf(MyUtils.user_only_num)}
+                    {"user_id", String.valueOf(MyUtils.my_id)}
             };
             WebHttpConnect.onCarDeleteRequest(params);
         }

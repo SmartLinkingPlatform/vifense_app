@@ -14,9 +14,10 @@ public class MyInfoTable {
                 if (cursor != null && cursor.getCount() > 0) {
                     cursor.moveToFirst();
                     MyUtils.my_name = cursor.getString(0); //나의 이름
-                    MyUtils.my_id = cursor.getString(1); //나의 폰 번호
+                    MyUtils.my_phone = cursor.getString(1); //나의 폰 번호
                     MyUtils.my_pwd = cursor.getString(2); //비밀 번호
-                    MyUtils.my_company = cursor.getString(3); //소속 회사
+                    MyUtils.admin_id = cursor.getInt(3); //소속 회사 아이디
+                    MyUtils.my_company = CompanyTable.getCompanyName(MyUtils.admin_id); //소속 회사 이름
                 }
             }
         } catch (Exception e) {

@@ -15,15 +15,12 @@ import androidx.core.app.NotificationCompat;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.btManage.BtService;
-import com.obd2.dgt.btManage.OBD2ApiCommand;
 import com.obd2.dgt.network.WebHttpConnect;
-import com.obd2.dgt.ui.FindPwdActivity;
-import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.MainActivity;
+import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RealService extends Service {
     private static Thread mainThread;
@@ -79,70 +76,122 @@ public class RealService extends Service {
 
     int time = 0;
     double driving_distance = 0;
+    double average_speed = 0;
+    String start_time = "";
+    String end_time = "";
+    int down_score_fast = 0;
+    int down_score_quick = 0;
+    int down_score_brake = 0;
+
     //차량의 움직임 상태
     private void getDrivingStatus() {
-        float speed = Float.parseFloat(MyUtils.ecu_vehicle_speed);
-        float load = Float.parseFloat(MyUtils.ecu_engine_load);
+        int speed = Integer.parseInt(MyUtils.ecu_vehicle_speed);
+        int load = Integer.parseInt(MyUtils.ecu_engine_load);
         if(speed >= 0 && load > 0) { //차량이 엔진을 켠 상태
+            if (MyUtils.showGauge) {
+                DashboardActivity.getInstance().startDashboardGauge();
+            }
+
             if (speed == 0) { //시동을 켠 상태에서 이동하지 않는 상태
                 idling_time++;
+                MyUtils.idling_time = idling_time;
             } else { //차량이 이동하는 중
                 idling_time = 0;
+                if (MyUtils.max_speed < speed) {
+                    MyUtils.max_speed = speed;
+                }
+                if (start_time.isEmpty()) {
+                    start_time = CommonFunc.getTime();
+                }
             }
             speed_fast = false;
             speed_quick = false;
             speed_brake = false;
             if (speed > 110) { //속도가 110 km을 초과한 경우
                 speed_fast = true;
+                MyUtils.fast_speed_time++;
+                if (prev_speed < 110) {
+                    MyUtils.fast_speed_cnt++;
+                }
+                if (down_score_fast > -4)
+                    down_score_fast -= 2;
             }
-            if (speed - prev_speed > 7) { // 차량 속도가 1초내에 7km 이상 가속된 경우
+            if (speed - prev_speed > 9) { // 차량 속도가 1초내에 9km 이상 급가속 경우
                 speed_quick = true;
+                MyUtils.quick_speed_cnt++;
+                if (MyUtils.quick_speed_cnt >= 30) {
+                    int cnt = MyUtils.quick_speed_cnt / 30;
+                    if (down_score_quick > -2)
+                        down_score_quick -= cnt;
+                }
             }
-            if (prev_speed - speed > 9) { // 차량 속도가 1초내에 9km 이상 감소된 경우
+            if (prev_speed - speed > 9) { // 차량 속도가 1초내에 9km 이상 급제동 경우
                 speed_brake = true;
+                MyUtils.brake_speed_cnt++;
+                if (MyUtils.brake_speed_cnt >= 30) {
+                    int cnt = MyUtils.brake_speed_cnt / 30;
+                    if (down_score_brake > -2)
+                        down_score_brake -= cnt;
+                }
             }
             time++;
-            String hour = getHour(time);
-            String min = getMinuteAndSecond(time % 3600);
+            String hour = CommonFunc.getHour(time, "");
+            String min = CommonFunc.getMinuteAndSecond(time % 3600, "", "");
             MyUtils.ecu_driving_time = hour + min;
 
             double distance = speed / (double)3600;
             driving_distance += distance;
-            MyUtils.ecu_mileage = String.valueOf(Math.round(driving_distance * 10) / 10.0);
-        } else { // 차량이 정지(엔진이 꺼진 상태)
-            
-        }
-        prev_speed = speed;
-    }
-    private String getHour(int time) {
-        String str_h = "";
-        int hour = Math.round(time / 3600);
-        if (hour > 0) {
-            if (hour > 9) {
-                str_h = hour + ":";
+            average_speed = driving_distance / (time / (float)3600);
+            if (MyUtils.ecu_distance == 0) {
+                MyUtils.ecu_mileage = String.valueOf(Math.round(driving_distance * 10) / 10.0);
             } else {
-                str_h = "0" + hour + ":";
+                MyUtils.ecu_mileage = String.valueOf(MyUtils.ecu_distance);
+            }
+        } else { // 차량이 정지(엔진이 꺼진 상태)
+            if (time > 0) {
+                int driving_score = 100 + down_score_fast + down_score_quick + down_score_brake;
+                String driving_date = CommonFunc.getDate();
+                end_time = CommonFunc.getTime();
+                float mileage = Float.parseFloat(MyUtils.ecu_mileage);
+                if (mileage > 0.1) {
+                    //서버에 등록
+                    String[][] params = new String[][]{
+                            {"driving_date", driving_date},
+                            {"start_time", start_time},
+                            {"end_time", end_time},
+                            {"car_id", String.valueOf(MyUtils.car_id)},
+                            {"user_id", String.valueOf(MyUtils.my_id)},
+                            {"max_speed", String.valueOf(MyUtils.max_speed)},
+                            {"average_speed", String.valueOf(Math.round(average_speed))},
+                            {"mileage", MyUtils.ecu_mileage},
+                            {"driving_time", MyUtils.ecu_driving_time},
+                            {"idling_time", String.valueOf(MyUtils.idling_time)},
+                            {"driving_score", String.valueOf(driving_score)},
+                            {"fast_time", String.valueOf(MyUtils.fast_speed_time)},
+                            {"fast_cnt", String.valueOf(MyUtils.fast_speed_cnt)},
+                            {"quick_cnt", String.valueOf(MyUtils.quick_speed_cnt)},
+                            {"brake_cnt", String.valueOf(MyUtils.brake_speed_cnt)}
+                    };
+                    WebHttpConnect.onSaveDrivingInfoRequest(params);
+
+                    //if gauge page
+                    if (MyUtils.showGauge) {
+                        DashboardActivity.getInstance().stopDashboardGauge();
+                    }
+
+                    time = 0;
+                    idling_time = 0;
+                    average_speed = 0;
+                    driving_distance = 0;
+                    down_score_fast = 0;
+                    down_score_quick = 0;
+                    down_score_brake = 0;
+                    start_time = "";
+                    end_time = "";
+                }
             }
         }
-        return str_h;
-    }
-    private String getMinuteAndSecond(int time) {
-        String str_m = "00";
-        int min = Math.round(time / 60);
-        if (min > 9) {
-            str_m = String.valueOf(min);
-        } else {
-            str_m = "0" + min;
-        }
-        String str_s = "00";
-        int sec = Math.round(time % 60);
-        if (sec > 9) {
-            str_s = String.valueOf(sec);
-        } else {
-            str_s = "0" + sec;
-        }
-        String min_sec = str_m + ":" + str_s;
-        return min_sec;
+        prev_speed = speed;
     }
     private void getFuelConsumption() {
         fuel_consumption += Double.parseDouble(MyUtils.ecu_fuel_rate) / 3600;

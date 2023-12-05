@@ -31,7 +31,8 @@ public class MyUtils {
     public static String reg_car = "/mobile.regCarInfo";
     public static String mod_car = "/mobile.modCarInfo";
     public static String del_car = "/mobile.delCarInfo";
-    public static String driving_info = "/mobile.mtsDrivingInfo";
+    public static String read_driving = "/mobile.readDriving";
+    public static String save_driving = "/mobile.saveDriving";
     public static AppBaseActivity appBase = null;
     public static Activity currentActivity = null;
     public static Context mContext = null;
@@ -44,7 +45,12 @@ public class MyUtils {
     public static BluetoothSocket btSocket = null;
     public static BtService btService = null;
     public static String PID = "01";
-    public static int user_only_num = 0;
+    public static int max_speed = 0; //최대 속도
+    public static int idling_time = 0; //공회전 시간
+    public static int fast_speed_time = 0; //과속 운전 시간
+    public static int fast_speed_cnt = 0; //과속 운전 수
+    public static int quick_speed_cnt = 0; //급가속 수
+    public static int brake_speed_cnt = 0; //급제동 수
     public static final int REQUEST_ENABLE_BT = 10;
     public static final int REQUEST_PAIRED_BT = 11;
     public static int[] main_list_images = {
@@ -90,6 +96,7 @@ public class MyUtils {
             {"MAF_AIR_FLOW", "10"},         //흡입 공기량
             {"THROTTLE_POSITION", "11"},    //스로틀 위치
             {"FUEL_TANK_LEVEL", "2F"},      //연료 탱크 레벨
+            {"DISTANCE_CODE", "31"},        //주행 거리
             {"BATTERY_VOLTAGE", "42"},      //배터리 전압
             {"FUEL_RATE_LITER", "5E"},      //순간 연료 소모량 l/h
             {"FUEL_RATE_GAL", "9D"},       //순간 연료 소모량 g/s
@@ -108,6 +115,7 @@ public class MyUtils {
     public static String ecu_fuel_rate_gram = "0";
     public static String ecu_fuel_consume = "0";
     public static String ecu_battery_voltage = "0";
+    public static int ecu_distance = 0;
     public static String ecu_mileage = "0";
     public static String ecu_driving_time = "00:00";
     public static String ecu_run_time = "0";
@@ -126,7 +134,10 @@ public class MyUtils {
     public static ArrayList<String[]> gaugeInfo = new ArrayList<>();
     public static ArrayList<String[]> carInfo = new ArrayList<>();
     public static ArrayList<String[]> companyInfo = new ArrayList<>();
-    public static String my_id = "";
+    public static int admin_id = 0;
+    public static int my_id = 0; //사용자 유일 번호
+    public static int car_id = 0; //차량 유일 번호
+    public static String my_phone = "";
     public static String my_name = "";
     public static String my_pwd = "";
     public static String my_company = "";
@@ -139,6 +150,7 @@ public class MyUtils {
     public static boolean isSocketError = false;
 
     public static int sel_car_id = 0;
+    public static boolean showGauge = false;
 
     public static int[] company_names = {
             R.string.car_name_1, R.string.car_name_2, R.string.car_name_3, R.string.car_name_4,

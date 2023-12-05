@@ -14,6 +14,7 @@ public enum ModeRequestEnums {
     MAF_AIR_FLOW("10"),
     THROTTLE_POSITION("11"),
     FUEL_TANK_LEVEL("2F"),
+    DISTANCE_CODE("31"),
     BATTERY_VOLTAGE("42"),
     FUEL_RATE_LITER("5E"),
     FUEL_RATE_GAL("9D"),

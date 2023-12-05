@@ -63,18 +63,23 @@ public class DashboardActivity extends AppBaseActivity {
     int[] dash_layout_location = new int[2];
     boolean isShow = false;
     boolean isAddGauge = false;
+    private static DashboardActivity instance;
+    public static DashboardActivity getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash);
+        instance = this;
+
         mContext = getContext();
         MyUtils.currentActivity = this;
         viewInfo = new ArrayList<>();
-
         MyUtils.gaugeInfo = new ArrayList<>();
+        MyUtils.showGauge = true;
 
-        isShow = true;
         initLayout();
         RefreshGaugeLayout();
     }
@@ -129,9 +134,9 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_engine_layout.setOnTouchListener(onTouchEventListener);
         gauge_engine_layout.setVisibility(View.GONE);
         gauge_engine_img = findViewById(R.id.gauge_engine_img);
-        gauge_engine_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_load), 100));
+        gauge_engine_img.setRotation(getRotationValueI(Integer.parseInt(MyUtils.ecu_engine_load), 100));
         gauge_engine_text = findViewById(R.id.gauge_engine_text);
-        gauge_engine_text.setText(getFloatToInteger(MyUtils.ecu_engine_load));
+        gauge_engine_text.setText(MyUtils.ecu_engine_load);
         engine_close_btn = findViewById(R.id.engine_close_btn);
         engine_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_engine_layout));
         engine_close_btn.setVisibility(View.GONE);
@@ -257,12 +262,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_add_btn.setBackgroundResource(R.drawable.gauge_add_state);
         gauge_add_btn.setOnClickListener(view -> onGaugeAddClick());
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                new GaugeAsyncTask().execute("GaugeInfo");
-            }
-        });
+        startDashboardGauge();
     }
 
     private void initGaugeItemInfo() {
@@ -602,6 +602,7 @@ public class DashboardActivity extends AppBaseActivity {
 
     private void onPrevActivityClick() {
         isShow = false;
+        MyUtils.showGauge = false;
         onLRChangeLayount(DashboardActivity.this, MainActivity.class);
         finish();
     }
@@ -609,6 +610,7 @@ public class DashboardActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         isShow = false;
+        MyUtils.showGauge = false;
         onLRChangeLayount(DashboardActivity.this, MainActivity.class);
         finish();
     }
@@ -633,12 +635,20 @@ public class DashboardActivity extends AppBaseActivity {
         int rot = Math.round(angle);
         return rot;
     }
-    private String getFloatToInteger(String val) {
-        String conVal = "0";
-        float f_val = Float.parseFloat(val);
-        int i_val = Math.round(f_val);
-        conVal = String.valueOf(i_val);
-        return conVal;
+
+    public void startDashboardGauge() {
+        if (!isShow) {
+            isShow = true;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    new GaugeAsyncTask().execute("GaugeInfo");
+                }
+            });
+        }
+    }
+    public void stopDashboardGauge() {
+        isShow = false;
     }
 
     class GaugeAsyncTask extends AsyncTask<String, Integer, Boolean> {
@@ -646,39 +656,44 @@ public class DashboardActivity extends AppBaseActivity {
         protected Boolean doInBackground(String... str) {
             while (isShow) {
                 try {
-                    //차량 속도
-                    gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
-                    gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);
-                    //엔진 부하
-                    gauge_engine_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_load), 100));
-                    gauge_engine_text.setText(getFloatToInteger(MyUtils.ecu_engine_load));
-                    //엔진 RPM
-                    gauge_rpm_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_rpm), 16400));
-                    gauge_rpm_text.setText(MyUtils.ecu_engine_rpm);
-                    //주행 거리
-                    mileage_date.setText(CommonFunc.getCurrentDate() + "(" + getString(CommonFunc.getCurrentWeek()) + ")");
-                    gauge_mileage_text.setText(MyUtils.ecu_mileage);
-                    //순간 연료 소모량
-                    //순간 연료 소모량이 0이면 "PID 0110 - 스로틀 위치" 와 "PID 010D - 연료 압력"으로 계산한다.
-                    double consumptionRate = 0;
-                    if (Float.parseFloat(MyUtils.ecu_fuel_rate) == 0) {
-                        double mafLPH = Double.parseDouble(MyUtils.ecu_maf);
-                        consumptionRate = Double.parseDouble(MyUtils.ecu_throttle_position) * mafLPH;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //차량 속도
+                            gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
+                            gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);
+                            //엔진 부하
+                            gauge_engine_img.setRotation(getRotationValueI(Integer.parseInt(MyUtils.ecu_engine_load), 100));
+                            gauge_engine_text.setText(MyUtils.ecu_engine_load);
+                            //엔진 RPM
+                            gauge_rpm_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_rpm), 16400));
+                            gauge_rpm_text.setText(MyUtils.ecu_engine_rpm);
+                            //주행 거리
+                            mileage_date.setText(CommonFunc.getCurrentDate() + "(" + getString(CommonFunc.getCurrentWeek()) + ")");
+                            gauge_mileage_text.setText(MyUtils.ecu_mileage);
+                            //순간 연료 소모량
+                            //순간 연료 소모량이 0이면 "PID 0110 - 스로틀 위치" 와 "PID 010D - 연료 압력"으로 계산한다.
+                            double consumptionRate = 0;
+                            if (Float.parseFloat(MyUtils.ecu_fuel_rate) == 0) {
+                                double mafLPH = Double.parseDouble(MyUtils.ecu_maf);
+                                consumptionRate = Double.parseDouble(MyUtils.ecu_throttle_position) * mafLPH;
 
-                        float D = (float) 0.92;
-                        consumptionRate = (mafLPH / (14.7 * 820 * D)) * 3600;
+                                float D = (float) 0.92;
+                                consumptionRate = (mafLPH / (14.7 * 820 * D)) * 3600;
 
-                        MyUtils.ecu_fuel_rate = String.valueOf(Math.round(consumptionRate * 10) / (float)10);
-                    }
-                    gauge_real_fuel_text.setText(MyUtils.ecu_fuel_rate);
-                    //연료 소모량
-                    gauge_fuel_text.setText(MyUtils.ecu_fuel_consume);
-                    //냉각수 온도
-                    gauge_temp_text.setText(MyUtils.ecu_coolant_temp);
-                    //배터리 전압
-                    gauge_battery_text.setText(MyUtils.ecu_battery_voltage);
-                    //주행 시간
-                    gauge_dtime_text.setText(MyUtils.ecu_driving_time);
+                                MyUtils.ecu_fuel_rate = String.valueOf(Math.round(consumptionRate * 10) / (float)10);
+                            }
+                            gauge_real_fuel_text.setText(MyUtils.ecu_fuel_rate);
+                            //연료 소모량
+                            gauge_fuel_text.setText(MyUtils.ecu_fuel_consume);
+                            //냉각수 온도
+                            gauge_temp_text.setText(MyUtils.ecu_coolant_temp);
+                            //배터리 전압
+                            gauge_battery_text.setText(MyUtils.ecu_battery_voltage);
+                            //주행 시간
+                            gauge_dtime_text.setText(MyUtils.ecu_driving_time);
+                        }
+                    });
 
                     SystemClock.sleep(1000);
                 } catch (Exception e) {

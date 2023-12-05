@@ -91,9 +91,9 @@ public class SignupActivity extends AppBaseActivity {
     private void onRegisterUserClick(){
         pageStatus(false);
         name_txt = reg_name_text.getText().toString();
-        name_txt = "ksi";
+        //name_txt = "ksi";
         phone_txt = reg_id_text.getText().toString();
-        phone_txt = "15524206580";
+        //phone_txt = "15524206580";
         password_txt = reg_pwd_text.getText().toString();
         if (name_txt.isEmpty() || phone_txt.isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.error_auth, Toast.LENGTH_SHORT).show();
@@ -124,14 +124,17 @@ public class SignupActivity extends AppBaseActivity {
                 Toast.makeText(getApplicationContext(), R.string.error_register_user, Toast.LENGTH_SHORT).show();
             } else {
                 encode_pwd = Crypt.encrypt(password_txt);
+                MyUtils.admin_id = Integer.parseInt(MyUtils.companyInfo.get(reg_company_spinner.getSelectedItemPosition())[1]);
+                String create_date = CommonFunc.getDateTime();
                 //서버에 등록
                 String[][] params = new String[][]{
+                        {"user_phone", phone_txt},
                         {"user_name", name_txt},
-                        {"user_id", phone_txt},
                         {"user_pwd", encode_pwd},
-                        {"user_type", "0"},
-                        {"user_class", "1"},
-                        {"company_name", reg_company_spinner.getSelectedItem().toString()}
+                        {"admin_id", String.valueOf(MyUtils.admin_id)},
+                        {"certifice_status", "1"},
+                        {"active", "1"},
+                        {"create_date", create_date}
                 };
                 WebHttpConnect.onSignUpRequest(params);
             }
@@ -155,7 +158,7 @@ public class SignupActivity extends AppBaseActivity {
                 {"name", name_txt},
                 {"phone", phone_txt},
                 {"password", encode_pwd},
-                {"company", reg_company_spinner.getSelectedItem().toString()},
+                {"cid", String.valueOf(MyUtils.admin_id)},
                 {"condition", "1"}
         };
         MyInfoTable.insertMyInfoTable(fields);

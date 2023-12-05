@@ -6,8 +6,8 @@ public class ENGINE_LOAD {
 
         float firstDecimal = Integer.parseInt(firstHex, 16);
         float engineLoad = 100 * firstDecimal / (float) 255;
-
-        response = Float.toString(engineLoad);
+        int load = (int) engineLoad;
+        response = String.valueOf(load);
         return response;
     }
 }

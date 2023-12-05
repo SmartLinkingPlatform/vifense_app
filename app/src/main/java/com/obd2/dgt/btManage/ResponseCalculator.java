@@ -2,6 +2,7 @@ package com.obd2.dgt.btManage;
 
 import com.obd2.dgt.btManage.PIDsFormulas.BATTERY_VOLTAGE;
 import com.obd2.dgt.btManage.PIDsFormulas.COOLANT_TEMPERATURE;
+import com.obd2.dgt.btManage.PIDsFormulas.DISTANCE_CODE;
 import com.obd2.dgt.btManage.PIDsFormulas.ENGINE_LOAD;
 import com.obd2.dgt.btManage.PIDsFormulas.ENGINE_RPM;
 import com.obd2.dgt.btManage.PIDsFormulas.FUEL_RATE_GAL;
@@ -63,6 +64,9 @@ public class ResponseCalculator {
                 break;
             case  "FUEL_RATE_GRAM":
                 MyUtils.ecu_fuel_rate_gram = FUEL_RATE_GAL.read(firstHex);
+                break;
+            case  "DISTANCE_CODE":
+                MyUtils.ecu_distance = DISTANCE_CODE.read(firstHex, secondHex);
                 break;
             case  "BATTERY_VOLTAGE":
                 MyUtils.ecu_battery_voltage = BATTERY_VOLTAGE.read(firstHex, secondHex);
