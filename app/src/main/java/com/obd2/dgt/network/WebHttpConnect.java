@@ -3,6 +3,7 @@ package com.obd2.dgt.network;
 import android.graphics.Bitmap;
 
 import com.obd2.dgt.dbManage.TableInfo.CompanyTable;
+import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
 import com.obd2.dgt.network.http.HttpCall;
 import com.obd2.dgt.network.http.HttpUrlRequest;
 import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
@@ -245,6 +246,7 @@ public class WebHttpConnect {
         }.execute(httpCallPost);
     }
 
+    //차량 주행 정보 요청
     public static void onReadDrivingInfoRequest(String[][] values) {
         serverCallHttpFunc(values, MyUtils.read_driving);
         new HttpUrlRequest(){
@@ -310,6 +312,38 @@ public class WebHttpConnect {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        }.execute(httpCallPost);
+    }
+
+    //새로운 메세지 리스트 요청
+    public static void onMessageInfoRequest(String[][] values) {
+        serverCallHttpFunc(values, MyUtils.mgs_list);
+        new HttpUrlRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (!response.isEmpty()) {
+                    JSONArray data = CommonFunc.AnalysisResponse(response);
+                    for (int i = 0; i < data.length(); i++) {
+                        try {
+                            JSONObject object = data.getJSONObject(i);
+                            String[][] fields = new String[][]{
+                                    {"id", object.getString("notice_id")},
+                                    {"msg_date", object.getString("msg_date")},
+                                    {"msg_user", object.getString("msg_user")},
+                                    {"msg_title", object.getString("msg_title")},
+                                    {"msg_content", object.getString("msg_content")}
+                            };
+                            if (MyUtils.lastMsgID != object.getInt("notice_id")) {
+                                MessageInfoTable.insertMessageTable(fields);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    MessageInfoTable.getMessageInfoTable();
                 }
             }
         }.execute(httpCallPost);

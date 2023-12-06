@@ -6,6 +6,8 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -63,6 +65,10 @@ public class DashboardActivity extends AppBaseActivity {
     int[] dash_layout_location = new int[2];
     boolean isShow = false;
     boolean isAddGauge = false;
+    boolean isShortClicking = false;
+    boolean isLongClicking = false;
+    private static final long LONG_CLICK_THRESHOLD = 1000;
+    private Handler longClickHandler = new Handler(Looper.getMainLooper());
     private static DashboardActivity instance;
     public static DashboardActivity getInstance() {
         return instance;
@@ -93,10 +99,6 @@ public class DashboardActivity extends AppBaseActivity {
             }
             return false;
         });
-        gauge_frame_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         dash_prev_btn = findViewById(R.id.dash_prev_btn);
         dash_prev_btn.setOnClickListener(view -> onPrevActivityClick());
@@ -123,10 +125,6 @@ public class DashboardActivity extends AppBaseActivity {
         speed_close_btn = findViewById(R.id.speed_close_btn);
         speed_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_speed_layout));
         speed_close_btn.setVisibility(View.GONE);
-        gauge_speed_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         //엔진 부하
         gauge_engine_layout = findViewById(R.id.gauge_engine_layout);
@@ -140,10 +138,6 @@ public class DashboardActivity extends AppBaseActivity {
         engine_close_btn = findViewById(R.id.engine_close_btn);
         engine_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_engine_layout));
         engine_close_btn.setVisibility(View.GONE);
-        gauge_engine_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         //RPM
         gauge_rpm_layout = findViewById(R.id.gauge_rpm_layout);
@@ -157,10 +151,6 @@ public class DashboardActivity extends AppBaseActivity {
         rpm_close_btn = findViewById(R.id.rpm_close_btn);
         rpm_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_rpm_layout));
         rpm_close_btn.setVisibility(View.GONE);
-        gauge_rpm_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         //주행 거리
         gauge_mileage_layout = findViewById(R.id.gauge_mileage_layout);
@@ -174,10 +164,6 @@ public class DashboardActivity extends AppBaseActivity {
         mileage_close_btn = findViewById(R.id.mileage_close_btn);
         mileage_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_mileage_layout));
         mileage_close_btn.setVisibility(View.GONE);
-        gauge_mileage_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         //순간 연료 소모량
         gauge_real_fuel_layout = findViewById(R.id.gauge_real_fuel_layout);
@@ -189,10 +175,6 @@ public class DashboardActivity extends AppBaseActivity {
         real_fuel_close_btn = findViewById(R.id.real_fuel_close_btn);
         real_fuel_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_real_fuel_layout));
         real_fuel_close_btn.setVisibility(View.GONE);
-        gauge_real_fuel_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         //연료 소모량
         gauge_fuel_layout = findViewById(R.id.gauge_fuel_layout);
@@ -204,10 +186,6 @@ public class DashboardActivity extends AppBaseActivity {
         fuel_close_btn = findViewById(R.id.fuel_close_btn);
         fuel_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_fuel_layout));
         fuel_close_btn.setVisibility(View.GONE);
-        gauge_fuel_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         //냉각수 온도
         gauge_temp_layout = findViewById(R.id.gauge_temp_layout);
@@ -219,10 +197,6 @@ public class DashboardActivity extends AppBaseActivity {
         temp_close_btn = findViewById(R.id.temp_close_btn);
         temp_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_temp_layout));
         temp_close_btn.setVisibility(View.GONE);
-        gauge_temp_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         //배터리 전압
         gauge_battery_layout = findViewById(R.id.gauge_battery_layout);
@@ -234,10 +208,6 @@ public class DashboardActivity extends AppBaseActivity {
         battery_close_btn = findViewById(R.id.battery_close_btn);
         battery_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_battery_layout));
         battery_close_btn.setVisibility(View.GONE);
-        gauge_battery_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         //주행 시간
         gauge_dtime_layout = findViewById(R.id.gauge_dtime_layout);
@@ -249,10 +219,6 @@ public class DashboardActivity extends AppBaseActivity {
         dtime_close_btn = findViewById(R.id.dtime_close_btn);
         dtime_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_dtime_layout));
         dtime_close_btn.setVisibility(View.GONE);
-        gauge_dtime_layout.setOnLongClickListener(v -> {
-            onLongTouchEvent();
-            return false;
-        });
 
         //계기 추가 버튼
         gauge_add_layout = findViewById(R.id.gauge_add_layout);
@@ -457,6 +423,9 @@ public class DashboardActivity extends AppBaseActivity {
                     view.setAlpha((float) 0.7);
                     view.setZ(10);
                     dash_layout.getLocationOnScreen(dash_layout_location);
+                    isShortClicking = true;
+                    if (!isLongClicking)
+                        longClickHandler.postDelayed(longClickRunnable, LONG_CLICK_THRESHOLD);
                     break;
                 case MotionEvent.ACTION_UP:
                     PointF touchPos = new PointF(event.getRawX(), event.getRawY());
@@ -470,6 +439,11 @@ public class DashboardActivity extends AppBaseActivity {
                     touch_index = -1;
                     over_index = -1;
                     saveGaugeInfo();
+                    if (isLongClicking && isShortClicking) {
+                        hiddenCloseButton();
+                        isLongClicking = false;
+                    }
+                    longClickHandler.removeCallbacks(longClickRunnable);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     PointF pointF = new PointF(event.getRawX() + dX, event.getRawY() + dY);
@@ -477,6 +451,15 @@ public class DashboardActivity extends AppBaseActivity {
                     break;
             }
             return true;
+        }
+    };
+
+    private Runnable longClickRunnable = new Runnable() {
+        @Override
+        public void run() {
+            isLongClicking = true;
+            isShortClicking = false;
+            onLongTouchEvent();
         }
     };
 
@@ -542,6 +525,7 @@ public class DashboardActivity extends AppBaseActivity {
             addDialog.setCancelable(false);
             showAddGaugeDialog();
         }
+        hiddenCloseButton();
     }
     //계기 추가 Dialog
     public void showAddGaugeDialog() {

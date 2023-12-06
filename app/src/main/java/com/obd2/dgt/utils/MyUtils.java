@@ -33,6 +33,7 @@ public class MyUtils {
     public static String del_car = "/mobile.delCarInfo";
     public static String read_driving = "/mobile.readDriving";
     public static String save_driving = "/mobile.saveDriving";
+    public static String mgs_list = "/mobile.messageList";
     public static AppBaseActivity appBase = null;
     public static Activity currentActivity = null;
     public static Context mContext = null;
@@ -131,6 +132,8 @@ public class MyUtils {
             "Bluetooth LE 4.0"
     };
     public static ArrayList<String[]> messageInfo = new ArrayList<>();
+    public static int lastMsgID = 0;
+    public static boolean msg_show = false;
     public static ArrayList<String[]> gaugeInfo = new ArrayList<>();
     public static ArrayList<String[]> carInfo = new ArrayList<>();
     public static ArrayList<String[]> companyInfo = new ArrayList<>();

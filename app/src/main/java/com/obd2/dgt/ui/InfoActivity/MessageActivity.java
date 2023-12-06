@@ -33,11 +33,16 @@ public class MessageActivity extends AppBaseActivity {
     ArrayList<MessageItem> messageItems = new ArrayList<>();
     MessageAdapter messageAdapter;
     Dialog dialog;
+    private static MessageActivity instance;
+    public static MessageActivity getInstance() {
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        instance = this;
         MyUtils.currentActivity = this;
 
         initLayout();
@@ -56,7 +61,7 @@ public class MessageActivity extends AppBaseActivity {
         msg_list_recycle_view.setLayoutManager(verticalLayoutManager);
         MessageItem item;
         for (int i = 0; i < MyUtils.messageInfo.size(); i++) {
-            String[] info = MyUtils.gaugeInfo.get(i);
+            String[] info = MyUtils.messageInfo.get(i);
             item = new MessageItem(false, info[0], info[1], info[2], info[3], info[4]);
             messageItems.add(item);
         }
@@ -69,7 +74,12 @@ public class MessageActivity extends AppBaseActivity {
         public void onItemClick(View v, int position) {
             for (int i = 0; i < messageItems.size(); i++) {
                 if (position == i) {
-                    messageItems.get(i).selected = true;
+                    if (messageItems.get(i).selected) {
+                        messageItems.get(i).selected = false;
+                    } else {
+                        messageItems.get(i).selected = true;
+                    }
+                    MessageInfoTable.updateMessageTable("show", "1", messageItems.get(i).id);
                 } else {
                     messageItems.get(i).selected = false;
                 }
@@ -96,13 +106,33 @@ public class MessageActivity extends AppBaseActivity {
         });
         ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);
         dialog_two_ok_btn.setOnClickListener(view -> {
-            MessageInfoTable.deleteAllMessageInfoTable();
+            MessageInfoTable.updateAllMessageTable();
             dialog.dismiss();
         });
         dialog.show();
     }
 
+    public void onMessageShow(String id) {
+        MessageInfoTable.updateMessageTable("show", "1", id);
+        MessageInfoTable.getMessageInfoTable();
+    }
+
+    public void onMessageDeleteClick(String id){
+        MessageInfoTable.updateMessageTable("active", "0", id);
+        MessageInfoTable.getMessageInfoTable();
+
+        MessageItem item;
+        messageItems.clear();
+        for (int i = 0; i < MyUtils.messageInfo.size(); i++) {
+            String[] info = MyUtils.messageInfo.get(i);
+            item = new MessageItem(false, info[0], info[1], info[2], info[3], info[4]);
+            messageItems.add(item);
+        }
+        messageAdapter.setData(messageItems);
+    }
+
     private void onMessagePrevClick(){
+        MainActivity.getInstance().showMessageIcon();
         onLRChangeLayount(MessageActivity.this, MainActivity.class);
         finish();
     }

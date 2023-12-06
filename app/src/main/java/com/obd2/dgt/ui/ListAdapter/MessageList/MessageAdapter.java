@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
+import com.obd2.dgt.ui.InfoActivity.MessageActivity;
 import com.obd2.dgt.ui.ListAdapter.LinkDevice.PairedItem;
+import com.obd2.dgt.utils.MyUtils;
 
 
 import java.util.ArrayList;
@@ -56,7 +58,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @NonNull
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_add_gauge, parent, false);
+        View view = mInflater.inflate(R.layout.item_message, parent, false);
         return new MessageAdapter.ViewHolder(view);
     }
 
@@ -64,17 +66,23 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         selected_id = "";
+        if(itemList.get(position).selected) {
+            holder.msg_send_content.setVisibility(View.VISIBLE);
+            selected_id = itemList.get(position).id;
+            MessageActivity.getInstance().onMessageShow(selected_id);
+        } else {
+            holder.msg_send_content.setVisibility(View.GONE);
+        }
         holder.msg_send_time.setText(itemList.get(position).msg_time);
         holder.msg_send_user.setText(itemList.get(position).msg_user);
         holder.msg_send_title.setText(itemList.get(position).msg_title);
         holder.msg_send_content.setText(itemList.get(position).msg_content);
-        holder.msg_close_btn.setOnClickListener(view -> onMessageDeleteClick());
-        if(itemList.get(position).selected) {
-            holder.msg_send_content.setVisibility(View.VISIBLE);
-            selected_id = itemList.get(position).id;
-        } else {
-            holder.msg_send_content.setVisibility(View.GONE);
-        }
+
+        holder.msg_close_btn.setImageResource(R.drawable.close_state);
+        holder.msg_close_btn.setVisibility(View.VISIBLE);
+        holder.msg_close_btn.setOnClickListener(view -> {
+            MessageActivity.getInstance().onMessageDeleteClick(itemList.get(position).id);
+        });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceAsColor")
             @Override
@@ -91,10 +99,5 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     public interface ItemClickListener {
         void onItemClick(View v, int position);
-    }
-    public void onMessageDeleteClick() {
-        if (!selected_id.isEmpty()) {
-            MessageInfoTable.deleteMessageInfoTable(selected_id);
-        }
     }
 }

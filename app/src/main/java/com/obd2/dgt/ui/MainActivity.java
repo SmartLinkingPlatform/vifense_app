@@ -38,7 +38,7 @@ import java.util.Set;
 public class MainActivity extends AppBaseActivity {
     ImageView user_img_btn, con_img_1, con_img_2, con_img_3;
     ImageView dot_img_1, dot_img_2, dot_img_3, dot_img_4, dot_img_5, dot_img_6;
-    ImageView connect_btn, mail_btn, ranking_view_btn;
+    ImageView connect_btn, message_btn, ranking_view_btn;
     TextView connect_device_text, ranking_text;
     RecyclerView mainmenu_recycleView;
     ArrayList<MainListItem> mainListItems = new ArrayList<>();
@@ -88,8 +88,11 @@ public class MainActivity extends AppBaseActivity {
         connect_btn = findViewById(R.id.connect_btn);
         connect_btn.setOnClickListener(view -> onConnectDeviceClick());
 
-        mail_btn = findViewById(R.id.mail_btn);
-        mail_btn.setOnClickListener(view -> onShowMailClick());
+        message_btn = findViewById(R.id.message_btn);
+        if (MyUtils.msg_show) {
+            message_btn.setImageResource(R.drawable.mail_btn_state);
+        }
+        message_btn.setOnClickListener(view -> onShowMailClick());
 
         ranking_view_btn = findViewById(R.id.ranking_view_btn);
         ranking_view_btn.setOnClickListener(view -> onShowRankingClick());
@@ -332,6 +335,14 @@ public class MainActivity extends AppBaseActivity {
         connect_device_text.setText("");
         //DB 저장
         DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
+    }
+
+    public void showMessageIcon() {
+        if (MyUtils.msg_show) {
+            message_btn.setImageResource(R.drawable.mail_btn_state);
+        } else {
+            message_btn.setImageResource(R.drawable.mail_off);
+        }
     }
 
     long waitTime = 0;

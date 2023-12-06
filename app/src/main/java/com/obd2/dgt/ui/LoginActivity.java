@@ -10,6 +10,7 @@ import com.obd2.dgt.dbManage.TableInfo.CarInfoTable;
 import com.obd2.dgt.dbManage.TableInfo.CompanyTable;
 import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
 import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.utils.CommonFunc;
@@ -49,6 +50,7 @@ public class LoginActivity extends AppBaseActivity {
         if (isNetwork) {
             getDatabaseInfo();
             getWindowsSize();
+
             //서버 에서 회사 자료 받기
             WebHttpConnect.onCompanyInfoRequest();
         }
@@ -95,6 +97,13 @@ public class LoginActivity extends AppBaseActivity {
             user_pwd = login_pwd_text.getText().toString();
             String encode_pwd = Crypt.encrypt(user_pwd);
 
+            String[][] msgparams = new String[][]{
+                    {"msg_id", String.valueOf(MyUtils.lastMsgID)},
+                    {"user_phone", user_phone}
+            };
+            WebHttpConnect.onMessageInfoRequest(msgparams);
+
+
             String visit_date = CommonFunc.getDateTime();
             String[][] params = new String[][]{
                     {"user_phone", user_phone},
@@ -132,7 +141,8 @@ public class LoginActivity extends AppBaseActivity {
 
     //DataBase setting
     private void getDatabaseInfo() {
-        CompanyTable.deleteAllCompanyInfoTable();        
+        CompanyTable.deleteAllCompanyInfoTable();
+        MessageInfoTable.getMessageInfoTable();
     }
 
     @Override

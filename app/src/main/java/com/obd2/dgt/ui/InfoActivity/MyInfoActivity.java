@@ -27,7 +27,7 @@ public class MyInfoActivity extends AppBaseActivity {
     ImageView user_info_img;
     FrameLayout my_info_framelayout, my_info_add_layout;
     ImageView my_info_reg_btn;
-    //ImageView my_info_car_add_btn;
+    ImageView my_info_car_add_btn;
     RecyclerView my_info_car_recycle_view;
     CarAdapter carAdapter;
     ArrayList<CarItem> carItems = new ArrayList<>();
@@ -101,8 +101,8 @@ public class MyInfoActivity extends AppBaseActivity {
             carAdapter = new CarAdapter(getContext(), carItems, carListListener);
             my_info_car_recycle_view.setAdapter(carAdapter);
 
-            //my_info_car_add_btn = findViewById(R.id.my_info_car_add_btn);
-            //my_info_car_add_btn.setOnClickListener(view -> onMyInfoAddCarClick());
+            my_info_car_add_btn = findViewById(R.id.my_info_car_add_btn);
+            my_info_car_add_btn.setOnClickListener(view -> onMyInfoAddCarClick());
         }
     }
     private CarAdapter.ItemClickListener carListListener = new CarAdapter.ItemClickListener() {
