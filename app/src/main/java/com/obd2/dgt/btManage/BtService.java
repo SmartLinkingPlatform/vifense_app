@@ -83,6 +83,9 @@ public class BtService {
                             }
                         }
                     } catch (IOException e) {
+                        MyUtils.isObdSocket = false;
+                        MyUtils.isSocketError = true;
+                        MyUtils.isPaired = false;
                         e.printStackTrace();
                     }
 

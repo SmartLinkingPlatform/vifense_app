@@ -76,6 +76,8 @@ public class RecordActivity extends AppBaseActivity {
     public void onSuccessDrivingInfo(Map<String, ArrayList<JSONObject>> info) {
         //현재 날짜
         String current_date = CommonFunc.getDate();
+        float m_distance = 0;
+        float d_distance = 0;
 
         if (info.size() > 0) {
             driving_info = new LinkedHashMap<>();
@@ -87,11 +89,11 @@ public class RecordActivity extends AppBaseActivity {
                 try {
                     for (JSONObject object : drv_detail) {
                         if (current_date.equals(key)) {
-                            total_d_distance += object.getDouble("mileage");
-                            total_d_time += calcTime(object.getString("driving_time"));
+                            d_distance += object.getDouble("mileage");
+                            total_d_time += CommonFunc.calculateTime(object.getString("driving_time"));
                         }
-                        total_m_distance += object.getDouble("mileage");
-                        total_m_time += calcTime(object.getString("driving_time"));
+                        m_distance += object.getDouble("mileage");
+                        total_m_time += CommonFunc.calculateTime(object.getString("driving_time"));
 
                         String[] detail = new String[6];
                         detail[0] = object.getString("start_time");
@@ -108,13 +110,11 @@ public class RecordActivity extends AppBaseActivity {
                 driving_info.put(key, detail_info);
             }
         }
-        initLayout();
-    }
 
-    private int calcTime(String time) {
-        String[] d_time = time.split(":");
-        int sec_time = Integer.parseInt(d_time[0]) * 60 + Integer.parseInt(d_time[1]);
-        return sec_time;
+        total_d_distance = Math.round(d_distance * 10) / (float) 10 ;
+        total_m_distance = Math.round(m_distance * 10) / (float) 10 ;
+
+        initLayout();
     }
 
     @SuppressLint("SetTextI18n")

@@ -14,12 +14,14 @@ import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
+import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.MessageActivity;
@@ -30,6 +32,7 @@ import com.obd2.dgt.ui.MainListActivity.DiagnosisActivity;
 import com.obd2.dgt.ui.MainListActivity.RecordActivity;
 import com.obd2.dgt.ui.ListAdapter.MainList.MainListAdapter;
 import com.obd2.dgt.ui.ListAdapter.MainList.MainListItem;
+import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.util.ArrayList;
@@ -39,8 +42,11 @@ public class MainActivity extends AppBaseActivity {
     ImageView user_img_btn, con_img_1, con_img_2, con_img_3;
     ImageView dot_img_1, dot_img_2, dot_img_3, dot_img_4, dot_img_5, dot_img_6;
     ImageView connect_btn, message_btn, ranking_view_btn;
-    TextView connect_device_text, ranking_text;
+    TextView connect_device_text;
+    TextView ranking_mileage_text, ranking_safety_text;
+    TextView ranking_mileage_unit_text, ranking_safety_unit_text;
     RecyclerView mainmenu_recycleView;
+    FrameLayout main_ranking_view_layout;
     ArrayList<MainListItem> mainListItems = new ArrayList<>();
     MainListAdapter mainListAdapter;
     int link_index = 0;
@@ -60,11 +66,33 @@ public class MainActivity extends AppBaseActivity {
         instance = this;
         MyUtils.currentActivity = this;
         isRun = true;
+
+        requestRankingInfo();
         initLayout();
 
         if (MyUtils.isPaired && MyUtils.savedSocketStatus) {
             obdConnectDevice();
         }
+    }
+    private void requestRankingInfo() {
+        String msg = getString(R.string.check_network_error);
+        String btnText = getString(R.string.confirm_text);
+        boolean isNetwork = CommonFunc.checkNetworkStatus(MainActivity.this, msg, btnText);
+        if (isNetwork) {
+            String driving_date = CommonFunc.getDate();
+            //서버에 등록
+            String[][] params = new String[][]{
+                    {"car_id", String.valueOf(MyUtils.car_id)},
+                    {"user_id", String.valueOf(MyUtils.my_id)},
+                    {"driving_date", driving_date}
+            };
+            WebHttpConnect.onRankingRequest(params);
+        }
+    }
+    public void setRankingValues(String[] values) {
+        MyUtils.mileage_score = values[0];
+        MyUtils.safety_score = values[1];
+        showRankingInfo();
     }
 
     private void initLayout() {
@@ -80,7 +108,14 @@ public class MainActivity extends AppBaseActivity {
         dot_img_6 = findViewById(R.id.dot_img_6);
 
         connect_device_text = findViewById(R.id.connect_device_text);
-        ranking_text = findViewById(R.id.ranking_text);
+
+        main_ranking_view_layout = findViewById(R.id.main_ranking_view_layout);
+        main_ranking_view_layout.setOnClickListener(view -> onShowRankingClick());
+
+        ranking_mileage_text = findViewById(R.id.ranking_mileage_text);
+        ranking_mileage_unit_text = findViewById(R.id.ranking_mileage_unit_text);
+        ranking_safety_text = findViewById(R.id.ranking_safety_text);
+        ranking_safety_unit_text = findViewById(R.id.ranking_safety_unit_text);
 
         user_img_btn = findViewById(R.id.user_img_btn);
         user_img_btn.setOnClickListener(view -> onUserClick());
@@ -154,7 +189,7 @@ public class MainActivity extends AppBaseActivity {
             onRLChangeLayount(MainActivity.this, LinkInfoActivity.class);
         }
     }
-    public void showAddCarDialog() {
+    private void showAddCarDialog() {
         dialog.setContentView(R.layout.dlg_normal);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         TextView dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
@@ -343,6 +378,13 @@ public class MainActivity extends AppBaseActivity {
         } else {
             message_btn.setImageResource(R.drawable.mail_off);
         }
+    }
+
+    public void showRankingInfo() {
+        ranking_mileage_text.setText(MyUtils.mileage_score);
+        ranking_mileage_unit_text.setText(R.string.unit_score);
+        ranking_safety_text.setText(MyUtils.safety_score);
+        ranking_safety_unit_text.setText(R.string.unit_score);
     }
 
     long waitTime = 0;

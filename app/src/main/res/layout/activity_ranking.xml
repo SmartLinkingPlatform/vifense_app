@@ -62,14 +62,16 @@
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_gravity="center"
                             android:layout_weight="1">
 
                             <Spinner
                                 android:id="@+id/ranking_date_spinner"
-                                android:layout_width="match_parent"
+                                android:layout_width="170dp"
                                 android:layout_height="match_parent"
-                                android:layout_gravity="center_horizontal|center_vertical"
-                                android:background="@drawable/dropdown_border1" />
+                                android:layout_gravity="center"
+                                android:background="@drawable/dropdown_border1"
+                                android:gravity="center" />
                         </FrameLayout>
 
                         <FrameLayout
@@ -609,7 +611,7 @@
                                 android:layout_weight="0.4">
 
                                 <TextView
-                                    android:id="@+id/ranking_detail_suddenspeed_text"
+                                    android:id="@+id/ranking_detail_quick_text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"

@@ -632,6 +632,9 @@ public class DashboardActivity extends AppBaseActivity {
         }
     }
     public void stopDashboardGauge() {
+        gauge_speed_text.setText("0");
+        gauge_engine_text.setText("0");
+        gauge_rpm_text.setText("0");
         isShow = false;
     }
 

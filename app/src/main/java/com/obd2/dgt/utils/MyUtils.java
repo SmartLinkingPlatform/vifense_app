@@ -33,6 +33,8 @@ public class MyUtils {
     public static String del_car = "/mobile.delCarInfo";
     public static String read_driving = "/mobile.readDriving";
     public static String save_driving = "/mobile.saveDriving";
+    public static String ranking = "/mobile.ranking";
+    public static String driving_ranking = "/mobile.drivingRanking";
     public static String mgs_list = "/mobile.messageList";
     public static AppBaseActivity appBase = null;
     public static Activity currentActivity = null;
@@ -154,6 +156,8 @@ public class MyUtils {
 
     public static int sel_car_id = 0;
     public static boolean showGauge = false;
+    public static String mileage_score = "0";
+    public static String safety_score = "0";
 
     public static int[] company_names = {
             R.string.car_name_1, R.string.car_name_2, R.string.car_name_3, R.string.car_name_4,

@@ -9,7 +9,9 @@ import com.obd2.dgt.network.http.HttpUrlRequest;
 import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.CarInfoModifyActivity;
 import com.obd2.dgt.ui.InfoActivity.MyInfoModifyActivity;
+import com.obd2.dgt.ui.InfoActivity.RankingInfoActivity;
 import com.obd2.dgt.ui.LoginActivity;
+import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.ui.MainListActivity.RecordActivity;
 import com.obd2.dgt.ui.SignupActivity;
 import com.obd2.dgt.utils.CommonFunc;
@@ -344,6 +346,91 @@ public class WebHttpConnect {
                         }
                     }
                     MessageInfoTable.getMessageInfoTable();
+                }
+            }
+        }.execute(httpCallPost);
+    }
+
+    //랭킹 정보 요청
+    public static void onDrivingRankingRequest(String[][] values) {
+        serverCallHttpFunc(values, MyUtils.driving_ranking);
+        new HttpUrlRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (!response.isEmpty()) {
+                    try {
+                        String mileage_score = "";
+                        String safety_score = "";
+                        double total_mileage = 0.0;
+                        float avr_speed = 0;
+                        int fast = 0;
+                        int quick = 0;
+                        int brake = 0;
+                        int total_time = 0;
+                        JSONObject res = new JSONObject(response);
+                        String msg = res.getString("msg");
+                        if (msg.equals("ok")) {
+                            mileage_score = res.getString("mileage_score");
+                            safety_score = res.getString("safety_score");
+                            total_mileage = res.getDouble("total_mileage");
+                            String lists = res.getString("lists");
+                            JSONArray data = new JSONArray(lists);
+                            int total_speed = 0;
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject object = data.getJSONObject(i);
+                                total_speed += object.getInt("average_speed");
+                                fast += object.getInt("fast_speed_cnt");
+                                quick += object.getInt("quick_speed_cnt");
+                                brake += object.getInt("brake_speed_cnt");
+                                total_time += CommonFunc.calculateTime(object.getString("driving_time"));
+                            }
+                            avr_speed = total_speed / (float) data.length();
+                        }
+                        String[] ranking_val = {
+                                mileage_score,
+                                safety_score,
+                                String.valueOf(Math.round(total_mileage * 10) / (float)10),
+                                String.valueOf(Math.round(avr_speed * 10) / (float)10),
+                                String.valueOf(total_time),
+                                String.valueOf(fast),
+                                String.valueOf(quick),
+                                String.valueOf(brake),
+                        };
+                        RankingInfoActivity.getInstance().setRankingValues(ranking_val);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute(httpCallPost);
+    }
+
+    //메인화면 랭킹정보
+    public static void onRankingRequest(String[][] values) {
+        serverCallHttpFunc(values, MyUtils.ranking);
+        new HttpUrlRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (!response.isEmpty()) {
+                    try {
+                        String mileage_score = "";
+                        String safety_score = "";
+                        JSONObject res = new JSONObject(response);
+                        String msg = res.getString("msg");
+                        if (msg.equals("ok")) {
+                            mileage_score = res.getString("mileage_score");
+                            safety_score = res.getString("safety_score");
+                        }
+                        String[] ranking_val = {
+                                mileage_score,
+                                safety_score
+                        };
+                        MainActivity.getInstance().setRankingValues(ranking_val);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }.execute(httpCallPost);

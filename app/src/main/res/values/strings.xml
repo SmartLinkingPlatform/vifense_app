@@ -80,6 +80,8 @@
     <string name="unit_hour">시간</string>
     <string name="unit_minute">분</string>
     <string name="unit_second">초</string>
+    <string name="unit_score">위</string>
+    <string name="unit_count">회</string>
     <string name="region_start">출발지</string>
     <string name="region_end">도착지</string>
     <string name="my_info">내 정보</string>

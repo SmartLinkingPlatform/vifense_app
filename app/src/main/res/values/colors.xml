@@ -23,5 +23,6 @@
     <color name="warning_color">#CC362D</color>
     <color name="progress_bar_color">#FFAA04</color>
     <color name="progress_bg_color">#767F88</color>
+    <color name="spinner_bg_color">#EEF0F3FF</color>
 
 </resources>

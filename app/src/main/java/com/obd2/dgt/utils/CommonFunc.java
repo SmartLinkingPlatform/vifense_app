@@ -92,6 +92,17 @@ public class CommonFunc {
         return jobs;
     }
 
+    public static int calculateTime(String time) {
+        String[] d_time = time.split(":");
+        int sec_time = 0;
+        if (d_time.length > 2) {
+            sec_time = Integer.parseInt(d_time[0]) * 3600 + Integer.parseInt(d_time[1]) * 60 + Integer.parseInt(d_time[2]);
+        } else {
+            sec_time = Integer.parseInt(d_time[0]) * 60 + Integer.parseInt(d_time[1]);
+        }
+        return sec_time;
+    }
+
     public static String getDateTime() {
         long currentMillis = new Date().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
