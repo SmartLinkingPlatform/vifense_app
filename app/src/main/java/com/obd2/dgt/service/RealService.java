@@ -33,6 +33,7 @@ public class RealService extends Service {
     float prev_speed = 0;
     static boolean running = true;
     float fuel_consumption = 0;
+    int err_cnt = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -57,7 +58,7 @@ public class RealService extends Service {
                             //MyUtils.btService.setOutStreamPID();
                             getDrivingStatus();
                             getFuelConsumption();
-                            showErrorDialog();
+                            showError();
                         }
                     }
 
@@ -243,31 +244,34 @@ public class RealService extends Service {
         stopSelf();
     }
 
-    private void showErrorDialog() {
-        int err_idx = 0;
+    private void showError() {
+        if (MyUtils.is_error_dlg) {
+            return;
+        }
+        MyUtils.err_idx = 0;
         if (idling_time > 180) {
-            err_idx = 1;
+            MyUtils.err_idx = 1;
         }
         if (speed_fast) {
-            err_idx = 2;
+            MyUtils.err_idx = 2;
         }
         if (speed_quick) {
-            err_idx = 3;
+            MyUtils.err_idx = 3;
         }
         if (speed_brake) {
-            err_idx = 4;
+            MyUtils.err_idx = 4;
         }
-        /*if (!MyUtils.ecu_trouble_code.isEmpty()) {
+        if (!MyUtils.ecu_trouble_code.isEmpty()) {
             MyUtils.is_trouble = true;
-            err_idx = 5;
+            MyUtils.err_idx = 5;
         }
         if (!MyUtils.ecu_consume_warning.isEmpty()) {
             MyUtils.is_consume = true;
-            err_idx = 6;
-        }*/
+            MyUtils.err_idx = 6;
+        }
 
-        if (err_idx > 0) {
-            //MyUtils.appBase.addErrorDialog(err_idx);
+        if (MyUtils.err_idx > 0) {
+            MyUtils.appBase.gotoDashboard();
         }
     }
 

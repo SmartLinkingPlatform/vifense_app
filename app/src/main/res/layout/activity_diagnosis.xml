@@ -156,12 +156,12 @@
                                         android:textColor="@color/title_color"
                                         android:textSize="18sp" />
 
-                                    <ImageView
+                                    <!--<ImageView
                                         android:id="@+id/current_trouble_search_btn"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical|end"
-                                        app:srcCompat="@drawable/search_state" />
+                                        app:srcCompat="@drawable/search_state" />-->
                                 </FrameLayout>
 
                                 <FrameLayout
@@ -172,15 +172,11 @@
                                     android:layout_marginBottom="10dp"
                                     android:layout_weight="0.5">
 
-                                    <TextView
-                                        android:id="@+id/current_trouble_content"
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/current_trouble_recycle_view"
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:fontFamily="@font/pretendard_regular"
-                                        android:lines="10"
-                                        android:maxLines="10"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="16sp" />
+                                        android:layout_height="match_parent" />
+
                                 </FrameLayout>
                             </LinearLayout>
                         </FrameLayout>
@@ -214,12 +210,12 @@
                                         android:textColor="@color/title_color"
                                         android:textSize="18sp" />
 
-                                    <ImageView
+                                    <!--<ImageView
                                         android:id="@+id/past_trouble_search_btn"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="center_vertical|end"
-                                        app:srcCompat="@drawable/search_state" />
+                                        app:srcCompat="@drawable/search_state" />-->
                                 </FrameLayout>
 
                                 <FrameLayout
@@ -230,15 +226,11 @@
                                     android:layout_marginBottom="10dp"
                                     android:layout_weight="0.5">
 
-                                    <TextView
-                                        android:id="@+id/past_trouble_content"
+                                    <androidx.recyclerview.widget.RecyclerView
+                                        android:id="@+id/past_trouble_recycle_view"
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:fontFamily="@font/pretendard_regular"
-                                        android:lines="10"
-                                        android:maxLines="10"
-                                        android:textColor="@color/text_color"
-                                        android:textSize="16sp" />
+                                        android:layout_height="match_parent" />
+
                                 </FrameLayout>
                             </LinearLayout>
                         </FrameLayout>

@@ -126,10 +126,15 @@ public class DBConnect extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor sqlSelect(String table, String field) {
+    public Cursor sqlSelect(String table, String field, boolean order) {
         Cursor cursor = null;
 
-        String query = "SELECT * FROM " + table + " ORDER BY " + field +" ASC";
+        String query = "SELECT * FROM " + table + " ORDER BY " + field;
+        if (order) {
+            query += " ASC";
+        } else {
+            query += " DESC";
+        }
         cursor = m_db.rawQuery(query, null);
 
         return cursor;

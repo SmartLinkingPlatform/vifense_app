@@ -91,9 +91,9 @@ public class SignupActivity extends AppBaseActivity {
     private void onRegisterUserClick(){
         pageStatus(false);
         name_txt = reg_name_text.getText().toString();
-        //name_txt = "ksi";
+        name_txt = "ksi";
         phone_txt = reg_id_text.getText().toString();
-        //phone_txt = "15524206580";
+        phone_txt = "11120006000";
         password_txt = reg_pwd_text.getText().toString();
         if (name_txt.isEmpty() || phone_txt.isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.error_auth, Toast.LENGTH_SHORT).show();

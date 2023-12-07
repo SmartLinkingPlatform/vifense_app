@@ -3,13 +3,13 @@ package com.obd2.dgt.ui.MainListActivity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,7 +28,9 @@ import com.obd2.dgt.R;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.AddGauge.GaugeAdapter;
 import com.obd2.dgt.ui.ListAdapter.AddGauge.GaugeItem;
+import com.obd2.dgt.ui.LoginActivity;
 import com.obd2.dgt.ui.MainActivity;
+import com.obd2.dgt.ui.SplashActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.GaugeViewInfo;
 import com.obd2.dgt.utils.MyUtils;
@@ -229,6 +231,8 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_add_btn.setOnClickListener(view -> onGaugeAddClick());
 
         startDashboardGauge();
+
+        showErrorDialog();
     }
 
     private void initGaugeItemInfo() {
@@ -681,7 +685,7 @@ public class DashboardActivity extends AppBaseActivity {
                             gauge_dtime_text.setText(MyUtils.ecu_driving_time);
                         }
                     });
-
+                    showErrorDialog();
                     SystemClock.sleep(1000);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -692,4 +696,66 @@ public class DashboardActivity extends AppBaseActivity {
         }
     }
 
+
+    Dialog errDialog;
+    ImageView dlg_warning_img;
+
+    public void showErrorDialog() {
+        if (MyUtils.err_idx > 0) {
+            if (!MyUtils.is_error_dlg) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyUtils.is_error_dlg = true;
+                        errDialog = new Dialog(DashboardActivity.this);
+                        errDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        errDialog.setCancelable(false);
+                        errDialog.setContentView(R.layout.dlg_error);
+                        errDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        TextView dlg_error_text = errDialog.findViewById(R.id.dlg_error_text);
+                        dlg_warning_img = errDialog.findViewById(R.id.dlg_warning_img);
+
+                        if (MyUtils.err_idx == 1) {
+                            dlg_error_text.setText(R.string.show_error_idle);
+                        } else if (MyUtils.err_idx == 2) {
+                            dlg_error_text.setText(R.string.show_error_fast);
+                        } else if (MyUtils.err_idx == 3) {
+                            dlg_error_text.setText(R.string.show_error_quick);
+                        } else if (MyUtils.err_idx == 4) {
+                            dlg_error_text.setText(R.string.show_error_brake);
+                        } else if (MyUtils.err_idx == 5) {
+                            dlg_error_text.setText(R.string.show_error_system);
+                            MyUtils.ecu_trouble_code = "";
+                        } else if (MyUtils.err_idx == 6) {
+                            dlg_error_text.setText(R.string.show_error_consume);
+                            MyUtils.ecu_consume_warning = "";
+                        }
+                        errDialog.show();
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                errDialog.dismiss();
+                                MyUtils.is_error_dlg = false;
+                                MyUtils.err_idx = 0;
+                            }
+                        }, 2000);
+                    }
+                });
+            }
+        }
+    }
+
+    public void animErrDlg(boolean b) {
+        if (b) {
+            dlg_warning_img.setAlpha(25);
+        } else {
+            dlg_warning_img.setAlpha(50);
+        }
+    }
+
+    public void hiddenErrorDialog() {
+        errDialog.dismiss();
+    }
 }

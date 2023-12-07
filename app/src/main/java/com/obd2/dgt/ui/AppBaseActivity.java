@@ -1,7 +1,6 @@
 package com.obd2.dgt.ui;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -9,16 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,7 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.service.RealService;
+import com.obd2.dgt.ui.InfoActivity.CarInfoModifyActivity;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
+import com.obd2.dgt.ui.InfoActivity.MyInfoActivity;
+import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
 import com.obd2.dgt.utils.MyUtils;
 import com.obd2.dgt.utils.PermissionSupport;
 
@@ -40,7 +35,7 @@ public class AppBaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (MyUtils.appBase != null) {
+        if (MyUtils.appBase == null) {
             MyUtils.appBase = this;
         }
         if (MyUtils.mContext == null) {
@@ -199,48 +194,6 @@ public class AppBaseActivity extends AppCompatActivity {
         }
     };
 
-    Dialog errDialog;
-    ImageView dlg_warning_img;
-
-    public void addErrorDialog(int error_index) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                errDialog = new Dialog(MyUtils.currentActivity.getBaseContext());
-                errDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                errDialog.setCancelable(false);
-                errDialog.setContentView(R.layout.dlg_error);
-                errDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                TextView dlg_error_text = errDialog.findViewById(R.id.dlg_error_text);
-                dlg_warning_img = errDialog.findViewById(R.id.dlg_warning_img);
-
-                if (error_index == 1) {
-                    dlg_error_text.setText(R.string.show_error_idle);
-                } else if (error_index == 2) {
-                    dlg_error_text.setText(R.string.show_error_fast);
-                } else if (error_index == 3) {
-                    dlg_error_text.setText(R.string.show_error_quick);
-                } else if (error_index == 4) {
-                    dlg_error_text.setText(R.string.show_error_brake);
-                } else if (error_index == 5) {
-                    dlg_error_text.setText(R.string.show_error_system);
-                    MyUtils.ecu_trouble_code = "";
-                } else if (error_index == 6) {
-                    dlg_error_text.setText(R.string.show_error_consume);
-                    MyUtils.ecu_consume_warning = "";
-                }
-                errDialog.show();
-            }
-        });
-    }
-
-    public void animErrDlg(boolean b) {
-        if (b) {
-            dlg_warning_img.setAlpha(25);
-        } else {
-            dlg_warning_img.setAlpha(50);
-        }
-    }
 
     public void ServiceStart() {
         try {
@@ -262,7 +215,10 @@ public class AppBaseActivity extends AppCompatActivity {
         RealService.StopService();
     }
 
-
+    public void gotoDashboard() {
+        onRLChangeLayount(MyUtils.currentActivity.getBaseContext(), DashboardActivity.class);
+        finish();
+    }
     int width = 1080;
     int height = 2115;
 

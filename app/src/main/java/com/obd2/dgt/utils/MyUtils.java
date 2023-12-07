@@ -22,7 +22,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class MyUtils {
-    public static String server_url = "http://192.168.1.6"; //dgt.vifense.com
+    public static String server_url = "http://192.168.1.6";
+    //public static String server_url = "https://dgt.vifense.com";
     public static String call_company = "/mobile.companyInfo";
     public static String user_signup = "/mobile.userSignup";
     public static String user_login = "/mobile.userLogin";
@@ -128,12 +129,15 @@ public class MyUtils {
     public static String ecu_consume_warning = "";
     public static boolean is_trouble = false;
     public static boolean is_consume = false;
+    public static boolean is_error_dlg = false;
+    public static int err_idx = 0;
 
     public static String[] link_methods = {
             "Bluetooth",
             "Bluetooth LE 4.0"
     };
     public static ArrayList<String[]> messageInfo = new ArrayList<>();
+    public static ArrayList<String[]> troubleCodes = new ArrayList<>();
     public static int lastMsgID = 0;
     public static boolean msg_show = false;
     public static ArrayList<String[]> gaugeInfo = new ArrayList<>();

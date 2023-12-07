@@ -64,6 +64,7 @@ public class RankingInfoActivity extends AppBaseActivity {
         instance = this;
         MyUtils.currentActivity = this;
 
+        initLayout();
         requestDrivingRankingInfo();
     }
 
@@ -95,10 +96,18 @@ public class RankingInfoActivity extends AppBaseActivity {
         String m_hTime = CommonFunc.getHour(time, getString(R.string.unit_hour));
         String m_mTime = CommonFunc.getMinuteAndSecond(time % 3600, getString(R.string.unit_minute), getString(R.string.unit_second));
         total_time = m_hTime + m_mTime;
-        initLayout();
 
         MyUtils.mileage_score = values[0];
         MyUtils.safety_score = values[1];
+
+        ranking_mileage_text.setText(mileage_score);
+        ranking_safety_text.setText(safety_score);
+        ranking_detail_mileage_text.setText(total_mileage);
+        ranking_detail_avrspeed_text.setText(avr_speed);
+        ranking_detail_drivingtime_text.setText(total_time);
+        ranking_detail_fastspeed_text.setText(fast);
+        ranking_detail_quick_text.setText(quick);
+        ranking_detail_braking_text.setText(brake);
     }
 
     private void initLayout() {
@@ -135,32 +144,15 @@ public class RankingInfoActivity extends AppBaseActivity {
         });
 
         ranking_mileage_text = findViewById(R.id.ranking_mileage_text);
-        ranking_mileage_text.setText(mileage_score);
-
         ranking_safety_text = findViewById(R.id.ranking_safety_text);
-        ranking_safety_text.setText(safety_score);
-
         ranking_detail_mileage_text = findViewById(R.id.ranking_detail_mileage_text);
-        ranking_detail_mileage_text.setText(total_mileage);
-
         ranking_detail_avrspeed_text = findViewById(R.id.ranking_detail_avrspeed_text);
-        ranking_detail_avrspeed_text.setText(avr_speed);
-
         ranking_detail_drivingtime_text = findViewById(R.id.ranking_detail_drivingtime_text);
-        ranking_detail_drivingtime_text.setText(total_time);
-
         ranking_detail_fastspeed_text = findViewById(R.id.ranking_detail_fastspeed_text);
-        ranking_detail_fastspeed_text.setText(fast);
-
         ranking_detail_quick_text = findViewById(R.id.ranking_detail_quick_text);
-        ranking_detail_quick_text.setText(quick);
-
         ranking_detail_braking_text = findViewById(R.id.ranking_detail_braking_text);
-        ranking_detail_braking_text.setText(brake);
-
         yesterday_value_text = findViewById(R.id.yesterday_value_text);
         today_value_text = findViewById(R.id.today_value_text);
-
         ranking_prev_btn = findViewById(R.id.ranking_prev_btn);
         ranking_prev_btn.setOnClickListener(view -> onRankingPrevClick());
 

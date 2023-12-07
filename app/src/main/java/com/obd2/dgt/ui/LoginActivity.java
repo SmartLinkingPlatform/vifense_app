@@ -54,15 +54,17 @@ public class LoginActivity extends AppBaseActivity {
             //서버 에서 회사 자료 받기
             WebHttpConnect.onCompanyInfoRequest();
         }
-        //년도
-        LocalDate now = null;
-        int year = 0;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            now = LocalDate.now();
-            year = now.getYear();
-        }
-        for (int i = 1990; i <= year; i++) {
-            MyUtils.create_years.add(String.valueOf(i));
+        if (MyUtils.create_years.size() == 0) {
+            //년도
+            LocalDate now = null;
+            int year = 0;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                now = LocalDate.now();
+                year = now.getYear();
+            }
+            for (int i = 1990; i <= year; i++) {
+                MyUtils.create_years.add(String.valueOf(i));
+            }
         }
     }
 

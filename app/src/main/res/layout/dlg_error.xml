@@ -3,18 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:alpha="0.8"
+    android:alpha="0.5"
     android:background="@color/warning_color">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/transparent"
         android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@color/transparent">
 
             <ImageView
                 android:id="@+id/dlg_warning_img"
@@ -23,18 +25,21 @@
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginBottom="50dp"
                 android:alpha="0.5"
+                android:background="@color/transparent"
                 app:srcCompat="@drawable/warning" />
         </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@color/transparent">
 
             <TextView
                 android:id="@+id/dlg_error_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/transparent"
                 android:fontFamily="@font/pretendard_bold"
                 android:gravity="center"
                 android:textColor="@color/white"
