@@ -53,6 +53,7 @@ public class FindPwdActivity extends AppBaseActivity {
         instance = this;
         isRun = false;
         auth_time_count = 60;
+
         initLayout();
     }
 

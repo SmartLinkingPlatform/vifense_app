@@ -597,10 +597,7 @@ public class DashboardActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        isShow = false;
-        MyUtils.showGauge = false;
-        onLRChangeLayount(DashboardActivity.this, MainActivity.class);
-        finish();
+        //super.onBackPressed();
     }
 
     private float getRotationValueF(float val, float max) {

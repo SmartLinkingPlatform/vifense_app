@@ -274,7 +274,10 @@ public class LinkInfoActivity extends AppBaseActivity {
         finish();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
     @SuppressLint("MissingPermission")
     @Override
     protected void onDestroy() {

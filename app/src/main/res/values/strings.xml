@@ -68,6 +68,7 @@
     <string name="error_register_user">이미 등록된 사용자 입니다.</string>
     <string name="error_input_auth_code">인증번호 확인 시간이 지났습니다.</string>
     <string name="disconnect_bluetooth_msg">블루투스 연결을 끊으시겠습니까?</string>
+    <string name="error_verify_phone">휴대폰 인증이 실패하였습니다.</string>
 
     <string name="mileage_month">월 주행 거리</string>
     <string name="mileage_today">오늘 주행 거리</string>

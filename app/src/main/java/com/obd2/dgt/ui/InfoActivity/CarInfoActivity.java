@@ -161,7 +161,6 @@ public class CarInfoActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        onLRChangeLayount(CarInfoActivity.this, MyInfoActivity.class);
-        finish();
+        //super.onBackPressed();
     }
 }

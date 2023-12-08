@@ -155,7 +155,6 @@ public class MyInfoModifyActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        onLRChangeLayount(MyInfoModifyActivity.this, MyInfoActivity.class);
-        finish();
+        //super.onBackPressed();
     }
 }

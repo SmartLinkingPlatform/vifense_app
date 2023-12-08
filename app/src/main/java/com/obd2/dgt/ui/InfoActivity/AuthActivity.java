@@ -2,6 +2,7 @@ package com.obd2.dgt.ui.InfoActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.obd2.dgt.R;
 import com.obd2.dgt.auth.CustomWebChromeClient;
 import com.obd2.dgt.ui.AppBaseActivity;
+import com.obd2.dgt.ui.FindPwdActivity;
 import com.obd2.dgt.ui.LoginActivity;
 import com.obd2.dgt.ui.SignupActivity;
 import com.obd2.dgt.utils.MyUtils;
@@ -36,12 +38,13 @@ public class AuthActivity extends AppBaseActivity {
     public static AuthActivity getInstance() {
         return instance;
     }
+    String dataKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
-        String dataKey = getIntent().getStringExtra("dataKey");
+        dataKey = getIntent().getStringExtra("dataKey");
 
         if (dataKey.equals("sign")) {
             send_url = MyUtils.signup_url;
@@ -55,55 +58,52 @@ public class AuthActivity extends AppBaseActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initLayout() {
-        //CustomWebChromeClient chromeClient = new CustomWebChromeClient();
         progressBar = (ProgressBar) findViewById(R.id.wv_progressBar);
         progressBar.setMax(100);
         progressBar.setProgress(1);
 
         webview_frame = (FrameLayout) findViewById(R.id.webview_frame);
         auth_web_view = findViewById(R.id.auth_web_view);
-        //auth_web_view.setWebChromeClient(chromeClient);
 
         WebSettings webSettings = auth_web_view.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportMultipleWindows(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         auth_web_view.setWebChromeClient(new CustomWebChromeClient());
-        auth_web_view.loadUrl("https://dgt.vifense.com/mok/mokAuth.html");
-
-        // Add JS interface to allow calls from webview to Android
-        // code. See below for WebAppInterface class implementation
-        auth_web_view.addJavascriptInterface(new WebAppInterface(this), "DGTApp");
+        auth_web_view.loadUrl(send_url);
     }
 
-    // Interface b/w JS and Android code
-    private class WebAppInterface {
-        Context mContext;
+    public void closeWebView(String name, String phone) {
+        Intent intent = null;
+        if (dataKey.equals("sign")) {
+            intent = new Intent(AuthActivity.this, SignupActivity.class);
 
-        WebAppInterface(Context c) {
-            mContext = c;
-        }
-
-        // This function can be called in our JS script now
-        @JavascriptInterface
-        public void receivedAuthInfo(String received_data) {
-            try {
-                JSONObject receiveObj = new JSONObject(received_data);
-                String user_name = receiveObj.getString("userName");
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if (name.isEmpty() || phone.isEmpty()) {
+                intent.putExtra("result", "no");
+            } else {
+                intent.putExtra("result", "ok");
+                intent.putExtra("user_name", name);
+                intent.putExtra("user_phone", phone);
             }
+        } else if (dataKey.equals("find")) {
+            intent = new Intent(AuthActivity.this, FindPwdActivity.class);
         }
-    }
+        if (intent != null) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
 
-    public void closeWebView() {
-        onLRChangeLayount(AuthActivity.this, SignupActivity.class);
-        finish();
+            finish();
+        }
     }
 
     @Override
     public void onBackPressed() {
-        onLRChangeLayount(AuthActivity.this, SignupActivity.class);
+        if (dataKey.equals("sign")) {
+            onLRChangeLayount(AuthActivity.this, SignupActivity.class);
+        } else if (dataKey.equals("find")) {
+            onLRChangeLayount(AuthActivity.this, FindPwdActivity.class);
+        }
         finish();
     }
 }

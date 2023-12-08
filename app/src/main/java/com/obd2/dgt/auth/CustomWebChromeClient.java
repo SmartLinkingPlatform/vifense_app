@@ -3,6 +3,7 @@ package com.obd2.dgt.auth;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Message;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
+import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -19,12 +21,18 @@ import android.webkit.WebViewClient;
 
 import com.obd2.dgt.ui.InfoActivity.AuthActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class CustomWebChromeClient extends WebChromeClient {
+    String user_name = "";
+    String user_phone = "";
     @Override
     public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
         Log.d("WebView Message", "JavaScript Console: " + consoleMessage.message());
         return true;
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
@@ -37,8 +45,9 @@ public class CustomWebChromeClient extends WebChromeClient {
         newWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onCloseWindow(WebView window) {
+                window.setVisibility(View.GONE);
                 window.destroy();
-                AuthActivity.getInstance().closeWebView();
+                AuthActivity.getInstance().closeWebView(user_name, user_phone);
             }
         });
 
@@ -60,12 +69,37 @@ public class CustomWebChromeClient extends WebChromeClient {
         });
         AuthActivity.getInstance().webview_frame.addView(newWebView);
 
+        //newWebView.addJavascriptInterface(new WebAppInterface(newWebView.getContext()), "DGTApp");
+
         ((WebView.WebViewTransport)resultMsg.obj).setWebView(newWebView);
         resultMsg.sendToTarget();
 
         return true;
     }
 
+/*
+    private class WebAppInterface {
+        Context mContext;
+
+        WebAppInterface(Context c) {
+            mContext = c;
+        }
+
+        // This function can be called in our JS script now
+        @JavascriptInterface
+        public void receivedAuthInfo(String value) {
+            try {
+                if (value != null && value.isEmpty()) {
+                    JSONObject receiveObj = new JSONObject(value);
+                    user_name = receiveObj.getString("userName");
+                    user_phone = receiveObj.getString("userPhone");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+*/
     @Override
     public void onCloseWindow(WebView window) {
         Log.i(getClass().getName(), "onCloseWindow");
@@ -81,8 +115,18 @@ public class CustomWebChromeClient extends WebChromeClient {
 
     @Override
     public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
-        Log.i(getClass().getName(), "onJsAlert() url:"+url+", message:"+message);
-        //return super.onJsAlert(view, url, message, result);
+        try {
+            message = message.replace("\n\n", "");
+            message = message.replace("\n", "");
+            if (message != null && !message.isEmpty()) {
+                JSONObject receiveObj = new JSONObject(message);
+                user_name = receiveObj.getString("userName");
+                user_phone = receiveObj.getString("userPhone");
+            }
+            AuthActivity.getInstance().closeWebView(user_name, user_phone);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return true;
     }

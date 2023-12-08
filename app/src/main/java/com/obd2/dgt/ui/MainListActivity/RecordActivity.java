@@ -171,7 +171,6 @@ public class RecordActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        onLRChangeLayount(RecordActivity.this, MainActivity.class);
-        finish();
+        //super.onBackPressed();
     }
 }

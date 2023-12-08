@@ -1,8 +1,11 @@
 package com.obd2.dgt.ui;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,6 +33,7 @@ public class SignupActivity extends AppBaseActivity {
     String name_txt = "";
     String phone_txt = "";
     String password_txt = "";
+    Dialog dialog;
     private static SignupActivity instance;
     public static SignupActivity getInstance() {
         return instance;
@@ -40,7 +44,20 @@ public class SignupActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         instance = this;
+
         initLayout();
+
+        String result = getIntent().getStringExtra("result");
+        if (result != null) {
+            if (result.equals("ok")) {
+                String name = getIntent().getStringExtra("user_name");
+                reg_name_text.setText(name);
+                String phone = getIntent().getStringExtra("user_phone");
+                reg_id_text.setText(phone);
+            } else {
+                dialog.show();
+            }
+        }
     }
 
     @SuppressLint("WrongViewCast")
@@ -70,6 +87,18 @@ public class SignupActivity extends AppBaseActivity {
         }
         ArrayAdapter<String> mf_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, companys);
         reg_company_spinner.setAdapter(mf_adapter);
+
+        dialog = new Dialog(SignupActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dlg_normal);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
+        dialog_normal_text.setText(R.string.error_verify_phone);
+        ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
+        dialog_normal_btn.setOnClickListener(view -> {
+            dialog.dismiss();
+        });
     }
 
     //휴대폰 인증하기 버튼

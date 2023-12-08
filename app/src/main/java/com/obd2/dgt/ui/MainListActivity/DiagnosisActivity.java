@@ -180,8 +180,7 @@ public class DiagnosisActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        onLRChangeLayount(DiagnosisActivity.this, MainActivity.class);
-        finish();
+        //super.onBackPressed();
     }
 
     boolean isTest = true;

@@ -139,8 +139,7 @@ public class MessageActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        onLRChangeLayount(MessageActivity.this, MainActivity.class);
-        finish();
+        //super.onBackPressed();
     }
 
 }
