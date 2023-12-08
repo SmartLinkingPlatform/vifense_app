@@ -25,7 +25,7 @@ public class MyUtils {
     //public static String server_url = "http://192.168.1.6";
     public static String server_url = "https://dgt.vifense.com";
     public static String signup_url = "file:///android_asset/mokSignup.html";
-    public static String findpwd_url = "file:///android_asset/mokFindPwd.html";
+    public static String find_url = "file:///android_asset/mokFindPwd.html";
     public static String call_company = "/mobile.companyInfo";
     public static String user_signup = "/mobile.userSignup";
     public static String user_login = "/mobile.userLogin";

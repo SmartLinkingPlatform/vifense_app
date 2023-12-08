@@ -46,7 +46,7 @@ public class AuthActivity extends AppBaseActivity {
         if (dataKey.equals("sign")) {
             send_url = MyUtils.signup_url;
         } else if (dataKey.equals("find")) {
-            send_url = MyUtils.findpwd_url;
+            send_url = MyUtils.find_url;
         }
 
         instance = this;
