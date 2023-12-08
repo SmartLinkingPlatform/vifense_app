@@ -18,9 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.service.RealService;
-import com.obd2.dgt.ui.InfoActivity.CarInfoModifyActivity;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
-import com.obd2.dgt.ui.InfoActivity.MyInfoActivity;
 import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
 import com.obd2.dgt.utils.MyUtils;
 import com.obd2.dgt.utils.PermissionSupport;

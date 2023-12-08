@@ -6,6 +6,7 @@ import com.obd2.dgt.dbManage.TableInfo.CompanyTable;
 import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
 import com.obd2.dgt.network.http.HttpCall;
 import com.obd2.dgt.network.http.HttpUrlRequest;
+import com.obd2.dgt.ui.FindPwdActivity;
 import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.CarInfoModifyActivity;
 import com.obd2.dgt.ui.InfoActivity.MyInfoModifyActivity;
@@ -428,6 +429,30 @@ public class WebHttpConnect {
                                 safety_score
                         };
                         MainActivity.getInstance().setRankingValues(ranking_val);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute(httpCallPost);
+    }
+
+    //서버에 새 비밀번호 저장
+    public static void onNewPasswordRequest(String[][] values) {
+        serverCallHttpFunc(values, MyUtils.new_pwd);
+        new HttpUrlRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (!response.isEmpty()) {
+                    try {
+                        JSONObject res = new JSONObject(response);
+                        String msg = res.getString("msg");
+                        if (msg.equals("ok")) {
+                            FindPwdActivity.getInstance().onSuccessSetting();
+                        } else {
+                            FindPwdActivity.getInstance().onFailedSetting();
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

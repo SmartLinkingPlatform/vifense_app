@@ -9,15 +9,12 @@ import static android.Manifest.permission.BLUETOOTH_SCAN;
 import static android.Manifest.permission.FOREGROUND_SERVICE;
 import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.Manifest.permission.RECEIVE_BOOT_COMPLETED;
-import static android.Manifest.permission.RECEIVE_SMS;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -38,8 +35,7 @@ public class PermissionSupport {
             ACCESS_FINE_LOCATION,
             POST_NOTIFICATIONS,
             FOREGROUND_SERVICE,
-            RECEIVE_BOOT_COMPLETED,
-            RECEIVE_SMS
+            RECEIVE_BOOT_COMPLETED
 
     };
     private List permissionList;

@@ -73,22 +73,21 @@ public class AuthActivity extends AppBaseActivity {
         auth_web_view.loadUrl(send_url);
     }
 
-    public void closeWebView(String name, String phone) {
+    public void closeWebView(String name, String phone, String resultCode) {
         Intent intent = null;
         if (dataKey.equals("sign")) {
             intent = new Intent(AuthActivity.this, SignupActivity.class);
-
-            if (name.isEmpty() || phone.isEmpty()) {
+        } else if (dataKey.equals("find")) {
+            intent = new Intent(AuthActivity.this, FindPwdActivity.class);
+        }
+        if (intent != null) {
+            if (!resultCode.equals("2000")) {
                 intent.putExtra("result", "no");
             } else {
                 intent.putExtra("result", "ok");
                 intent.putExtra("user_name", name);
                 intent.putExtra("user_phone", phone);
             }
-        } else if (dataKey.equals("find")) {
-            intent = new Intent(AuthActivity.this, FindPwdActivity.class);
-        }
-        if (intent != null) {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);

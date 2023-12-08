@@ -24,6 +24,20 @@ public class MyInfoTable {
             e.printStackTrace();
         }
     }
+    public static int getExistMyInfoTable(String[] fields) {
+        try {
+            String where = "name='" + fields[0] + "' and phone='" + fields[1] + "'";
+            Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "name", where);
+            if (cursor != null && cursor.getCount() > 0) {
+                return cursor.getCount();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+        return 0;
+    }
+
     public static int getMyInfoTableCount() {
         try {
             Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "*", "");

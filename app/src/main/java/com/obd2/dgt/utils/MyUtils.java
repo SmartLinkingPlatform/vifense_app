@@ -22,8 +22,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class MyUtils {
-    //public static String server_url = "http://192.168.1.6";
-    public static String server_url = "https://dgt.vifense.com";
+    public static String server_url = "http://192.168.1.6";
+    //public static String server_url = "https://dgt.vifense.com";
     public static String signup_url = "https://dgt.vifense.com/mok/auth_signup.html";
     public static String find_url = "https://dgt.vifense.com/mok/auth_findpwd.html";
     public static String call_company = "/mobile.companyInfo";
@@ -39,6 +39,7 @@ public class MyUtils {
     public static String ranking = "/mobile.ranking";
     public static String driving_ranking = "/mobile.drivingRanking";
     public static String mgs_list = "/mobile.messageList";
+    public static String new_pwd = "/mobile.newpassword";
     public static AppBaseActivity appBase = null;
     public static Activity currentActivity = null;
     public static Context mContext = null;

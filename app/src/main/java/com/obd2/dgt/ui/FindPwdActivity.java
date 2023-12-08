@@ -3,12 +3,7 @@ package com.obd2.dgt.ui;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,8 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
+import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.InfoActivity.AuthActivity;
-import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
+import com.obd2.dgt.utils.CommonFunc;
+import com.obd2.dgt.utils.Crypt;
 import com.obd2.dgt.utils.MyUtils;
 
 public class FindPwdActivity extends AppBaseActivity {
@@ -40,6 +38,8 @@ public class FindPwdActivity extends AppBaseActivity {
     ImageView find_pwd_complete_btn;
     boolean isRun = false;
     int auth_time_count = 60;
+    String user_phone = "";
+    String encode_pwd = "";
 
     private static FindPwdActivity instance;
     public static FindPwdActivity getInstance() {
@@ -55,6 +55,19 @@ public class FindPwdActivity extends AppBaseActivity {
         auth_time_count = 60;
 
         initLayout();
+        String result = getIntent().getStringExtra("result");
+        if (result != null) {
+            if (result.equals("ok")) {
+                user_phone = getIntent().getStringExtra("user_phone");
+                String user_name = getIntent().getStringExtra("user_name");
+                find_name_text.setText(user_name);
+                find_id_text.setText(user_phone);
+                setting_new_pwd_layout.setVisibility(View.VISIBLE);
+
+            } else {
+                setting_new_pwd_layout.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void initLayout() {
@@ -64,17 +77,17 @@ public class FindPwdActivity extends AppBaseActivity {
         auth_code_btn.setBackgroundResource(R.drawable.button2);
         auth_code_btn.setOnClickListener(view -> onGetAuthCodeClick());
 
-        auth_code_layout = findViewById(R.id.auth_code_layout);
-        auth_code_layout.setVisibility(View.GONE);
+        //auth_code_layout = findViewById(R.id.auth_code_layout);
+        //auth_code_layout.setVisibility(View.GONE);
 
         setting_new_pwd_layout = findViewById(R.id.setting_new_pwd_layout);
         setting_new_pwd_layout.setVisibility(View.GONE);
 
-        auth_code_text = findViewById(R.id.auth_code_text);
-        auth_time_text = findViewById(R.id.auth_time_text);
+        //auth_code_text = findViewById(R.id.auth_code_text);
+        //auth_time_text = findViewById(R.id.auth_time_text);
 
-        complete_btn = findViewById(R.id.complete_btn);
-        complete_btn.setOnClickListener(view -> onAuthCompleteClick());
+        //complete_btn = findViewById(R.id.complete_btn);
+        //complete_btn.setOnClickListener(view -> onAuthCompleteClick());
 
         find_new_pwd = findViewById(R.id.find_new_pwd);
         find_new_pwd_conf = findViewById(R.id.find_new_pwd_conf);
@@ -89,14 +102,81 @@ public class FindPwdActivity extends AppBaseActivity {
 
     //인증번호 받기 버튼 클릭
     private void onGetAuthCodeClick() {
-        Intent intent = new Intent(FindPwdActivity.this, AuthActivity.class);
-        intent.putExtra("dataKey", "find");
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+        String[] params = new String[]{
+                find_name_text.getText().toString(),
+                find_id_text.getText().toString()
+        };
+        int exist_int = MyInfoTable.getExistMyInfoTable(params);
+        if (exist_int > 0) {
+            Intent intent = new Intent(FindPwdActivity.this, AuthActivity.class);
+            intent.putExtra("dataKey", "find");
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+            finish();
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.error_equal_name_id, Toast.LENGTH_LONG).show();
+        }
+    }
+    //새 비밀번호 설정 확인 버튼 클릭
+    private void onFindPasswordCompleteClick() {
+        String pwd = find_new_pwd.getText().toString();
+        String pwd_conf = find_new_pwd_conf.getText().toString();
+        if (pwd.equals(pwd_conf)) {
+            String msg = getString(R.string.check_network_error);
+            String btnText = getString(R.string.confirm_text);
+            boolean isNetwork = CommonFunc.checkNetworkStatus(FindPwdActivity.this, msg, btnText);
+            if (isNetwork) {
+                encode_pwd = Crypt.encrypt(pwd);
+                String update_date = CommonFunc.getDateTime();
+                //서버에 등록
+                String[][] params = new String[][]{
+                        {"user_id", user_phone},
+                        {"user_pwd", encode_pwd},
+                        {"update_date", update_date}
+                };
+                WebHttpConnect.onNewPasswordRequest(params);
+            }
+        } else {
+            showConfirmDialog();
+        }
+    }
+
+    @SuppressLint({"ResourceAsColor", "ResourceType"})
+    public void showConfirmDialog() {
+        dialog.setContentView(R.layout.dlg_normal);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
+        dialog_normal_text.setText(R.string.error_input_pwd);
+        ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
+        dialog_normal_btn.setImageResource(R.drawable.confirm_press);
+        dialog_normal_btn.setOnClickListener(view -> {
+            dialog.dismiss();
+        });
+        dialog.show();
+    }
+
+    public void onSuccessSetting() {
+        String[][] fields = new String[][]{
+                {"password", encode_pwd}
+        };
+        MyInfoTable.updateMyInfoTable(fields);
+
+        onLRChangeLayount(FindPwdActivity.this, LoginActivity.class);
         finish();
     }
 
+    public void onFailedSetting() {
+        Toast.makeText(getApplicationContext(), R.string.error_modify_pwd, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        onLRChangeLayount(FindPwdActivity.this, LoginActivity.class);
+        finish();
+    }
+
+/*
     private void confirmAuthCode() {
         if (!auth_flag) {
             if (MyUtils.my_name.equals(find_name_text.getText().toString()) &&
@@ -117,6 +197,7 @@ public class FindPwdActivity extends AppBaseActivity {
             }
         }
     }
+
     int auth_time = 0;
     String auth_code = "";
     @SuppressLint("SetTextI18n")
@@ -129,6 +210,7 @@ public class FindPwdActivity extends AppBaseActivity {
     }
 
     //인증번호 확인 버튼 클릭
+
     private void onAuthCompleteClick() {
         boolean is_ok = false;
         if (auth_flag && !recv_flag) {
@@ -155,19 +237,9 @@ public class FindPwdActivity extends AppBaseActivity {
             }
         }
     }
+*/
 
-    //새 비밀번호 설정 확인 버튼 클릭
-    private void onFindPasswordCompleteClick() {
-        String pwd = find_new_pwd.getText().toString();
-        String pwd_conf = find_new_pwd_conf.getText().toString();
-        if (pwd.equals(pwd_conf)) {
-            onLRChangeLayount(FindPwdActivity.this, LoginActivity.class);
-            finish();
-        } else {
-            showConfirmDialog();
-        }
-    }
-
+/*
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     public void showWarningDialog() {
         dialog.setContentView(R.layout.dlg_notification);
@@ -185,26 +257,10 @@ public class FindPwdActivity extends AppBaseActivity {
         });
         dialog.show();
     }
-    @SuppressLint({"ResourceAsColor", "ResourceType"})
-    public void showConfirmDialog() {
-        dialog.setContentView(R.layout.dlg_normal);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
-        dialog_normal_text.setText(R.string.error_input_pwd);
-        ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
-        dialog_normal_btn.setImageResource(R.drawable.confirm_press);
-        dialog_normal_btn.setOnClickListener(view -> {
-            dialog.dismiss();
-        });
-        dialog.show();
-    }
+*/
 
-    @Override
-    public void onBackPressed() {
-        onLRChangeLayount(FindPwdActivity.this, LoginActivity.class);
-        finish();
-    }
 
+/*
     class ReceiveSMSAsyncTask extends AsyncTask<String, Integer, Boolean> {
         @SuppressLint("MissingPermission")
         protected Boolean doInBackground(String... str) {
@@ -226,5 +282,6 @@ public class FindPwdActivity extends AppBaseActivity {
             return false;
         }
     }
+*/
 
 }

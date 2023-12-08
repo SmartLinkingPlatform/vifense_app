@@ -117,7 +117,7 @@ public class MyInfoModifyActivity extends AppBaseActivity {
                         {"user_id", String.valueOf(MyUtils.my_id)},
                         {"user_pwd", encode_pwd},
                         {"admin_id", c_ids[myinfo_mod_company_spinner.getSelectedItemPosition()]},
-                        {"update_date", update_date},
+                        {"update_date", update_date}
                 };
                 WebHttpConnect.onModifyUserRequest(params);
             }

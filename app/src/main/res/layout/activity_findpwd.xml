@@ -161,7 +161,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_horizontal|center_vertical"
                                     android:fontFamily="@font/pretendard_semibold"
-                                    android:text="@string/get_auth_number"
+                                    android:text="@string/real_name"
                                     android:textColor="@color/white"
                                     android:textSize="20sp" />
                             </FrameLayout>
@@ -189,7 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
-
+                    <!--
                     <LinearLayout
                         android:id="@+id/auth_code_layout"
                         android:layout_width="match_parent"
@@ -271,7 +271,7 @@
                                 android:textSize="20sp" />
                         </FrameLayout>
                     </LinearLayout>
-
+                    -->
                 </FrameLayout>
 
                 <FrameLayout
