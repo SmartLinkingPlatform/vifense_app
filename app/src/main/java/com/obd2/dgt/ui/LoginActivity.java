@@ -76,7 +76,7 @@ public class LoginActivity extends AppBaseActivity {
         find_pwd_btn.setOnClickListener(view -> gotoFindPwdActivity());
 
         register_btn = findViewById(R.id.register_btn);
-        register_btn.setOnClickListener(view -> gotoRegisterActivity());
+        register_btn.setOnClickListener(view -> gotoSignupActivity());
 
         login_btn = findViewById(R.id.login_btn);
         login_btn.setOnClickListener(view -> gotoMainActivity());
@@ -87,7 +87,7 @@ public class LoginActivity extends AppBaseActivity {
             finish();
         }
     }
-    private void gotoRegisterActivity(){
+    private void gotoSignupActivity(){
         if (isNetwork) {
             onRLChangeLayount(LoginActivity.this, SignupActivity.class);
             finish();

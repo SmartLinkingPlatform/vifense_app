@@ -22,8 +22,10 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class MyUtils {
-    public static String server_url = "http://192.168.1.6";
-    //public static String server_url = "https://dgt.vifense.com";
+    //public static String server_url = "http://192.168.1.6";
+    public static String server_url = "https://dgt.vifense.com";
+    public static String signup_url = "file:///android_asset/mokSignup.html";
+    public static String findpwd_url = "file:///android_asset/mokFindPwd.html";
     public static String call_company = "/mobile.companyInfo";
     public static String user_signup = "/mobile.userSignup";
     public static String user_login = "/mobile.userLogin";
@@ -92,34 +94,28 @@ public class MyUtils {
     public static String[][] enum_info = {
             {"ENGINE_LOAD", "04"},          //엔진 부하
             {"COOLANT_TEMPERATURE", "05"},  //냉각수 온도
-            //{"MANIFOLD_PRESSURE", "0B"},    //흡입기 절대 압력
             {"ENGINE_RPM", "0C"},           //엔진 RPM
             {"VEHICLE_SPEED", "0D"},        //차량 속도
             //{"TIMING_ADVANCE", "0E"},       //주행 시간
-            //{"INTAKE_TEMPERATURE", "0F"},   //흡입기 온도
             {"MAF_AIR_FLOW", "10"},         //흡입 공기량
             {"THROTTLE_POSITION", "11"},    //스로틀 위치
             {"FUEL_TANK_LEVEL", "2F"},      //연료 탱크 레벨
-            {"DISTANCE_CODE", "31"},        //주행 거리
+            {"TOTAL_DISTANCE_CODE", "31"},        //주행 거리
             {"BATTERY_VOLTAGE", "42"},      //배터리 전압
             {"FUEL_RATE_LITER", "5E"},      //순간 연료 소모량 l/h
             {"FUEL_RATE_GAL", "9D"},       //순간 연료 소모량 g/s
-            //{"RUN_TIME", "7F"},             //엔진 시동 후 주행시간
-            //{"MILEAGE", "A6"},              //주행 거리계
     };
     public static String ecu_engine_load = "0";
     public static String ecu_coolant_temp = "0";
-    public static String ecu_manifold_press = "0";
     public static String ecu_engine_rpm = "0";
     public static String ecu_vehicle_speed = "0";
     public static String ecu_timing_advance = "0";
-    public static String ecu_intake_temp = "0";
     public static String ecu_fuel_tank_level = "0";
     public static String ecu_fuel_rate = "0";
     public static String ecu_fuel_rate_gram = "0";
     public static String ecu_fuel_consume = "0";
     public static String ecu_battery_voltage = "0";
-    public static int ecu_distance = 0;
+    public static int ecu_total_distance = 0;
     public static String ecu_mileage = "0";
     public static String ecu_driving_time = "00:00";
     public static String ecu_run_time = "0";

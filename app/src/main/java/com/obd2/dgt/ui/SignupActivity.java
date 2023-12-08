@@ -1,6 +1,7 @@
 package com.obd2.dgt.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
 import com.obd2.dgt.network.WebHttpConnect;
+import com.obd2.dgt.ui.InfoActivity.AuthActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.Crypt;
 import com.obd2.dgt.utils.MyUtils;
@@ -72,7 +74,12 @@ public class SignupActivity extends AppBaseActivity {
 
     //휴대폰 인증하기 버튼
     private void onAuthRealNameClick(){
-
+        Intent intent = new Intent(SignupActivity.this, AuthActivity.class);
+        intent.putExtra("dataKey", "sign");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+        finish();
     }
 
     //약관 동의 체크
@@ -91,9 +98,9 @@ public class SignupActivity extends AppBaseActivity {
     private void onRegisterUserClick(){
         pageStatus(false);
         name_txt = reg_name_text.getText().toString();
-        name_txt = "ksi";
+        //name_txt = "ksi";
         phone_txt = reg_id_text.getText().toString();
-        phone_txt = "11120006000";
+        //phone_txt = "11120006000";
         password_txt = reg_pwd_text.getText().toString();
         if (name_txt.isEmpty() || phone_txt.isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.error_auth, Toast.LENGTH_SHORT).show();

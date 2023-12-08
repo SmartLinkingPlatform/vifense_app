@@ -143,11 +143,7 @@ public class RealService extends Service {
             double distance = speed / (double)3600;
             driving_distance += distance;
             average_speed = driving_distance / (time / (float)3600);
-            if (MyUtils.ecu_distance == 0) {
-                MyUtils.ecu_mileage = String.valueOf(Math.round(driving_distance * 10) / 10.0);
-            } else {
-                MyUtils.ecu_mileage = String.valueOf(MyUtils.ecu_distance);
-            }
+            MyUtils.ecu_mileage = String.valueOf(Math.round(driving_distance * 10) / 10.0);
         } else { // 차량이 정지(엔진이 꺼진 상태)
             if (time > 0) {
                 int driving_score = 100 + down_score_fast + down_score_quick + down_score_brake;

@@ -303,13 +303,13 @@ public class WebHttpConnect {
                         String msg = res.getString("msg");
                         if (msg.equals("ok")) {
                             MyUtils.max_speed = 0;
-                            MyUtils.ecu_distance = 0;
+                            //MyUtils.ecu_total_distance = 0;
                             MyUtils.ecu_mileage = "0";
                             MyUtils.fast_speed_cnt = 0;
                             MyUtils.quick_speed_cnt = 0;
                             MyUtils.brake_speed_cnt = 0;
                             MyUtils.idling_time = 0;
-                            MyUtils.ecu_driving_time = "0";
+                            MyUtils.ecu_driving_time = "00:00";
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

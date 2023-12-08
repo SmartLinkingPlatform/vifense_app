@@ -2,6 +2,7 @@ package com.obd2.dgt.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.ui.InfoActivity.AuthActivity;
 import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
 import com.obd2.dgt.utils.MyUtils;
 
@@ -86,6 +88,15 @@ public class FindPwdActivity extends AppBaseActivity {
 
     //인증번호 받기 버튼 클릭
     private void onGetAuthCodeClick() {
+        Intent intent = new Intent(FindPwdActivity.this, AuthActivity.class);
+        intent.putExtra("dataKey", "find");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+        finish();
+    }
+
+    private void confirmAuthCode() {
         if (!auth_flag) {
             if (MyUtils.my_name.equals(find_name_text.getText().toString()) &&
                     MyUtils.my_phone.equals(find_id_text.getText().toString())) {

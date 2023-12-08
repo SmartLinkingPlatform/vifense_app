@@ -2,7 +2,7 @@ package com.obd2.dgt.btManage;
 
 import com.obd2.dgt.btManage.PIDsFormulas.BATTERY_VOLTAGE;
 import com.obd2.dgt.btManage.PIDsFormulas.COOLANT_TEMPERATURE;
-import com.obd2.dgt.btManage.PIDsFormulas.DISTANCE_CODE;
+import com.obd2.dgt.btManage.PIDsFormulas.TOTAL_DISTANCE_CODE;
 import com.obd2.dgt.btManage.PIDsFormulas.ENGINE_LOAD;
 import com.obd2.dgt.btManage.PIDsFormulas.ENGINE_RPM;
 import com.obd2.dgt.btManage.PIDsFormulas.FUEL_RATE_GAL;
@@ -35,9 +35,6 @@ public class ResponseCalculator {
             case "COOLANT_TEMPERATURE":
                 MyUtils.ecu_coolant_temp = COOLANT_TEMPERATURE.read(firstHex);
                 break;
-            case "MANIFOLD_PRESSURE":
-                //MyUtils.ecu_manifold_press = MANIFOLD_PRESSURE.read(firstHex);
-                break;
             case "ENGINE_RPM":
                 MyUtils.ecu_engine_rpm = ENGINE_RPM.read(firstHex, secondHex);
                 break;
@@ -46,9 +43,6 @@ public class ResponseCalculator {
                 break;
             case "TIMING_ADVANCE":
                 //MyUtils.ecu_timing_advance = TIMING_ADVANCE.read(firstHex);
-                break;
-            case "INTAKE_TEMPERATURE":
-                //MyUtils.ecu_intake_temp = INTAKE_TEMPERATURE.read(firstHex);
                 break;
             case  "MAF_AIR_FLOW":
                 MyUtils.ecu_maf = MAF_AIR_FLOW.read(firstHex, secondHex);
@@ -65,17 +59,11 @@ public class ResponseCalculator {
             case  "FUEL_RATE_GRAM":
                 MyUtils.ecu_fuel_rate_gram = FUEL_RATE_GAL.read(firstHex);
                 break;
-            case  "DISTANCE_CODE":
-                MyUtils.ecu_distance = DISTANCE_CODE.read(firstHex, secondHex);
+            case  "TOTAL_DISTANCE_CODE":
+                MyUtils.ecu_total_distance = TOTAL_DISTANCE_CODE.read(firstHex, secondHex);
                 break;
             case  "BATTERY_VOLTAGE":
                 MyUtils.ecu_battery_voltage = BATTERY_VOLTAGE.read(firstHex, secondHex);
-                break;
-            case  "MILEAGE":
-                //MyUtils.ecu_mileage = MILEAGE.read(firstHex, secondHex, thirdHex, fourthHex);
-                break;
-            case  "RUNNING_TIME":
-                //MyUtils.ecu_run_time = RUN_TIME.read(firstHex, secondHex);
                 break;
         }
     }
