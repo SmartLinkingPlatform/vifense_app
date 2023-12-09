@@ -44,20 +44,21 @@
     <string name="new_password">신규 비밀번호</string>
     <string name="warning_text_1">회원 가입 시 등록한 이름과 ID가 같아야 문자 인증번호를 받을수 있습니다.</string>
     <string name="alarm_text_1">올바른 내용을 입력해 주세요.</string>
-    <string name="alarm_text_2">인증이 완료되였습니다.</string>
+    <string name="alarm_text_2">인증이 완료 되였습니다.</string>
     <string name="alarm_text_3">비밀번호 수정 페이지로 이동합니다.</string>
     <string name="diagnosing_text">진단하기</string>
     <string name="diagnosing_completed">진단완료</string>
     <string name="current_trouble_code">현재 고장 코드</string>
     <string name="past_trouble_code">과거 고장 코드</string>
-    <string name="confirm_reg_message">등록이 완료되였습니다.</string>
-    <string name="confirm_mod_message">변경이 완료되였습니다.</string>
+    <string name="confirm_reg_message">등록이 완료 되였습니다.</string>
+    <string name="confirm_mod_message">변경이 완료 되였습니다.</string>
     <string name="error_pwd_message">비밀번호를 다시 입력하세요.</string>
     <string name="check_network_error">인터넷 연결이 원활하지 않습니다.</string>
     <string name="error_auth">휴대폰 인증을 하여야 합니다.</string>
     <string name="error_login">로그인 실패 하였습니다.</string>
     <string name="error_signup_duplicate">이미 등록된 사용자 입니다.</string>
-    <string name="error_signup_fail">사용자 등록에 실패하였습니다.</string>
+    <string name="error_signup_fail">사용자 등록에 실패 하였습니다.</string>
+    <string name="error_modify_fail">변경이 실패 하였습니다.</string>
     <string name="error_reg_car_duplicate">이미 등록된 차량 입니다.</string>
     <string name="show_reg_car">차량 등록을 진행 해 주세요.</string>
     <string name="error_reg_car_fail">차량 등록에 실패 하였습니다.</string>
@@ -156,7 +157,7 @@
 
     <string name="safe_driving_scoring1">시속 110Km 이상 5분 이상 주행 시 : 감점 -2점, 1일 최대 -4점 감점</string>
     <string name="safe_driving_scoring2">근무 당일 평균 주행속도 50Km 이내 시 : 가점 +1점</string>
-    <string name="safe_driving_scoring3">급가속, 급제동(1초에 9Km이상) 30회당 : -1점, 1일 최대 -2점</string>
+    <string name="safe_driving_scoring3">급가속, 급제동(1초에 15Km이상) 30회당 : -1점, 1일 최대 -2점</string>
     <string name="safe_driving_scoring4">기본 100점에서 차감 제도로 운영</string>
 
     <string name="finish_app">\'뒤로\' 버튼을 한번 더 누르면 종료 됩니다.</string>

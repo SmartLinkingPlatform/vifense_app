@@ -3,10 +3,12 @@ package com.obd2.dgt.ui.InfoActivity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,11 +31,13 @@ public class CarInfoActivity extends AppBaseActivity {
     Spinner car_fuel_type_spinner;
     ImageView register_car_btn;
     ImageView reg_car_prev_btn;
+    FrameLayout car_progress_layout;
 
     int manufacturer_idx = 0;
     int model_idx = 0;
     int year_idx = 0;
     int fuel_idx = 0;
+    boolean isMode = false;
     Dialog dialog;
 
     private static CarInfoActivity instance;
@@ -92,6 +96,9 @@ public class CarInfoActivity extends AppBaseActivity {
 
         reg_car_prev_btn = findViewById(R.id.reg_car_prev_btn);
         reg_car_prev_btn.setOnClickListener(view -> onCarInfoPrevClick());
+
+        car_progress_layout = findViewById(R.id.car_progress_layout);
+        car_progress_layout.setVisibility(View.GONE);
     }
 
     private void onRegisterCarClick() {
@@ -99,6 +106,8 @@ public class CarInfoActivity extends AppBaseActivity {
         String btnText = getString(R.string.confirm_text);
         boolean isNetwork = CommonFunc.checkNetworkStatus(CarInfoActivity.this, msg, btnText);
         if (isNetwork) {
+            isMode = true;
+            car_progress_layout.setVisibility(View.VISIBLE);
             //서버에 등록
             String[][] params = new String[][]{
                     {"number", reg_car_number_text.getText().toString()},
@@ -127,16 +136,23 @@ public class CarInfoActivity extends AppBaseActivity {
         };
         CarInfoTable.insertCarInfoTable(fields);
 
+        isMode = false;
+        car_progress_layout.setVisibility(View.GONE);
+
         dialog = new Dialog(CarInfoActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         showConfirmDialog();
     }
     public void onDuplicationRegisterCar() {
+        isMode = false;
+        car_progress_layout.setVisibility(View.GONE);
         Toast.makeText(getApplicationContext(), R.string.error_reg_car_duplicate, Toast.LENGTH_SHORT).show();
     }
 
     public void onFailedRegisterCar() {
+        isMode = false;
+        car_progress_layout.setVisibility(View.GONE);
         Toast.makeText(getApplicationContext(), R.string.error_reg_car_fail, Toast.LENGTH_SHORT).show();
     }
 
@@ -155,8 +171,10 @@ public class CarInfoActivity extends AppBaseActivity {
         dialog.show();
     }
     private void onCarInfoPrevClick(){
-        onLRChangeLayount(CarInfoActivity.this, MyInfoActivity.class);
-        finish();
+        if (!isMode) {
+            onLRChangeLayount(CarInfoActivity.this, MyInfoActivity.class);
+            finish();
+        }
     }
 
     @Override

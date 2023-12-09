@@ -1,7 +1,9 @@
 package com.obd2.dgt.ui;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ public class LoginActivity extends AppBaseActivity {
     boolean isNetwork = false;
     String user_phone = "";
     String user_pwd = "";
+    FrameLayout progress_layout;
 
     private static LoginActivity instance;
     public static LoginActivity getInstance() {
@@ -66,11 +69,19 @@ public class LoginActivity extends AppBaseActivity {
                 MyUtils.create_years.add(String.valueOf(i));
             }
         }
+        if (!MyUtils.my_phone.isEmpty() && !MyUtils.my_pwd.isEmpty()) {
+            String encode_pwd = Crypt.decrypt(MyUtils.my_pwd);
+            login_id_text.setText(MyUtils.my_phone);
+            login_pwd_text.setText(encode_pwd);
+        }
+
     }
 
     private void initLayout() {
         login_id_text = findViewById(R.id.login_id_text);
+        login_id_text.setText(MyUtils.my_phone);
         login_pwd_text = findViewById(R.id.login_pwd_text);
+        login_pwd_text.setText(MyUtils.my_pwd);
 
         find_pwd_btn = findViewById(R.id.find_pwd_btn);
         find_pwd_btn.setOnClickListener(view -> gotoFindPwdActivity());
@@ -80,6 +91,9 @@ public class LoginActivity extends AppBaseActivity {
 
         login_btn = findViewById(R.id.login_btn);
         login_btn.setOnClickListener(view -> gotoMainActivity());
+
+        progress_layout = findViewById(R.id.progress_layout);
+        progress_layout.setVisibility(View.GONE);
     }
     private void gotoFindPwdActivity(){
         if (isNetwork) {
@@ -95,6 +109,7 @@ public class LoginActivity extends AppBaseActivity {
     }
     private void gotoMainActivity(){
         if (isNetwork) {
+            progress_layout.setVisibility(View.VISIBLE);
             user_phone = login_id_text.getText().toString();
             user_pwd = login_pwd_text.getText().toString();
             String encode_pwd = Crypt.encrypt(user_pwd);
@@ -134,22 +149,26 @@ public class LoginActivity extends AppBaseActivity {
             MyInfoTable.getMyInfoTable();
         }
         ServiceStart();
+        progress_layout.setVisibility(View.GONE);
         onRLChangeLayount(LoginActivity.this, MainActivity.class);
         finish();
     }
     public void onFailedStart() {
+        progress_layout.setVisibility(View.GONE);
         Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_SHORT).show();
     }
 
     //DataBase setting
     private void getDatabaseInfo() {
         CompanyTable.deleteAllCompanyInfoTable();
+        MyInfoTable.getMyInfoTable();
         MessageInfoTable.getMessageInfoTable();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        progress_layout.setVisibility(View.GONE);
     }
 
 }

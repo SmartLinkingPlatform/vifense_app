@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
@@ -34,9 +37,11 @@ public class MyInfoModifyActivity extends AppBaseActivity {
     ImageView my_info_mod_prev_btn;
     ImageView my_info_mod_btn;
     Spinner myinfo_mod_company_spinner;
+    FrameLayout mymod_progress_layout;
     Dialog dialog;
     TextView dialog_normal_text;
     String[] c_ids;
+    boolean isMode = false;
     private static MyInfoModifyActivity instance;
     public static MyInfoModifyActivity getInstance() {
         return instance;
@@ -85,6 +90,9 @@ public class MyInfoModifyActivity extends AppBaseActivity {
         my_info_mod_btn = findViewById(R.id.my_info_mod_btn);
         my_info_mod_btn.setOnClickListener(view -> onMyInfoModifyClick());
 
+        mymod_progress_layout = findViewById(R.id.mymod_progress_layout);
+        mymod_progress_layout.setVisibility(View.GONE);
+
         dialog = new Dialog(MyInfoModifyActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -103,6 +111,8 @@ public class MyInfoModifyActivity extends AppBaseActivity {
             boolean isNetwork = CommonFunc.checkNetworkStatus(MyInfoModifyActivity.this, msg, btnText);
 
             if (isNetwork) {
+                isMode = true;
+                mymod_progress_layout.setVisibility(View.VISIBLE);
                 String encode_pwd = Crypt.encrypt(pwd);
                 String[][] fields = new String[][]{
                         {"password", encode_pwd},
@@ -122,12 +132,21 @@ public class MyInfoModifyActivity extends AppBaseActivity {
                 WebHttpConnect.onModifyUserRequest(params);
             }
         } else {
+            isMode = false;
+            mymod_progress_layout.setVisibility(View.GONE);
             showConfirmDialog(false);
         }
     }
 
     public void onSuccessModify() {
+        isMode = false;
+        mymod_progress_layout.setVisibility(View.GONE);
         showConfirmDialog(true);
+    }
+    public void onFailedModify() {
+        isMode = false;
+        mymod_progress_layout.setVisibility(View.GONE);
+        Toast.makeText(getApplicationContext(), R.string.error_modify_fail, Toast.LENGTH_SHORT).show();
     }
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     public void showConfirmDialog(boolean b_mod) {
@@ -149,8 +168,10 @@ public class MyInfoModifyActivity extends AppBaseActivity {
     }
 
     private void onMyInfoModPrevClick() {
-        onLRChangeLayount(MyInfoModifyActivity.this, MyInfoActivity.class);
-        finish();
+        if (!isMode) {
+            onLRChangeLayount(MyInfoModifyActivity.this, MyInfoActivity.class);
+            finish();
+        }
     }
 
     @Override

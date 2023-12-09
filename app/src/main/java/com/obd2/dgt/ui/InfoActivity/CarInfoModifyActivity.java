@@ -1,8 +1,10 @@
 package com.obd2.dgt.ui.InfoActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     ImageView mod_car_btn;
     ImageView del_car_btn;
     ImageView mod_car_prev_btn;
+    FrameLayout car_mod_progress_layout;
     int manufacturer_idx = 0;
     int model_idx = 0;
     int year_idx = 0;
@@ -34,6 +37,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     String car_id = "";
     String car_number = "";
     String car_gas = "";
+    boolean isMode = false;
     private static CarInfoModifyActivity instance;
     public static CarInfoModifyActivity getInstance() {
         return instance;
@@ -106,6 +110,9 @@ public class CarInfoModifyActivity extends AppBaseActivity {
 
         mod_car_prev_btn = findViewById(R.id.mod_car_prev_btn);
         mod_car_prev_btn.setOnClickListener(view -> onModCarInfoPrevClick());
+
+        car_mod_progress_layout = findViewById(R.id.car_mod_progress_layout);
+        car_mod_progress_layout.setVisibility(View.GONE);
     }
 
     private void getSelectedCarInfo() {
@@ -127,6 +134,8 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         String btnText = getString(R.string.confirm_text);
         boolean isNetwork = CommonFunc.checkNetworkStatus(CarInfoModifyActivity.this, msg, btnText);
         if (isNetwork) {
+            isMode = true;
+            car_mod_progress_layout.setVisibility(View.VISIBLE);
             //서버에 등록
             String[][] params = new String[][]{
                     {"car_id", car_id},
@@ -142,6 +151,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     }
 
     public void onSuccessModifyCar() {
+        isMode = false;
         String[][] fields = new String[][]{
                 {"manufacturer", String.valueOf(mod_manufacturer_spinner.getSelectedItemPosition())},
                 {"model", String.valueOf(mod_model_spinner.getSelectedItemPosition())},
@@ -153,12 +163,14 @@ public class CarInfoModifyActivity extends AppBaseActivity {
 
         CarInfoTable.updateCarInfoTable(Integer.parseInt(car_id), fields);
         CarInfoTable.getCarInfoTable();
-
+        car_mod_progress_layout.setVisibility(View.GONE);
         onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
         finish();
     }
 
     public void onFailedModifyCar() {
+        isMode = false;
+        car_mod_progress_layout.setVisibility(View.GONE);
         Toast.makeText(getApplicationContext(), R.string.error_mod_car_fail, Toast.LENGTH_SHORT).show();
     }
 
@@ -167,6 +179,8 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         String btnText = getString(R.string.confirm_text);
         boolean isNetwork = CommonFunc.checkNetworkStatus(CarInfoModifyActivity.this, msg, btnText);
         if (isNetwork) {
+            isMode = true;
+            car_mod_progress_layout.setVisibility(View.VISIBLE);
             //서버에 등록
             String[][] params = new String[][]{
                     {"car_id", car_id},
@@ -177,6 +191,8 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         }
     }
     public void onSuccessDeleteCar() {
+        isMode = false;
+        car_mod_progress_layout.setVisibility(View.GONE);
         CarInfoTable.deleteCarInfoTable(MyUtils.sel_car_id);
         CarInfoTable.getCarInfoTable();
 
@@ -184,12 +200,16 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         finish();
     }
     public void onFailedDeleteCar() {
+        isMode = false;
+        car_mod_progress_layout.setVisibility(View.GONE);
         Toast.makeText(getApplicationContext(), R.string.error_del_car_fail, Toast.LENGTH_SHORT).show();
     }
 
     private void onModCarInfoPrevClick(){
-        onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
-        finish();
+        if (!isMode) {
+            onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
+            finish();
+        }
     }
 
     @Override

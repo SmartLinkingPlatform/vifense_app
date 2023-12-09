@@ -144,6 +144,8 @@ public class WebHttpConnect {
                         String msg = res.getString("msg");
                         if (msg.equals("ok")) {
                             MyInfoModifyActivity.getInstance().onSuccessModify();
+                        } else {
+                            MyInfoModifyActivity.getInstance().onFailedModify();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

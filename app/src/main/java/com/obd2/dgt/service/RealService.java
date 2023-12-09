@@ -117,7 +117,7 @@ public class RealService extends Service {
                 if (down_score_fast > -4)
                     down_score_fast -= 2;
             }
-            if (speed - prev_speed > 9) { // 차량 속도가 1초내에 9km 이상 급가속 경우
+            if (speed - prev_speed > 15) { // 차량 속도가 1초내에 15km 이상 급가속 경우
                 speed_quick = true;
                 MyUtils.quick_speed_cnt++;
                 if (MyUtils.quick_speed_cnt >= 30) {
@@ -126,7 +126,7 @@ public class RealService extends Service {
                         down_score_quick -= cnt;
                 }
             }
-            if (prev_speed - speed > 9) { // 차량 속도가 1초내에 9km 이상 급제동 경우
+            if (prev_speed - speed > 15) { // 차량 속도가 1초내에 15km 이상 급제동 경우
                 speed_brake = true;
                 MyUtils.brake_speed_cnt++;
                 if (MyUtils.brake_speed_cnt >= 30) {
