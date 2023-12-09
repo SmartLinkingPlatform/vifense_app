@@ -56,7 +56,6 @@ public class LinkInfoActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link);
         instance = this;
-        MyUtils.currentActivity = this;
 
         //페어링 된 장치 검색
         onSearchPairedBtDevices();

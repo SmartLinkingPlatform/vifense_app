@@ -52,7 +52,6 @@ public class RecordActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
         instance = this;
-        MyUtils.currentActivity = this;
 
         requestReadDrivingInfo();
     }

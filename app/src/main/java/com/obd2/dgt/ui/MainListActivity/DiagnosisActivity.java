@@ -67,7 +67,6 @@ public class DiagnosisActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diagnosis);
         instance = this;
-        MyUtils.currentActivity = this;
 
         TroubleTable.getTroubleCodeTable();
 

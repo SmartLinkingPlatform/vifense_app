@@ -62,7 +62,6 @@ public class RankingInfoActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
         instance = this;
-        MyUtils.currentActivity = this;
 
         initLayout();
         requestDrivingRankingInfo();

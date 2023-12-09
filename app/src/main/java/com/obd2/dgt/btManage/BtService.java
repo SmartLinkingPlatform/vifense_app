@@ -82,6 +82,7 @@ public class BtService {
                                 ResponseCalculator.ResponseCalculator(response);
                             }
                         }
+                        SystemClock.sleep(100);
                     } catch (IOException e) {
                         MyUtils.isObdSocket = false;
                         MyUtils.isSocketError = true;
@@ -113,14 +114,13 @@ public class BtService {
     public void setOutStream() {
         for (String[] info : MyUtils.enum_info) {
             String msg = "01" + info[1];
-            msg += "\r";
             try {
                 if (MyUtils.isObdSocket)
                     outputStream.write(msg.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            SystemClock.sleep(100);
+            SystemClock.sleep(50);
         }
     }
     private ArrayList<String> getResponses(String rawResponse) {

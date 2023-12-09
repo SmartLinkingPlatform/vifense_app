@@ -50,7 +50,6 @@ public class CarInfoActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info);
         instance = this;
-        MyUtils.currentActivity = this;
         initLayout();
     }
 

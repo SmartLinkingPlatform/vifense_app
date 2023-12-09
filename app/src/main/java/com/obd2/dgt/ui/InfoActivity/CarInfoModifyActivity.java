@@ -48,7 +48,6 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info_modify);
         instance = this;
-        MyUtils.currentActivity = this;
         getSelectedCarInfo();
         initLayout();
     }

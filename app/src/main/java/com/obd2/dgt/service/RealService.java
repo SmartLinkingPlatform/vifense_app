@@ -195,33 +195,38 @@ public class RealService extends Service {
         MyUtils.ecu_fuel_consume = String.valueOf(Math.round(fuel_consumption * 10) / (float)10.0);
     }
 
-    @SuppressLint("LaunchActivityFromNotification")
+    @SuppressLint({"LaunchActivityFromNotification", "MissingPermission"})
     private void createNotification() {
         String CHANNEL_ID = "com.obd2.dgt";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel =
-                    new NotificationChannel(CHANNEL_ID, getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            assert notificationManager != null;
-            notificationManager.createNotificationChannel(serviceChannel);
-        }
+        createNotificationChannel();
 
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_MUTABLE);
-        } else {
-            pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
-        }
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle(getString(R.string.app_running))
+        Intent notificationIntent = new Intent(MyUtils.mContext, MainActivity.class);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(MyUtils.mContext, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        Notification notification = new NotificationCompat.Builder(MyUtils.mContext, CHANNEL_ID)
+                .setContentText(getString(R.string.app_running))
                 .setSmallIcon(R.drawable.app_icon)
                 .setContentIntent(pendingIntent)
-                .setOngoing(true)
+                .setFullScreenIntent(pendingIntent, false)
+                .setAutoCancel(true)
                 .build();
 
-
         startForeground(1, notification);
+    }
+
+    private void createNotificationChannel() {
+        String CHANNEL_ID = "com.obd2.dgt";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.app_name);
+            String description = getString(R.string.app_running);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     @Override

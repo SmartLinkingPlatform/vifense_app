@@ -83,7 +83,6 @@ public class DashboardActivity extends AppBaseActivity {
         instance = this;
 
         mContext = getContext();
-        MyUtils.currentActivity = this;
         viewInfo = new ArrayList<>();
         MyUtils.gaugeInfo = new ArrayList<>();
         MyUtils.showGauge = true;

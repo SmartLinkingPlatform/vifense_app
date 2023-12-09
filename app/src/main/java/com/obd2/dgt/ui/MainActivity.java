@@ -64,14 +64,25 @@ public class MainActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         instance = this;
-        MyUtils.currentActivity = this;
         isRun = true;
 
         requestRankingInfo();
         initLayout();
 
-        if (MyUtils.isPaired && MyUtils.savedSocketStatus) {
-            obdConnectDevice();
+        if (!MyUtils.run_main) {
+            MyUtils.run_main = true;
+            if (MyUtils.isPaired) {
+                if (MyUtils.isObdSocket) {
+                    link_index = 10;
+                    showConnectingLink(link_index);
+                }
+                else {
+                    if (MyUtils.savedSocketStatus) {
+                        obdConnectDevice();
+                    }
+                }
+            }
+
         }
     }
     private void requestRankingInfo() {
@@ -387,6 +398,11 @@ public class MainActivity extends AppBaseActivity {
         ranking_safety_unit_text.setText(R.string.unit_score);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MyUtils.run_main = false;
+    }
     long waitTime = 0;
 
     @Override

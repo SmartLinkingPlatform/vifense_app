@@ -1,6 +1,7 @@
 package com.obd2.dgt.ui;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -42,6 +43,7 @@ public class AppBaseActivity extends AppCompatActivity {
     }
 
     public void onRLChangeLayount(Context currentLayout, Class<?> changeLayout) {
+        MyUtils.currentActivity = changeLayout;
         Intent intent = new Intent(currentLayout, changeLayout);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
@@ -49,6 +51,7 @@ public class AppBaseActivity extends AppCompatActivity {
     }
 
     public void onLRChangeLayount(Context currentLayout, Class<?> changeLayout) {
+        MyUtils.currentActivity = changeLayout;
         Intent intent = new Intent(currentLayout, changeLayout);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
@@ -120,6 +123,15 @@ public class AppBaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
     }
 
     //블루투스 기기 찾기
@@ -214,7 +226,7 @@ public class AppBaseActivity extends AppCompatActivity {
     }
 
     public void gotoDashboard() {
-        onRLChangeLayount(MyUtils.currentActivity.getBaseContext(), DashboardActivity.class);
+        onRLChangeLayount(MyUtils.appBase, DashboardActivity.class);
         finish();
     }
     int width = 1080;

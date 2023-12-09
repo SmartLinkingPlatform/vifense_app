@@ -52,7 +52,6 @@ public class MyInfoModifyActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_info_modify);
         instance = this;
-        MyUtils.currentActivity = this;
 
         initLayout();
     }

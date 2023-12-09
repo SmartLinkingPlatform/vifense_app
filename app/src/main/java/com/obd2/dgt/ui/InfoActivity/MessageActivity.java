@@ -43,7 +43,6 @@ public class MessageActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         instance = this;
-        MyUtils.currentActivity = this;
 
         initLayout();
     }
