@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CustomWebChromeClient extends WebChromeClient {
+    String user_birthday = "";
     String user_name = "";
     String user_phone = "";
     String result_code = "";
@@ -48,7 +49,7 @@ public class CustomWebChromeClient extends WebChromeClient {
             public void onCloseWindow(WebView window) {
                 window.setVisibility(View.GONE);
                 window.destroy();
-                AuthActivity.getInstance().closeWebView(user_name, user_phone, result_code);
+                AuthActivity.getInstance().closeWebView(user_name, user_phone, user_birthday, result_code);
             }
         });
 
@@ -123,9 +124,10 @@ public class CustomWebChromeClient extends WebChromeClient {
                 JSONObject receiveObj = new JSONObject(message);
                 user_name = receiveObj.getString("userName");
                 user_phone = receiveObj.getString("userPhone");
+                user_birthday = receiveObj.getString("userBirthday");
                 result_code = receiveObj.getString("resultCode");
             }
-            AuthActivity.getInstance().closeWebView(user_name, user_phone, result_code);
+            AuthActivity.getInstance().closeWebView(user_name, user_phone, user_birthday, result_code);
         } catch (JSONException e) {
             e.printStackTrace();
         }

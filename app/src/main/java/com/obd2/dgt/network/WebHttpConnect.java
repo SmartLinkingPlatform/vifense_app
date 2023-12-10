@@ -88,8 +88,6 @@ public class WebHttpConnect {
                         String msg = res.getString("msg");
                         if (msg.equals("ok")) {
                             SignupActivity.getInstance().onSuccessSignup();
-                        } else if (msg.equals("du")) {
-                            SignupActivity.getInstance().onDuplicateSignup();
                         } else {
                             SignupActivity.getInstance().onFailedSignup();
                         }
@@ -221,27 +219,6 @@ public class WebHttpConnect {
                             CarInfoModifyActivity.getInstance().onSuccessDeleteCar();
                         } else {
                             CarInfoModifyActivity.getInstance().onFailedDeleteCar();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }.execute(httpCallPost);
-    }
-
-    public static void onFindPasswordRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.find_password);
-        new HttpUrlRequest(){
-            @Override
-            public void onResponse(String response) {
-                super.onResponse(response);
-                if (!response.isEmpty()) {
-                    try {
-                        JSONObject res = new JSONObject(response);
-                        String msg = res.getString("msg");
-                        if (msg.equals("ok")) {
-
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

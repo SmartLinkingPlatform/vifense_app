@@ -22,15 +22,14 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class MyUtils {
-    public static String server_url = "http://192.168.1.6";
-    //public static String server_url = "https://dgt.vifense.com";
+    //public static String server_url = "http://192.168.1.6";
+    public static String server_url = "https://dgt.vifense.com";
     public static String signup_url = "https://dgt.vifense.com/mok/auth_signup.html";
     public static String find_url = "https://dgt.vifense.com/mok/auth_findpwd.html";
     public static String call_company = "/mobile.companyInfo";
     public static String user_signup = "/mobile.userSignup";
     public static String user_login = "/mobile.userLogin";
     public static String user_modify = "/mobile.userInfoModify";
-    public static String find_password = "/mobile.userFindPassword";
     public static String reg_car = "/mobile.regCarInfo";
     public static String mod_car = "/mobile.modCarInfo";
     public static String del_car = "/mobile.delCarInfo";

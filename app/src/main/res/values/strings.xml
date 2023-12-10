@@ -66,7 +66,6 @@
     <string name="error_del_car_fail">차량 정보 삭제에 실패 하였습니다.</string>
     <string name="error_input_pwd">비밀번호가 일치하지 않습니다.</string>
     <string name="error_view_conditions">이용약관을 확인하십시오.</string>
-    <string name="error_register_user">이미 등록된 사용자 입니다.</string>
     <string name="error_input_auth_code">인증번호 확인 시간이 지났습니다.</string>
     <string name="disconnect_bluetooth_msg">블루투스 연결을 끊으시겠습니까?</string>
     <string name="error_verify_phone">휴대폰 인증이 실패하였습니다.</string>
@@ -143,6 +142,8 @@
     <string name="delete_all_message">모든 메시지를 삭제하시겠습니까?</string>
     <string name="no_start_place">출발지 정보가 없습니다.</string>
     <string name="no_end_place">도착지 정보가 없습니다.</string>
+    <string name="hint_auth_name">이름 : 먼저 휴대폰 인증을 해주세요.</string>
+    <string name="hint_auth_phone">아이디 : 휴대폰 인증 후 자동입력 됩니다.</string>
 
     <string name="week_1">일</string>
     <string name="week_2">월</string>

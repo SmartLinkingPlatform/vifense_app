@@ -33,6 +33,7 @@ public class SignupActivity extends AppBaseActivity {
     String name_txt = "";
     String phone_txt = "";
     String password_txt = "";
+    String user_birthday = "";
     Dialog dialog;
     private static SignupActivity instance;
     public static SignupActivity getInstance() {
@@ -54,8 +55,9 @@ public class SignupActivity extends AppBaseActivity {
                 reg_name_text.setText(name);
                 String phone = getIntent().getStringExtra("user_phone");
                 reg_id_text.setText(phone);
+                user_birthday = getIntent().getStringExtra("user_birthday");
             } else {
-                dialog.show();
+                showSignErrorDialog(R.string.error_verify_phone);
             }
         }
     }
@@ -87,18 +89,21 @@ public class SignupActivity extends AppBaseActivity {
         }
         ArrayAdapter<String> mf_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, companys);
         reg_company_spinner.setAdapter(mf_adapter);
+    }
 
+    private void showSignErrorDialog(int res_id) {
         dialog = new Dialog(SignupActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dlg_normal);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         TextView dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
-        dialog_normal_text.setText(R.string.error_verify_phone);
+        dialog_normal_text.setText(res_id);
         ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
         dialog_normal_btn.setOnClickListener(view -> {
             dialog.dismiss();
         });
+        dialog.show();
     }
 
     //휴대폰 인증하기 버튼
@@ -125,30 +130,28 @@ public class SignupActivity extends AppBaseActivity {
     //회원 가입하기 버튼
     String encode_pwd = "";
     private void onRegisterUserClick(){
-        pageStatus(false);
+        setButtonStatus(false, false);
         name_txt = reg_name_text.getText().toString();
-        //name_txt = "ksi";
         phone_txt = reg_id_text.getText().toString();
-        //phone_txt = "11120006000";
         password_txt = reg_pwd_text.getText().toString();
         if (name_txt.isEmpty() || phone_txt.isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.error_auth, Toast.LENGTH_SHORT).show();
-            pageStatus(true);
+            setButtonStatus(true, false);
             return;
         }
         if (password_txt.isEmpty()) {
             Toast.makeText(getApplicationContext(), R.string.error_pwd_message, Toast.LENGTH_SHORT).show();
-            pageStatus(true);
+            setButtonStatus(true, false);
             return;
         }
         if (!password_txt.equals(reg_pwd_confirm.getText().toString())) {
             Toast.makeText(getApplicationContext(), R.string.error_input_pwd, Toast.LENGTH_SHORT).show();
-            pageStatus(true);
+            setButtonStatus(true, false);
             return;
         }
         if (!isChecked) {
             Toast.makeText(getApplicationContext(), R.string.error_view_conditions, Toast.LENGTH_SHORT).show();
-            pageStatus(true);
+            setButtonStatus(true, false);
             return;
         }
 
@@ -157,7 +160,8 @@ public class SignupActivity extends AppBaseActivity {
         boolean isNetwork = CommonFunc.checkNetworkStatus(SignupActivity.this, msg, btnText);
         if (isNetwork) {
             if (MyInfoTable.getMyInfoTableCount() > 0) {
-                Toast.makeText(getApplicationContext(), R.string.error_register_user, Toast.LENGTH_SHORT).show();
+                showSignErrorDialog(R.string.error_signup_duplicate);
+                setButtonStatus(false, true);
             } else {
                 encode_pwd = Crypt.encrypt(password_txt);
                 MyUtils.admin_id = Integer.parseInt(MyUtils.companyInfo.get(reg_company_spinner.getSelectedItemPosition())[1]);
@@ -167,18 +171,24 @@ public class SignupActivity extends AppBaseActivity {
                         {"user_phone", phone_txt},
                         {"user_name", name_txt},
                         {"user_pwd", encode_pwd},
+                        {"user_birthday", user_birthday},
                         {"admin_id", String.valueOf(MyUtils.admin_id)},
                         {"certifice_status", "1"},
-                        {"active", "1"},
+                        {"active", "0"},
                         {"create_date", create_date}
                 };
                 WebHttpConnect.onSignUpRequest(params);
             }
         }
     }
-    private void pageStatus(boolean status) {
+    private void setButtonStatus(boolean status, boolean error) {
         if (!status) {
-            reg_user_btn.setBackgroundResource(R.drawable.button_press);
+            if (!error) {
+                reg_user_btn.setBackgroundResource(R.drawable.button_press);
+            } else {
+                reg_user_btn.setBackgroundResource(R.drawable.button_disable);
+                reg_user_btn.setEnabled(false);
+            }
         } else {
             reg_user_btn.setBackgroundResource(R.drawable.button);
         }
@@ -202,9 +212,7 @@ public class SignupActivity extends AppBaseActivity {
         onLRChangeLayount(SignupActivity.this, LoginActivity.class);
         finish();
     }
-    public void onDuplicateSignup() {
-        Toast.makeText(getApplicationContext(), R.string.error_signup_duplicate, Toast.LENGTH_SHORT).show();
-    }
+
     public void onFailedSignup() {
         Toast.makeText(getApplicationContext(), R.string.error_signup_fail, Toast.LENGTH_SHORT).show();
     }

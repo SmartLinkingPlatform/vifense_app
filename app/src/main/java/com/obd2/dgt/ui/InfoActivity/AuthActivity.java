@@ -73,7 +73,7 @@ public class AuthActivity extends AppBaseActivity {
         auth_web_view.loadUrl(send_url);
     }
 
-    public void closeWebView(String name, String phone, String resultCode) {
+    public void closeWebView(String name, String phone, String birthday, String resultCode) {
         Intent intent = null;
         if (dataKey.equals("sign")) {
             intent = new Intent(AuthActivity.this, SignupActivity.class);
@@ -87,6 +87,7 @@ public class AuthActivity extends AppBaseActivity {
                 intent.putExtra("result", "ok");
                 intent.putExtra("user_name", name);
                 intent.putExtra("user_phone", phone);
+                intent.putExtra("user_birthday", birthday);
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
