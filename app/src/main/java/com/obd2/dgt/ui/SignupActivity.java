@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -35,6 +37,7 @@ public class SignupActivity extends AppBaseActivity {
     String password_txt = "";
     String user_birthday = "";
     Dialog dialog;
+    private GestureDetector gestureDetector;
     private static SignupActivity instance;
     public static SignupActivity getInstance() {
         return instance;
@@ -60,6 +63,18 @@ public class SignupActivity extends AppBaseActivity {
                 showSignErrorDialog(R.string.error_verify_phone);
             }
         }
+
+        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
     }
 
     @SuppressLint("WrongViewCast")
@@ -223,7 +238,15 @@ public class SignupActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         onLRChangeLayount(SignupActivity.this, LoginActivity.class);
         finish();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
+
 }

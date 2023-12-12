@@ -99,6 +99,7 @@ public class AuthActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         if (dataKey.equals("sign")) {
             onLRChangeLayount(AuthActivity.this, SignupActivity.class);
         } else if (dataKey.equals("find")) {

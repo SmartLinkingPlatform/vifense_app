@@ -53,7 +53,9 @@ public class MyInfoTable {
 
     public static void insertMyInfoTable(String[][] fields) {
         try {
-            MyUtils.db_connect.sqlInsert(table_name, fields);
+            if (getMyInfoTableCount() == 0) {
+                MyUtils.db_connect.sqlInsert(table_name, fields);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

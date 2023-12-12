@@ -204,7 +204,6 @@ public class AppBaseActivity extends AppCompatActivity {
         }
     };
 
-
     public void ServiceStart() {
         try {
             //Start Service

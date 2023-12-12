@@ -336,13 +336,6 @@ public class MainActivity extends AppBaseActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            super.onDestroy();
-        }
-    }
-
     BluetoothDevice pairedDevice = null;
     @SuppressLint("MissingPermission")
     public void obdConnectDevice() {
@@ -407,13 +400,21 @@ public class MainActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (System.currentTimeMillis() - waitTime >= 1500) {
+        /*if (System.currentTimeMillis() - waitTime >= 1500) {
             waitTime = System.currentTimeMillis();
             Toast.makeText(this, R.string.finish_app, Toast.LENGTH_SHORT).show();
+            return;
         } else {
             MyUtils.btService.closeSocket();
             ServiceStop();
             finishAffinity();
-        }
+        }*/
+        super.onBackPressed();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
 }

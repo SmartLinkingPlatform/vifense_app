@@ -177,11 +177,6 @@ public class DiagnosisActivity extends AppBaseActivity {
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-    }
-
     boolean isTest = true;
     int prog = 0;
     class GetTroubleCodesTask extends AsyncTask<String, Integer, Boolean> {
@@ -291,4 +286,18 @@ public class DiagnosisActivity extends AppBaseActivity {
         });
         dialog.show();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        onLRChangeLayount(DiagnosisActivity.this, MainActivity.class);
+        finish();
+    }
+
 }

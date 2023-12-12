@@ -106,6 +106,16 @@ public class MessageActivity extends AppBaseActivity {
         ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);
         dialog_two_ok_btn.setOnClickListener(view -> {
             MessageInfoTable.updateAllMessageTable();
+            MessageInfoTable.getMessageInfoTable();
+
+            MessageItem item;
+            messageItems.clear();
+            for (int i = 0; i < MyUtils.messageInfo.size(); i++) {
+                String[] info = MyUtils.messageInfo.get(i);
+                item = new MessageItem(false, info[0], info[1], info[2], info[3], info[4]);
+                messageItems.add(item);
+            }
+            messageAdapter.setData(messageItems);
             dialog.dismiss();
         });
         dialog.show();
@@ -138,7 +148,10 @@ public class MessageActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
+        MainActivity.getInstance().showMessageIcon();
+        onLRChangeLayount(MessageActivity.this, MainActivity.class);
+        finish();
     }
 
 }

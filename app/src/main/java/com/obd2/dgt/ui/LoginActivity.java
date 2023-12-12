@@ -44,7 +44,6 @@ public class LoginActivity extends AppBaseActivity {
 
         permissionCheck();
         resetBluetoothAdapter();
-        initLayout();
 
         //인터넷 상태 확인
         String msg = getString(R.string.check_network_error);
@@ -69,6 +68,9 @@ public class LoginActivity extends AppBaseActivity {
                 MyUtils.create_years.add(String.valueOf(i));
             }
         }
+
+        initLayout();
+
         if (!MyUtils.my_phone.isEmpty() && !MyUtils.my_pwd.isEmpty()) {
             String encode_pwd = Crypt.decrypt(MyUtils.my_pwd);
             login_id_text.setText(MyUtils.my_phone);
@@ -108,10 +110,19 @@ public class LoginActivity extends AppBaseActivity {
         }
     }
     private void gotoMainActivity(){
+        user_phone = login_id_text.getText().toString();
+        user_pwd = login_pwd_text.getText().toString();
+        if (user_phone.isEmpty()) {
+            Toast.makeText(getApplicationContext(), R.string.error_login_id, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (user_pwd.isEmpty()) {
+            Toast.makeText(getApplicationContext(), R.string.error_login_pwd, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (isNetwork) {
             progress_layout.setVisibility(View.VISIBLE);
-            user_phone = login_id_text.getText().toString();
-            user_pwd = login_pwd_text.getText().toString();
             String encode_pwd = Crypt.encrypt(user_pwd);
 
             String[][] msgparams = new String[][]{
@@ -164,10 +175,15 @@ public class LoginActivity extends AppBaseActivity {
         MyInfoTable.getMyInfoTable();
         MessageInfoTable.getMessageInfoTable();
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        finish();
         progress_layout.setVisibility(View.GONE);
     }
 

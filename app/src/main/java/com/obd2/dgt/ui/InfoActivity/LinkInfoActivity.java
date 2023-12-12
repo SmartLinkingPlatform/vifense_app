@@ -275,7 +275,9 @@ public class LinkInfoActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
+        onLRChangeLayount(LinkInfoActivity.this, MainActivity.class);
+        finish();
     }
     @SuppressLint("MissingPermission")
     @Override

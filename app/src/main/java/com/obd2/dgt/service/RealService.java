@@ -86,6 +86,9 @@ public class RealService extends Service {
 
     //차량의 움직임 상태
     private void getDrivingStatus() {
+        speed_fast = false;
+        speed_quick = false;
+        speed_brake = false;
         int speed = Integer.parseInt(MyUtils.ecu_vehicle_speed);
         int load = Integer.parseInt(MyUtils.ecu_engine_load);
         if(speed >= 0 && load > 0) { //차량이 엔진을 켠 상태
@@ -105,9 +108,7 @@ public class RealService extends Service {
                     start_time = CommonFunc.getTime();
                 }
             }
-            speed_fast = false;
-            speed_quick = false;
-            speed_brake = false;
+
             if (speed > 110) { //속도가 110 km을 초과한 경우
                 speed_fast = true;
                 MyUtils.fast_speed_time++;
@@ -212,7 +213,7 @@ public class RealService extends Service {
                 .setAutoCancel(true)
                 .build();
 
-        startForeground(1, notification);
+        startForeground(101, notification);
     }
 
     private void createNotificationChannel() {

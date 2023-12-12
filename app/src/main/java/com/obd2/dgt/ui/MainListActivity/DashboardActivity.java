@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public class DashboardActivity extends AppBaseActivity {
     boolean isLongClicking = false;
     private static final long LONG_CLICK_THRESHOLD = 1000;
     private Handler longClickHandler = new Handler(Looper.getMainLooper());
+    private GestureDetector gestureDetector;
     private static DashboardActivity instance;
     public static DashboardActivity getInstance() {
         return instance;
@@ -89,6 +91,14 @@ public class DashboardActivity extends AppBaseActivity {
 
         initLayout();
         RefreshGaugeLayout();
+
+        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                // 뒤로가기 제스처를 막기 위해 항상 true를 반환합니다.
+                return true;
+            }
+        });
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -233,7 +243,11 @@ public class DashboardActivity extends AppBaseActivity {
 
         showErrorDialog();
     }
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // GestureDetector를 사용하여 터치 이벤트를 전달합니다.
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
+    }
     private void initGaugeItemInfo() {
         View gauge_view = null;
 
@@ -596,7 +610,11 @@ public class DashboardActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
+        isShow = false;
+        MyUtils.showGauge = false;
+        onLRChangeLayount(DashboardActivity.this, MainActivity.class);
+        finish();
     }
 
     private float getRotationValueF(float val, float max) {
@@ -621,14 +639,16 @@ public class DashboardActivity extends AppBaseActivity {
     }
 
     public void startDashboardGauge() {
-        if (!isShow) {
-            isShow = true;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    new GaugeAsyncTask().execute("GaugeInfo");
-                }
-            });
+        if (Integer.parseInt(MyUtils.ecu_engine_load) > 0) {
+            if (!isShow) {
+                isShow = true;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new GaugeAsyncTask().execute("GaugeInfo");
+                    }
+                });
+            }
         }
     }
     public void stopDashboardGauge() {
@@ -753,5 +773,13 @@ public class DashboardActivity extends AppBaseActivity {
 
     public void hiddenErrorDialog() {
         errDialog.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MyUtils.showGauge = false;
+        isShow = false;
+        finish();
     }
 }

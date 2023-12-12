@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -40,6 +42,7 @@ public class FindPwdActivity extends AppBaseActivity {
     int auth_time_count = 60;
     String user_phone = "";
     String encode_pwd = "";
+    private GestureDetector gestureDetector;
 
     private static FindPwdActivity instance;
     public static FindPwdActivity getInstance() {
@@ -68,6 +71,18 @@ public class FindPwdActivity extends AppBaseActivity {
                 setting_new_pwd_layout.setVisibility(View.GONE);
             }
         }
+
+        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event);
     }
 
     private void initLayout() {
@@ -172,7 +187,14 @@ public class FindPwdActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         onLRChangeLayount(FindPwdActivity.this, LoginActivity.class);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         finish();
     }
 

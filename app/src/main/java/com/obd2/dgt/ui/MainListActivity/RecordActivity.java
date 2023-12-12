@@ -169,7 +169,15 @@ public class RecordActivity extends AppBaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
+
+    @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
+        onLRChangeLayount(RecordActivity.this, MainActivity.class);
+        finish();
     }
 }

@@ -177,6 +177,9 @@ public class RankingInfoActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
+        MainActivity.getInstance().showRankingInfo();
+        onLRChangeLayount(RankingInfoActivity.this, MainActivity.class);
+        finish();
     }
 }

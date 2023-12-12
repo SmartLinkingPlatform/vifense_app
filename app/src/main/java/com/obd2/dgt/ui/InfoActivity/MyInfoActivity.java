@@ -140,7 +140,9 @@ public class MyInfoActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
+        super.onBackPressed();
+        onLRChangeLayount(MyInfoActivity.this, MainActivity.class);
+        finish();
     }
 
 }
