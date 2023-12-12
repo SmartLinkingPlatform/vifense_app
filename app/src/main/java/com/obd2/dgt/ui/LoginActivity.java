@@ -26,7 +26,6 @@ public class LoginActivity extends AppBaseActivity {
     EditText login_id_text, login_pwd_text;
     TextView find_pwd_btn, register_btn;
     ImageView login_btn;
-    boolean isNetwork = false;
     String user_phone = "";
     String user_pwd = "";
     FrameLayout progress_layout;
@@ -45,17 +44,9 @@ public class LoginActivity extends AppBaseActivity {
         permissionCheck();
         resetBluetoothAdapter();
 
-        //인터넷 상태 확인
-        String msg = getString(R.string.check_network_error);
-        String btnText = getString(R.string.confirm_text);
-        isNetwork = CommonFunc.checkNetworkStatus(LoginActivity.this, msg, btnText);
-        if (isNetwork) {
-            getDatabaseInfo();
-            getWindowsSize();
+        getDatabaseInfo();
+        getWindowsSize();
 
-            //서버 에서 회사 자료 받기
-            WebHttpConnect.onCompanyInfoRequest();
-        }
         if (MyUtils.create_years.size() == 0) {
             //년도
             LocalDate now = null;
@@ -98,16 +89,12 @@ public class LoginActivity extends AppBaseActivity {
         progress_layout.setVisibility(View.GONE);
     }
     private void gotoFindPwdActivity(){
-        if (isNetwork) {
-            onRLChangeLayount(LoginActivity.this, FindPwdActivity.class);
-            finish();
-        }
+        onRLChangeLayount(LoginActivity.this, FindPwdActivity.class);
+        finish();
     }
     private void gotoSignupActivity(){
-        if (isNetwork) {
-            onRLChangeLayount(LoginActivity.this, SignupActivity.class);
-            finish();
-        }
+        onRLChangeLayount(LoginActivity.this, SignupActivity.class);
+        finish();
     }
     private void gotoMainActivity(){
         user_phone = login_id_text.getText().toString();
@@ -121,28 +108,26 @@ public class LoginActivity extends AppBaseActivity {
             return;
         }
 
-        if (isNetwork) {
-            progress_layout.setVisibility(View.VISIBLE);
-            String encode_pwd = Crypt.encrypt(user_pwd);
+        progress_layout.setVisibility(View.VISIBLE);
+        String encode_pwd = Crypt.encrypt(user_pwd);
 
-            String[][] msgparams = new String[][]{
-                    {"msg_id", String.valueOf(MyUtils.lastMsgID)},
-                    {"user_phone", user_phone}
-            };
-            WebHttpConnect.onMessageInfoRequest(msgparams);
+        String[][] msgparams = new String[][]{
+                {"msg_id", String.valueOf(MyUtils.lastMsgID)},
+                {"user_phone", user_phone}
+        };
+        WebHttpConnect.onMessageInfoRequest(msgparams);
 
 
-            String visit_date = CommonFunc.getDateTime();
-            String[][] params = new String[][]{
-                    {"user_phone", user_phone},
-                    {"user_pwd", encode_pwd},
-                    {"visit_date", visit_date}
-            };
-            WebHttpConnect.onLoginRequest(params);
-        }
+        String visit_date = CommonFunc.getDateTime();
+        String[][] params = new String[][]{
+                {"user_phone", user_phone},
+                {"user_pwd", encode_pwd},
+                {"visit_date", visit_date}
+        };
+        WebHttpConnect.onLoginRequest(params);
     }
+
     public void onSuccessStart(ArrayList<String> user_info) {
-        MyInfoTable.getMyInfoTable();
         DeviceInfoTable.getDeviceInfoTable();
         CarInfoTable.getCarInfoTable();
         
@@ -171,7 +156,7 @@ public class LoginActivity extends AppBaseActivity {
 
     //DataBase setting
     private void getDatabaseInfo() {
-        CompanyTable.deleteAllCompanyInfoTable();
+        //CompanyTable.deleteAllCompanyInfoTable();
         MyInfoTable.getMyInfoTable();
         MessageInfoTable.getMessageInfoTable();
     }

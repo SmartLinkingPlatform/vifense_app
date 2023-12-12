@@ -73,6 +73,7 @@
     <string name="error_equal_name_id">입력한 이름과 아이디가 회원가입시 등록한 이름과 아이디와 일치하지 않습니다.</string>
     <string name="error_login_id">아이디를 입력하십시오.</string>
     <string name="error_login_pwd">비밀번호를 입력하십시오</string>
+    <string name="error_sel_company">소속사 정보가 없습니다.</string>
 
     <string name="mileage_month">월 주행 거리</string>
     <string name="mileage_today">오늘 주행 거리</string>

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
 import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.InfoActivity.AuthActivity;
@@ -166,6 +167,11 @@ public class SignupActivity extends AppBaseActivity {
         }
         if (!isChecked) {
             Toast.makeText(getApplicationContext(), R.string.error_view_conditions, Toast.LENGTH_SHORT).show();
+            setButtonStatus(true, false);
+            return;
+        }
+        if (MyUtils.companyInfo.size() == 0) {
+            Toast.makeText(getApplicationContext(), R.string.error_sel_company, Toast.LENGTH_SHORT).show();
             setButtonStatus(true, false);
             return;
         }

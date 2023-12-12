@@ -15,6 +15,7 @@ import com.obd2.dgt.ui.LoginActivity;
 import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.ui.MainListActivity.RecordActivity;
 import com.obd2.dgt.ui.SignupActivity;
+import com.obd2.dgt.ui.SplashActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
@@ -55,6 +56,7 @@ public class WebHttpConnect {
                 super.onResponse(response);
                 if (!response.isEmpty()) {
                     JSONArray data = CommonFunc.AnalysisResponse(response);
+                    MyUtils.companyInfo.clear();
                     for (int i = 0; i < data.length(); i++) {
                         int index = i + 1;
                         try {
@@ -64,12 +66,21 @@ public class WebHttpConnect {
                                     {"cid", object.getString("admin_id")},
                                     {"name", object.getString("company_name")}
                             };
-                            CompanyTable.insertCompanyInfoTable(fields);
+
+                            String[] info = new String[3];
+                            info[0] = String.valueOf(index); //ID
+                            info[1] = object.getString("admin_id"); //company id
+                            info[2] = object.getString("company_name"); //company name
+                            MyUtils.companyInfo.add(info);
+
+                            SplashActivity.getInstance().gotoSuccess();
+                            //CompanyTable.insertCompanyInfoTable(fields);
                         } catch (Exception e) {
                             e.printStackTrace();
+                            SplashActivity.getInstance().gotoFail();
                         }
                     }
-                    CompanyTable.getCompanyInfoTable();
+                    //CompanyTable.getCompanyInfoTable();
                 }
             }
         }.execute(httpCallPost);
