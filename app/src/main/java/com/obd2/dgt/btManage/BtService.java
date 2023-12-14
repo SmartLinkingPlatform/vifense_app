@@ -88,18 +88,24 @@ public class BtService {
                         int byteAvailable = inputStream.available();
                         // 데이터가 수신 된 경우
                         if (byteAvailable > 0) {
-                            MyUtils.isObdSocket = true;
-                            MyUtils.loading_obd_data = true;
                             // 입력 스트림에서 바이트 단위로 읽어 옵니다.
                             byte[] rawBytes = new byte[byteAvailable];
                             inputStream.read(rawBytes);
                             final String rawResponse = new String(rawBytes, "UTF-8");
+                            String res = rawResponse.toLowerCase();
+                            if (res.contains("elm") || res.contains("ok")) {
+                                MyUtils.isObdSocket = true;
+                                MyUtils.loading_obd_data = true;
+                            }
                             ArrayList<String> responses = getResponses(rawResponse);
                             for (String response : responses) {
                                 ResponseCalculator.ResponseCalculator(response);
                             }
                         } else {
-                            MyUtils.loading_obd_data = false;
+                            if (MyUtils.isObdSocket) {
+                                MyUtils.isSocketError = true;
+                                MyUtils.loading_obd_data = false;
+                            }
                         }
                         setOutStream();
                     } catch (Exception e) {
@@ -116,6 +122,7 @@ public class BtService {
     private void getHeaderData() {
         try {
             String[] msgs = {
+                    "AT",
                     "ATD",
                     "ATZ"
             };
@@ -251,6 +258,7 @@ public class BtService {
             if (socket != null && socket.isConnected()) {
                 socket.close();
                 socket = null;
+                isSocket = false;
                 MyUtils.isSocketError = false;
                 MyUtils.isPaired = false;
                 MyUtils.isObdSocket = false;

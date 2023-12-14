@@ -161,17 +161,22 @@ public class FindPwdActivity extends AppBaseActivity {
 
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     public void showConfirmDialog() {
-        dialog.setContentView(R.layout.dlg_normal);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
-        dialog_normal_text.setText(R.string.error_input_pwd);
-        ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
-        dialog_normal_btn.setImageResource(R.drawable.confirm_press);
-        dialog_normal_btn.setOnClickListener(view -> {
-            dialog.dismiss();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.setContentView(R.layout.dlg_normal);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
+                dialog_normal_text.setText(R.string.error_input_pwd);
+                ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
+                dialog_normal_btn.setImageResource(R.drawable.confirm_press);
+                dialog_normal_btn.setOnClickListener(view -> {
+                    dialog.dismiss();
+                });
+                dialog.show();
+            }
         });
-        dialog.show();
     }
 
     public void onSuccessSetting() {

@@ -305,30 +305,36 @@ public class LinkInfoActivity extends AppBaseActivity {
     }
 
     private void showDialog() {
-        dialog = new Dialog(LinkInfoActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dlg_two_button);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog = new Dialog(LinkInfoActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.dlg_two_button);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        TextView dialog_two_title_text = dialog.findViewById(R.id.dialog_two_title_text);
-        dialog_two_title_text.setText(R.string.bt_link_title);
-        TextView dialog_two_button_text = dialog.findViewById(R.id.dialog_two_content_text);
-        dialog_two_button_text.setText(R.string.bt_link_content);
-        TextView dialog_two_question_text = dialog.findViewById(R.id.dialog_two_question_text);
-        dialog_two_question_text.setText(R.string.bt_link_question);
-        ImageView dialog_two_no_btn = dialog.findViewById(R.id.dialog_two_no_btn);
-        dialog_two_no_btn.setOnClickListener(view -> {
-            dialog.dismiss();
-        });
-        ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);
-        dialog_two_ok_btn.setOnClickListener(view -> {
-            MainActivity.getInstance().obdConnectDevice();
-            finish();
-        });
+                TextView dialog_two_title_text = dialog.findViewById(R.id.dialog_two_title_text);
+                dialog_two_title_text.setText(R.string.bt_link_title);
+                TextView dialog_two_button_text = dialog.findViewById(R.id.dialog_two_content_text);
+                dialog_two_button_text.setText(R.string.bt_link_content);
+                TextView dialog_two_question_text = dialog.findViewById(R.id.dialog_two_question_text);
+                dialog_two_question_text.setText(R.string.bt_link_question);
+                ImageView dialog_two_no_btn = dialog.findViewById(R.id.dialog_two_no_btn);
+                dialog_two_no_btn.setOnClickListener(view -> {
+                    dialog.dismiss();
+                });
+                ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);
+                dialog_two_ok_btn.setOnClickListener(view -> {
+                    MainActivity.getInstance().obdConnectDevice();
+                    finish();
+                    dialog.dismiss();
+                });
 
-        dialog.show();
+                dialog.show();
+            }
+        });
     }
     public void onStartSearch() {
         enableDevices.clear();

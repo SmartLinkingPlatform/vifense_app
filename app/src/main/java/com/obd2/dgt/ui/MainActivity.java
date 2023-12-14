@@ -75,14 +75,14 @@ public class MainActivity extends AppBaseActivity {
             MyUtils.run_main = true;
             if (MyUtils.isPaired) {
                 if (MyUtils.isObdSocket) {
-                    link_index = 10;
+                    link_index = 22;
                     showConnectingLink(link_index);
-                }
+                }/*
                 else {
                     if (MyUtils.savedSocketStatus) {
                         obdConnectDevice();
                     }
-                }
+                }*/
             }
 
         }
@@ -204,16 +204,21 @@ public class MainActivity extends AppBaseActivity {
         }
     }
     private void showAddCarDialog() {
-        dialog.setContentView(R.layout.dlg_normal);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        TextView dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
-        dialog_normal_text.setText(R.string.show_reg_car);
-        ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
-        dialog_normal_btn.setOnClickListener(view -> {
-            dialog.dismiss();
-            onRLChangeLayount(MainActivity.this, CarInfoActivity.class);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.setContentView(R.layout.dlg_normal);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                TextView dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
+                dialog_normal_text.setText(R.string.show_reg_car);
+                ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
+                dialog_normal_btn.setOnClickListener(view -> {
+                    dialog.dismiss();
+                    onRLChangeLayount(MainActivity.this, CarInfoActivity.class);
+                });
+                dialog.show();
+            }
         });
-        dialog.show();
     }
     private void onShowMailClick() {
         onRLChangeLayount(MainActivity.this, MessageActivity.class);
@@ -252,27 +257,75 @@ public class MainActivity extends AppBaseActivity {
             dot_img_2.setImageResource(R.drawable.dot_on);
             dot_img_3.setImageResource(R.drawable.dot_on);
         } else if (index == 5) {
+            dot_img_1.setImageResource(R.drawable.dot_off);
+            dot_img_2.setImageResource(R.drawable.dot_off);
+            dot_img_3.setImageResource(R.drawable.dot_off);
+        } else if (index == 6) {
+            dot_img_1.setImageResource(R.drawable.dot_on);
+            dot_img_2.setImageResource(R.drawable.dot_off);
+            dot_img_3.setImageResource(R.drawable.dot_off);
+        } else if (index == 7) {
+            dot_img_1.setImageResource(R.drawable.dot_on);
+            dot_img_2.setImageResource(R.drawable.dot_on);
+            dot_img_3.setImageResource(R.drawable.dot_off);
+        } else if (index == 8) {
+            dot_img_1.setImageResource(R.drawable.dot_on);
+            dot_img_2.setImageResource(R.drawable.dot_on);
+            dot_img_3.setImageResource(R.drawable.dot_on);
+        } else if (index == 9) {
             dot_img_1.setImageResource(R.drawable.dot_on);
             dot_img_2.setImageResource(R.drawable.dot_on);
             dot_img_3.setImageResource(R.drawable.dot_on);
             con_img_2.setImageResource(R.drawable.bluetooth_on);
-        } else if (index == 6) {
+        } else if (index == 10) {
             dot_img_4.setImageResource(R.drawable.dot_off);
             dot_img_5.setImageResource(R.drawable.dot_off);
             dot_img_6.setImageResource(R.drawable.dot_off);
-        } else if (index == 7) {
+        } else if (index == 11) {
             dot_img_4.setImageResource(R.drawable.dot_on);
             dot_img_5.setImageResource(R.drawable.dot_off);
             dot_img_6.setImageResource(R.drawable.dot_off);
-        } else if (index == 8) {
+        } else if (index == 12) {
             dot_img_4.setImageResource(R.drawable.dot_on);
             dot_img_5.setImageResource(R.drawable.dot_on);
             dot_img_6.setImageResource(R.drawable.dot_off);
-        } else if (index == 9) {
+        } else if (index == 13) {
             dot_img_4.setImageResource(R.drawable.dot_on);
             dot_img_5.setImageResource(R.drawable.dot_on);
             dot_img_6.setImageResource(R.drawable.dot_on);
-        } else if (index == 10) {
+        } else if (index == 14) {
+            dot_img_4.setImageResource(R.drawable.dot_off);
+            dot_img_5.setImageResource(R.drawable.dot_off);
+            dot_img_6.setImageResource(R.drawable.dot_off);
+        } else if (index == 15) {
+            dot_img_4.setImageResource(R.drawable.dot_on);
+            dot_img_5.setImageResource(R.drawable.dot_off);
+            dot_img_6.setImageResource(R.drawable.dot_off);
+        } else if (index == 16) {
+            dot_img_4.setImageResource(R.drawable.dot_on);
+            dot_img_5.setImageResource(R.drawable.dot_on);
+            dot_img_6.setImageResource(R.drawable.dot_off);
+        } else if (index == 17) {
+            dot_img_4.setImageResource(R.drawable.dot_on);
+            dot_img_5.setImageResource(R.drawable.dot_on);
+            dot_img_6.setImageResource(R.drawable.dot_on);
+        } else if (index == 18) {
+            dot_img_4.setImageResource(R.drawable.dot_off);
+            dot_img_5.setImageResource(R.drawable.dot_off);
+            dot_img_6.setImageResource(R.drawable.dot_off);
+        } else if (index == 19) {
+            dot_img_4.setImageResource(R.drawable.dot_on);
+            dot_img_5.setImageResource(R.drawable.dot_off);
+            dot_img_6.setImageResource(R.drawable.dot_off);
+        } else if (index == 20) {
+            dot_img_4.setImageResource(R.drawable.dot_on);
+            dot_img_5.setImageResource(R.drawable.dot_on);
+            dot_img_6.setImageResource(R.drawable.dot_off);
+        } else if (index == 21) {
+            dot_img_4.setImageResource(R.drawable.dot_on);
+            dot_img_5.setImageResource(R.drawable.dot_on);
+            dot_img_6.setImageResource(R.drawable.dot_on);
+        } else if (index == 22) {
             dot_img_1.setImageResource(R.drawable.dot_on);
             dot_img_2.setImageResource(R.drawable.dot_on);
             dot_img_3.setImageResource(R.drawable.dot_on);
@@ -298,12 +351,12 @@ public class MainActivity extends AppBaseActivity {
                         isConClick = false;
                         link_index++;
                         if (!MyUtils.isPaired) {
-                            if (link_index > 4) {
+                            if (link_index > 8) {
                                 link_index = 1;
                             }
                         } else {
-                            if (link_index > 9) {
-                                link_index = 6;
+                            if (link_index > 21) {
+                                link_index = 10;
                                 if (!obd2link) {
                                     obd2link = true;
                                     MyUtils.btService.connectDevice(pairedDevice);
@@ -322,9 +375,9 @@ public class MainActivity extends AppBaseActivity {
                             connect_device_text.setText(R.string.connecting_error_text);
                         }
                         showConnectingLink(link_index);
-                        Thread.sleep(500);
+                        Thread.sleep(400);
                     } else {
-                        link_index = 10;
+                        link_index = 22;
                         connect_device_text.setText(R.string.connected_obd2_text);
                         showConnectingLink(link_index);
                         isRun = false;
@@ -401,7 +454,7 @@ public class MainActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
     }
 
     @Override

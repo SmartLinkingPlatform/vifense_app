@@ -111,39 +111,49 @@ public class SignupActivity extends AppBaseActivity {
     }
 
     private void showSignSuccessDialog() {
-        success_dialog = new Dialog(SignupActivity.this);
-        success_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        success_dialog.setCancelable(false);
-        success_dialog.setContentView(R.layout.dlg_notification);
-        success_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        success_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView dialog_text_1 = success_dialog.findViewById(R.id.dialog_text_1);
-        dialog_text_1.setText(R.string.success_signup_message1);
-        TextView dialog_text_2 = success_dialog.findViewById(R.id.dialog_text_2);
-        dialog_text_2.setText(R.string.success_signup_message2);
-        ImageView dialog_confirm_btn = success_dialog.findViewById(R.id.dialog_confirm_btn);
-        dialog_confirm_btn.setOnClickListener(view -> {
-            success_dialog.dismiss();
-            onLRChangeLayount(SignupActivity.this, LoginActivity.class);
-            finish();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                success_dialog = new Dialog(SignupActivity.this);
+                success_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                success_dialog.setCancelable(false);
+                success_dialog.setContentView(R.layout.dlg_notification);
+                success_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                success_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView dialog_text_1 = success_dialog.findViewById(R.id.dialog_text_1);
+                dialog_text_1.setText(R.string.success_signup_message1);
+                TextView dialog_text_2 = success_dialog.findViewById(R.id.dialog_text_2);
+                dialog_text_2.setText(R.string.success_signup_message2);
+                ImageView dialog_confirm_btn = success_dialog.findViewById(R.id.dialog_confirm_btn);
+                dialog_confirm_btn.setOnClickListener(view -> {
+                    success_dialog.dismiss();
+                    onLRChangeLayount(SignupActivity.this, LoginActivity.class);
+                    finish();
+                });
+                success_dialog.show();
+            }
         });
-        success_dialog.show();
     }
 
     private void showSignErrorDialog(int res_id) {
-        error_dialog = new Dialog(SignupActivity.this);
-        error_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        error_dialog.setCancelable(false);
-        error_dialog.setContentView(R.layout.dlg_normal);
-        error_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        error_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView dialog_normal_text = error_dialog.findViewById(R.id.dialog_normal_text);
-        dialog_normal_text.setText(res_id);
-        ImageView dialog_normal_btn = error_dialog.findViewById(R.id.dialog_normal_btn);
-        dialog_normal_btn.setOnClickListener(view -> {
-            error_dialog.dismiss();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                error_dialog = new Dialog(SignupActivity.this);
+                error_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                error_dialog.setCancelable(false);
+                error_dialog.setContentView(R.layout.dlg_normal);
+                error_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                error_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView dialog_normal_text = error_dialog.findViewById(R.id.dialog_normal_text);
+                dialog_normal_text.setText(res_id);
+                ImageView dialog_normal_btn = error_dialog.findViewById(R.id.dialog_normal_btn);
+                dialog_normal_btn.setOnClickListener(view -> {
+                    error_dialog.dismiss();
+                });
+                error_dialog.show();
+            }
         });
-        error_dialog.show();
     }
 
     //휴대폰 인증하기 버튼

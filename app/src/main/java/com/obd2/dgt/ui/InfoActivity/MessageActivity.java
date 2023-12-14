@@ -88,37 +88,42 @@ public class MessageActivity extends AppBaseActivity {
     }
     @SuppressLint("ResourceType")
     private void showDialog() {
-        dialog = new Dialog(MessageActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dlg_two_button);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog = new Dialog(MessageActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.dlg_two_button);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        TextView dialog_two_title_text = dialog.findViewById(R.id.dialog_two_title_text);
-        dialog_two_title_text.setText(R.string.delete_message_title);
-        TextView dialog_two_button_text = dialog.findViewById(R.id.dialog_two_content_text);
-        dialog_two_button_text.setText(R.string.delete_all_message);
-        ImageView dialog_two_no_btn = dialog.findViewById(R.id.dialog_two_no_btn);
-        dialog_two_no_btn.setOnClickListener(view -> {
-            dialog.dismiss();
-        });
-        ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);
-        dialog_two_ok_btn.setOnClickListener(view -> {
-            MessageInfoTable.updateAllMessageTable();
-            MessageInfoTable.getMessageInfoTable();
+                TextView dialog_two_title_text = dialog.findViewById(R.id.dialog_two_title_text);
+                dialog_two_title_text.setText(R.string.delete_message_title);
+                TextView dialog_two_button_text = dialog.findViewById(R.id.dialog_two_content_text);
+                dialog_two_button_text.setText(R.string.delete_all_message);
+                ImageView dialog_two_no_btn = dialog.findViewById(R.id.dialog_two_no_btn);
+                dialog_two_no_btn.setOnClickListener(view -> {
+                    dialog.dismiss();
+                });
+                ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);
+                dialog_two_ok_btn.setOnClickListener(view -> {
+                    MessageInfoTable.updateAllMessageTable();
+                    MessageInfoTable.getMessageInfoTable();
 
-            MessageItem item;
-            messageItems.clear();
-            for (int i = 0; i < MyUtils.messageInfo.size(); i++) {
-                String[] info = MyUtils.messageInfo.get(i);
-                item = new MessageItem(false, info[0], info[1], info[2], info[3], info[4]);
-                messageItems.add(item);
+                    MessageItem item;
+                    messageItems.clear();
+                    for (int i = 0; i < MyUtils.messageInfo.size(); i++) {
+                        String[] info = MyUtils.messageInfo.get(i);
+                        item = new MessageItem(false, info[0], info[1], info[2], info[3], info[4]);
+                        messageItems.add(item);
+                    }
+                    messageAdapter.setData(messageItems);
+                    dialog.dismiss();
+                });
+                dialog.show();
             }
-            messageAdapter.setData(messageItems);
-            dialog.dismiss();
         });
-        dialog.show();
     }
 
     public void onMessageShow(String id) {

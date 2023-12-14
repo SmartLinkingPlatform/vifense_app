@@ -58,6 +58,10 @@ public class RealService extends Service {
                         MyUtils.btService = new BtService();
                     } else {
                         if (mainThread != null && MyUtils.isObdSocket) {
+                            if (MyUtils.isSocketError) {
+                                MyUtils.btService.closeSocket();
+                                MainActivity.getInstance().showDisconnectedStatus();
+                            }
                             //MyUtils.btService.setOutStreamPID();
                             getDrivingStatus();
                             getFuelConsumption();

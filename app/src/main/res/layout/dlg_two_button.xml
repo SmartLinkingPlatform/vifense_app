@@ -56,6 +56,8 @@
                         android:gravity="center"
                         android:lines="5"
                         android:maxLines="5"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
                         android:textColor="@color/title_color"
                         android:textSize="14sp" />
 
@@ -72,6 +74,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/pretendard_bold"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
                         android:textColor="@color/title_color"
                         android:textSize="14sp" />
                 </FrameLayout>
@@ -94,8 +98,8 @@
 
                             <ImageView
                                 android:id="@+id/dialog_two_no_btn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="100dp"
+                                android:layout_height="40dp"
                                 android:layout_gravity="center_horizontal|center_vertical"
                                 app:srcCompat="@drawable/confirm_off" />
 
@@ -119,8 +123,8 @@
 
                             <ImageView
                                 android:id="@+id/dialog_two_ok_btn"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="100dp"
+                                android:layout_height="40dp"
                                 android:layout_gravity="center_horizontal|center_vertical"
                                 app:srcCompat="@drawable/confirm_off" />
 

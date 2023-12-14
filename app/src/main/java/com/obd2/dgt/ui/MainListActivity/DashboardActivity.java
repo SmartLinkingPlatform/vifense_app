@@ -681,7 +681,7 @@ public class DashboardActivity extends AppBaseActivity {
                             @Override
                             public void run() {
                                 if (MyUtils.loading_obd_data) {
-                                    showLoadingOBDData(false);
+                                    //showLoadingOBDData(false);
                                     //차량 속도
                                     gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
                                     gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);
@@ -715,8 +715,8 @@ public class DashboardActivity extends AppBaseActivity {
                                     gauge_battery_text.setText(MyUtils.ecu_battery_voltage);
                                     //주행 시간
                                     gauge_dtime_text.setText(MyUtils.ecu_driving_time);
-                                } else {
-                                    showLoadingOBDData(true);
+                                //} else {
+                                    //showLoadingOBDData(true);
                                 }
                             }
                         });
@@ -733,7 +733,7 @@ public class DashboardActivity extends AppBaseActivity {
     }
 
     TextView dialog_loading_text;
-    private void showLoadingOBDData(boolean b) {
+    /*private void showLoadingOBDData(boolean b) {
         if (loadingDialog == null) {
             loadingDialog = new Dialog(DashboardActivity.this);
             loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -767,10 +767,10 @@ public class DashboardActivity extends AppBaseActivity {
                 });
             }
         }
-    }
+    }*/
 
     public void showSocketError() {
-        showLoadingOBDData(false);
+        //showLoadingOBDData(false);
         if (loadingDialog == null) {
             loadingDialog = new Dialog(DashboardActivity.this);
             loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
