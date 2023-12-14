@@ -56,7 +56,7 @@ public class SplashActivity extends AppBaseActivity {
     }
 
     public void gotoFail() {
-        Toast.makeText(getApplicationContext(), R.string.check_network_error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.check_network_error, Toast.LENGTH_LONG).show();
     }
 
     @Override

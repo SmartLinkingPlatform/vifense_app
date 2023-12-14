@@ -8,13 +8,16 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.SystemClock;
 
 import androidx.core.app.NotificationCompat;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.btManage.BtService;
+import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
@@ -26,7 +29,7 @@ public class RealService extends Service {
     private static Thread mainThread;
     public static Intent serviceIntent = null;
 
-    int idling_time = 0; //공회전 시간
+    static int idling_time = 0; //공회전 시간
     boolean speed_fast = false;
     boolean speed_quick = false;
     boolean speed_brake = false;
@@ -67,7 +70,6 @@ public class RealService extends Service {
                     boolean interrupted = Thread.interrupted();
                     if (interrupted) {
                         running = false;
-                        MyUtils.isObdSocket = false;
                     }
                 }
             }
@@ -75,14 +77,17 @@ public class RealService extends Service {
         mainThread.start();
     }
 
-    int time = 0;
-    double driving_distance = 0;
-    double average_speed = 0;
-    String start_time = "";
-    String end_time = "";
-    int down_score_fast = 0;
-    int down_score_quick = 0;
-    int down_score_brake = 0;
+    static int time = 0;
+    static double driving_distance = 0;
+    static double average_speed = 0;
+    static String start_time = "";
+    static String end_time = "";
+    static int down_score_fast = 0;
+    static int down_score_quick = 0;
+    static int down_score_brake = 0;
+    static int fast_time_cnt = 0;
+    static int quick_time_cnt = 0;
+    static int break_time_cnt = 0;
 
     //차량의 움직임 상태
     private void getDrivingStatus() {
@@ -147,46 +152,7 @@ public class RealService extends Service {
             MyUtils.ecu_mileage = String.valueOf(Math.round(driving_distance * 10) / 10.0);
         } else { // 차량이 정지(엔진이 꺼진 상태)
             if (time > 0) {
-                int driving_score = 100 + down_score_fast + down_score_quick + down_score_brake;
-                String driving_date = CommonFunc.getDate();
-                end_time = CommonFunc.getTime();
-                float mileage = Float.parseFloat(MyUtils.ecu_mileage);
-                if (mileage > 0.1) {
-                    //서버에 등록
-                    String[][] params = new String[][]{
-                            {"driving_date", driving_date},
-                            {"start_time", start_time},
-                            {"end_time", end_time},
-                            {"car_id", String.valueOf(MyUtils.car_id)},
-                            {"user_id", String.valueOf(MyUtils.my_id)},
-                            {"max_speed", String.valueOf(MyUtils.max_speed)},
-                            {"average_speed", String.valueOf(Math.round(average_speed))},
-                            {"mileage", MyUtils.ecu_mileage},
-                            {"driving_time", MyUtils.ecu_driving_time},
-                            {"idling_time", String.valueOf(MyUtils.idling_time)},
-                            {"driving_score", String.valueOf(driving_score)},
-                            {"fast_time", String.valueOf(MyUtils.fast_speed_time)},
-                            {"fast_cnt", String.valueOf(MyUtils.fast_speed_cnt)},
-                            {"quick_cnt", String.valueOf(MyUtils.quick_speed_cnt)},
-                            {"brake_cnt", String.valueOf(MyUtils.brake_speed_cnt)}
-                    };
-                    WebHttpConnect.onSaveDrivingInfoRequest(params);
-
-                    //if gauge page
-                    if (MyUtils.showGauge) {
-                        DashboardActivity.getInstance().stopDashboardGauge();
-                    }
-
-                    time = 0;
-                    idling_time = 0;
-                    average_speed = 0;
-                    driving_distance = 0;
-                    down_score_fast = 0;
-                    down_score_quick = 0;
-                    down_score_brake = 0;
-                    start_time = "";
-                    end_time = "";
-                }
+                stopEngineStatus();
             }
         }
         prev_speed = speed;
@@ -234,14 +200,12 @@ public class RealService extends Service {
     public void onDestroy() {
         super.onDestroy();
         StopService();
-        MyUtils.isObdSocket = false;
         running = false;
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        MyUtils.isObdSocket = false;
         running = false;
         stopSelf();
     }
@@ -278,7 +242,7 @@ public class RealService extends Service {
     }
 
     @SuppressLint("MissingPermission")
-    public static void StopService() {
+    public void StopService() {
         if (mainThread != null) {
             mainThread.interrupt();
             mainThread = null;
@@ -286,6 +250,50 @@ public class RealService extends Service {
         Thread.currentThread().interrupt();
         MyUtils.isObdSocket = false;
         running = false;
+        stopEngineStatus();
+    }
+
+    private void stopEngineStatus() {
+        int driving_score = 100 + down_score_fast + down_score_quick + down_score_brake;
+        String driving_date = CommonFunc.getDate();
+        end_time = CommonFunc.getTime();
+        float mileage = Float.parseFloat(MyUtils.ecu_mileage);
+        if (mileage > 0.1) {
+            //서버에 등록
+            String[][] params = new String[][]{
+                    {"driving_date", driving_date},
+                    {"start_time", start_time},
+                    {"end_time", end_time},
+                    {"car_id", String.valueOf(MyUtils.car_id)},
+                    {"user_id", String.valueOf(MyUtils.my_id)},
+                    {"max_speed", String.valueOf(MyUtils.max_speed)},
+                    {"average_speed", String.valueOf(Math.round(average_speed))},
+                    {"mileage", MyUtils.ecu_mileage},
+                    {"driving_time", MyUtils.ecu_driving_time},
+                    {"idling_time", String.valueOf(MyUtils.idling_time)},
+                    {"driving_score", String.valueOf(driving_score)},
+                    {"fast_time", String.valueOf(MyUtils.fast_speed_time)},
+                    {"fast_cnt", String.valueOf(MyUtils.fast_speed_cnt)},
+                    {"quick_cnt", String.valueOf(MyUtils.quick_speed_cnt)},
+                    {"brake_cnt", String.valueOf(MyUtils.brake_speed_cnt)}
+            };
+            WebHttpConnect.onSaveDrivingInfoRequest(params);
+
+            //if gauge page
+            if (MyUtils.showGauge) {
+                DashboardActivity.getInstance().stopDashboardGauge();
+            }
+
+            time = 0;
+            idling_time = 0;
+            average_speed = 0;
+            driving_distance = 0;
+            down_score_fast = 0;
+            down_score_quick = 0;
+            down_score_brake = 0;
+            start_time = "";
+            end_time = "";
+        }
     }
 
     @Override

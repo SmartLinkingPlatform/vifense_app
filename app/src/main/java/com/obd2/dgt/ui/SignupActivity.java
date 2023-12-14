@@ -3,6 +3,8 @@ package com.obd2.dgt.ui;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -37,7 +39,8 @@ public class SignupActivity extends AppBaseActivity {
     String phone_txt = "";
     String password_txt = "";
     String user_birthday = "";
-    Dialog dialog;
+    Dialog error_dialog;
+    Dialog success_dialog;
     private GestureDetector gestureDetector;
     private static SignupActivity instance;
     public static SignupActivity getInstance() {
@@ -107,19 +110,40 @@ public class SignupActivity extends AppBaseActivity {
         reg_company_spinner.setAdapter(mf_adapter);
     }
 
-    private void showSignErrorDialog(int res_id) {
-        dialog = new Dialog(SignupActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dlg_normal);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        TextView dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
-        dialog_normal_text.setText(res_id);
-        ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
-        dialog_normal_btn.setOnClickListener(view -> {
-            dialog.dismiss();
+    private void showSignSuccessDialog() {
+        success_dialog = new Dialog(SignupActivity.this);
+        success_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        success_dialog.setCancelable(false);
+        success_dialog.setContentView(R.layout.dlg_notification);
+        success_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        success_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView dialog_text_1 = success_dialog.findViewById(R.id.dialog_text_1);
+        dialog_text_1.setText(R.string.success_signup_message1);
+        TextView dialog_text_2 = success_dialog.findViewById(R.id.dialog_text_2);
+        dialog_text_2.setText(R.string.success_signup_message2);
+        ImageView dialog_confirm_btn = success_dialog.findViewById(R.id.dialog_confirm_btn);
+        dialog_confirm_btn.setOnClickListener(view -> {
+            success_dialog.dismiss();
+            onLRChangeLayount(SignupActivity.this, LoginActivity.class);
+            finish();
         });
-        dialog.show();
+        success_dialog.show();
+    }
+
+    private void showSignErrorDialog(int res_id) {
+        error_dialog = new Dialog(SignupActivity.this);
+        error_dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        error_dialog.setCancelable(false);
+        error_dialog.setContentView(R.layout.dlg_normal);
+        error_dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        error_dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView dialog_normal_text = error_dialog.findViewById(R.id.dialog_normal_text);
+        dialog_normal_text.setText(res_id);
+        ImageView dialog_normal_btn = error_dialog.findViewById(R.id.dialog_normal_btn);
+        dialog_normal_btn.setOnClickListener(view -> {
+            error_dialog.dismiss();
+        });
+        error_dialog.show();
     }
 
     //휴대폰 인증하기 버튼
@@ -230,8 +254,7 @@ public class SignupActivity extends AppBaseActivity {
         };
         MyInfoTable.insertMyInfoTable(fields);
 
-        onLRChangeLayount(SignupActivity.this, LoginActivity.class);
-        finish();
+        showSignSuccessDialog();
     }
 
     public void onFailedSignup() {

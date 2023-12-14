@@ -3,10 +3,15 @@ package com.obd2.dgt.btManage;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.os.AsyncTask;
+import android.content.Intent;
+import android.os.Handler;
 import android.os.SystemClock;
+import android.view.View;
 
+import com.obd2.dgt.R;
+import com.obd2.dgt.ui.LoginActivity;
 import com.obd2.dgt.ui.MainActivity;
+import com.obd2.dgt.ui.SplashActivity;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.io.IOException;
@@ -22,6 +27,8 @@ public class BtService {
     private final String MOD_PREFIX1 = "41";
     private final String MOD_PREFIX2 = " 41 ";
     private final String MOD_PREFIX3 = "7E8";
+    private BluetoothDevice btDevice;
+    boolean isSocket = false;
 
     public BtService() {
     }
@@ -29,18 +36,26 @@ public class BtService {
     @SuppressLint("MissingPermission")
     public void connectDevice(BluetoothDevice bluetoothDevice) {
         MyUtils.isSocketError = false;
+        btDevice = bluetoothDevice;
         // Rfcomm 채널을 통해 블루투스 디바이스와 통신하는 소켓 생성
         try {
-            socket = bluetoothDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
-            socket.connect();
-            MyUtils.isObdSocket = true;
-        } catch (IOException e) {
+            if (socket == null) {
+                socket = btDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
+                socket.connect();
+                if (socket.isConnected()) {
+                    isSocket = true;
+                    Thread.sleep(1000);
+                }
+            }
+        } catch (Exception e) {
+            socket = null;
+            MyUtils.btSocket = null;
             MyUtils.isObdSocket = false;
             MyUtils.isSocketError = true;
             MyUtils.isPaired = false;
             e.printStackTrace();
         }
-        if (MyUtils.isObdSocket) {
+        if (isSocket) {
             try {
                 outputStream = socket.getOutputStream();
             } catch (IOException e) {
@@ -64,7 +79,7 @@ public class BtService {
         workerThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (MyUtils.isObdSocket) {
+                while (isSocket) {
                     if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
@@ -73,6 +88,8 @@ public class BtService {
                         int byteAvailable = inputStream.available();
                         // 데이터가 수신 된 경우
                         if (byteAvailable > 0) {
+                            MyUtils.isObdSocket = true;
+                            MyUtils.loading_obd_data = true;
                             // 입력 스트림에서 바이트 단위로 읽어 옵니다.
                             byte[] rawBytes = new byte[byteAvailable];
                             inputStream.read(rawBytes);
@@ -81,16 +98,15 @@ public class BtService {
                             for (String response : responses) {
                                 ResponseCalculator.ResponseCalculator(response);
                             }
+                        } else {
+                            MyUtils.loading_obd_data = false;
                         }
-                        SystemClock.sleep(100);
-                    } catch (IOException e) {
-                        MyUtils.isObdSocket = false;
-                        MyUtils.isSocketError = true;
-                        MyUtils.isPaired = false;
+                        setOutStream();
+                    } catch (Exception e) {
+                        closeSocket();
+                        MainActivity.getInstance().showDisconnectedStatus();
                         e.printStackTrace();
                     }
-
-                    setOutStream();
                 }
             }
         });
@@ -112,15 +128,19 @@ public class BtService {
         }
     }
     public void setOutStream() {
-        for (String[] info : MyUtils.enum_info) {
-            String msg = "01" + info[1];
-            try {
-                if (MyUtils.isObdSocket)
-                    outputStream.write(msg.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            for (String[] info : MyUtils.enum_info) {
+                String msg = "01" + info[1];
+                try {
+                    if (MyUtils.isObdSocket)
+                        outputStream.write(msg.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Thread.sleep(100);
             }
-            SystemClock.sleep(50);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     private ArrayList<String> getResponses(String rawResponse) {
@@ -225,16 +245,19 @@ public class BtService {
         }
     }
 */
+
     public void closeSocket(){
         try {
-            if (socket.isConnected()) {
+            if (socket != null && socket.isConnected()) {
                 socket.close();
                 socket = null;
                 MyUtils.isSocketError = false;
                 MyUtils.isPaired = false;
                 MyUtils.isObdSocket = false;
-                workerThread.interrupt();
-                workerThread = null;
+                if (workerThread != null) {
+                    workerThread.interrupt();
+                    workerThread = null;
+                }
                 outputStream = null;
                 inputStream = null;
                 MyUtils.btSocket = null;

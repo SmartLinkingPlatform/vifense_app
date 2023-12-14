@@ -2,6 +2,8 @@ package com.obd2.dgt.ui.InfoActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -159,6 +161,7 @@ public class CarInfoActivity extends AppBaseActivity {
     public void showConfirmDialog() {
         dialog.setContentView(R.layout.dlg_normal);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         TextView dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
         dialog_normal_text.setText(R.string.confirm_reg_message);
         ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);

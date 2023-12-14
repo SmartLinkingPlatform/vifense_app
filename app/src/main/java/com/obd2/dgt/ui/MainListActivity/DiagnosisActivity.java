@@ -3,6 +3,8 @@ package com.obd2.dgt.ui.MainListActivity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -274,6 +276,7 @@ public class DiagnosisActivity extends AppBaseActivity {
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dlg_normal);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         TextView dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
         dialog_normal_text.setText(dlg_text);

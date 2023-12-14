@@ -1,6 +1,8 @@
 package com.obd2.dgt.utils;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 
@@ -15,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 
 public class CommonFunc {
     public static String getCurrentDate() {
@@ -74,6 +77,19 @@ public class CommonFunc {
         } else {
             return true;
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    public static BluetoothDevice getPairedDevice() {
+        BluetoothDevice pairedDevice = null;
+        Set<BluetoothDevice> pairedDevices = MyUtils.mBluetoothAdapter.getBondedDevices();
+        for (BluetoothDevice paired : pairedDevices) {
+            if (paired.getName().equals(MyUtils.obd2_name)) {
+                pairedDevice = paired;
+                break;
+            }
+        }
+        return pairedDevice;
     }
 
     public static JSONArray AnalysisResponse(String response) {

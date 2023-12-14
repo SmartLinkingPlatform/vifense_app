@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        tools:ignore="MissingConstraints"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:background="@drawable/dlg_bg">
+        android:layout_width="300dp"
+        android:layout_height="220dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/dlg_bg"
+        tools:ignore="MissingConstraints">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -28,20 +29,51 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1.1">
 
                     <TextView
-                        android:id="@+id/dialog_two_button_text"
+                        android:id="@+id/dialog_two_title_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:gravity="center"
+                        android:textColor="@color/title_color"
+                        android:textSize="18sp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.9">
+
+                    <TextView
+                        android:id="@+id/dialog_two_content_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/pretendard_regular"
-                        android:gravity="center_horizontal|center_vertical"
+                        android:gravity="center"
                         android:lines="5"
                         android:maxLines="5"
                         android:textColor="@color/title_color"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.1">
+
+                    <TextView
+                        android:id="@+id/dialog_two_question_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/pretendard_bold"
+                        android:textColor="@color/title_color"
+                        android:textSize="14sp" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -56,7 +88,8 @@
 
                         <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
                             android:layout_weight="1">
 
                             <ImageView
@@ -80,7 +113,8 @@
 
                         <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
                             android:layout_weight="1">
 
                             <ImageView
@@ -107,4 +141,4 @@
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

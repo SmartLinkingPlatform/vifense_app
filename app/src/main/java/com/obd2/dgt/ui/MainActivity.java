@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -158,6 +160,7 @@ public class MainActivity extends AppBaseActivity {
         dialog = new Dialog(MainActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 
     private MainListAdapter.ItemClickListener mainListListener = new MainListAdapter.ItemClickListener() {
@@ -284,8 +287,9 @@ public class MainActivity extends AppBaseActivity {
 
     //장치 연결 스레드
     boolean obd2link = false;
+    int last_cnt = 0;
     class ConnectDeviceAsyncTask extends AsyncTask<String, Integer, Boolean> {
-        @SuppressLint("MissingPermission")
+        @SuppressLint({"MissingPermission", "WrongThread"})
         protected Boolean doInBackground(String... str) {
             while (isRun) {
                 try {
@@ -294,39 +298,40 @@ public class MainActivity extends AppBaseActivity {
                         isConClick = false;
                         link_index++;
                         if (!MyUtils.isPaired) {
-                            if (link_index > 4)
+                            if (link_index > 4) {
                                 link_index = 1;
+                            }
                         } else {
                             if (link_index > 9) {
                                 link_index = 6;
                                 if (!obd2link) {
                                     obd2link = true;
-                                    Handler handler = new Handler(Looper.getMainLooper());
-                                    handler.postDelayed(() -> {
-                                        MyUtils.btService.connectDevice(pairedDevice);
-                                        //DB 저장
-                                        DeviceInfoTable.updateDeviceInfoTable(pairedDevice.getName(), pairedDevice.getAddress(), "1", "1");
-                                        handler.removeMessages(0);
-                                    }, 2000);
+                                    MyUtils.btService.connectDevice(pairedDevice);
+                                    DeviceInfoTable.updateDeviceInfoTable(pairedDevice.getName(), pairedDevice.getAddress(), "1", "1");
                                 }
                             }
                         }
 
                         if (MyUtils.isSocketError) {
+                            if (MyUtils.show_dash_dialog) {
+                                DashboardActivity.getInstance().showSocketError();
+                            }
                             link_index = 0;
                             isRun = false;
                             isConClick = true;
                             connect_device_text.setText(R.string.connecting_error_text);
                         }
                         showConnectingLink(link_index);
-                        Thread.sleep(300);
+                        Thread.sleep(500);
                     } else {
                         link_index = 10;
                         connect_device_text.setText(R.string.connected_obd2_text);
                         showConnectingLink(link_index);
                         isRun = false;
                         isConClick = true;
+                        last_cnt = 0;
                     }
+                    last_cnt++;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -340,24 +345,20 @@ public class MainActivity extends AppBaseActivity {
     @SuppressLint("MissingPermission")
     public void obdConnectDevice() {
         con_img_1.setImageResource(R.drawable.icon_on);
-        Set<BluetoothDevice> pairedDevices = MyUtils.mBluetoothAdapter.getBondedDevices();
-        for (BluetoothDevice paired : pairedDevices) {
-            if (paired.getName().equals(MyUtils.obd2_name)) {
-                pairedDevice = paired;
-                break;
-            }
-        }
+        pairedDevice = CommonFunc.getPairedDevice();
         if (pairedDevice != null) {
             isRun = true;
             obd2link = false;
             link_index = 0;
-            MyUtils.isObdSocket = false;
+            //MyUtils.isObdSocket = false;
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     new ConnectDeviceAsyncTask().execute("BtConnectInfo");
                 }
             });
+        } else {
+            showDisconnectedStatus();
         }
     }
 
@@ -400,15 +401,6 @@ public class MainActivity extends AppBaseActivity {
 
     @Override
     public void onBackPressed() {
-        /*if (System.currentTimeMillis() - waitTime >= 1500) {
-            waitTime = System.currentTimeMillis();
-            Toast.makeText(this, R.string.finish_app, Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            MyUtils.btService.closeSocket();
-            ServiceStop();
-            finishAffinity();
-        }*/
         super.onBackPressed();
     }
 

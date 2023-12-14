@@ -183,7 +183,8 @@ public class AppBaseActivity extends AppCompatActivity {
                 case BluetoothDevice.ACTION_BOND_STATE_CHANGED:
                     break;
                 case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
-
+                    MyUtils.btService.closeSocket();
+                    MainActivity.getInstance().showDisconnectedStatus();
                     break;
 
                 case BluetoothAdapter.ACTION_DISCOVERY_STARTED: //블루투스 기기 검색 시작
@@ -196,6 +197,7 @@ public class AppBaseActivity extends AppCompatActivity {
                     break;
                 case BluetoothAdapter.ACTION_DISCOVERY_FINISHED:    //블루투스 기기 검색 종료
                     MyUtils.mBluetoothAdapter.cancelDiscovery();
+                    LinkInfoActivity.getInstance().onStopSearch();
                     break;
                 case BluetoothDevice.ACTION_PAIRING_REQUEST:
 
@@ -219,10 +221,6 @@ public class AppBaseActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void ServiceStop() {
-        RealService.StopService();
     }
 
     public void gotoDashboard() {

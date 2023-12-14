@@ -81,6 +81,8 @@ public class WebHttpConnect {
                         }
                     }
                     //CompanyTable.getCompanyInfoTable();
+                } else {
+                    SplashActivity.getInstance().gotoFail();
                 }
             }
         }.execute(httpCallPost);
@@ -129,8 +131,10 @@ public class WebHttpConnect {
                             user_info.add(res.getString("user_pwd"));
                             user_info.add(res.getString("admin_id"));
                             LoginActivity.getInstance().onSuccessStart(user_info);
+                        } else if (msg.equals("nonuser")){
+                            LoginActivity.getInstance().onNonUser();
                         } else {
-                            LoginActivity.getInstance().onFailedStart();
+                            LoginActivity.getInstance().onFailedPassword();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -295,12 +299,12 @@ public class WebHttpConnect {
                         if (msg.equals("ok")) {
                             MyUtils.max_speed = 0;
                             //MyUtils.ecu_total_distance = 0;
-                            MyUtils.ecu_mileage = "0";
+                            //MyUtils.ecu_mileage = "0";
                             MyUtils.fast_speed_cnt = 0;
                             MyUtils.quick_speed_cnt = 0;
                             MyUtils.brake_speed_cnt = 0;
                             MyUtils.idling_time = 0;
-                            MyUtils.ecu_driving_time = "00:00";
+                            //MyUtils.ecu_driving_time = "00:00";
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

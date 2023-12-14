@@ -2,6 +2,8 @@ package com.obd2.dgt.ui.InfoActivity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
 import com.obd2.dgt.ui.AppBaseActivity;
-import com.obd2.dgt.ui.ListAdapter.MainList.MainListAdapter;
-import com.obd2.dgt.ui.ListAdapter.MainList.MainListItem;
 import com.obd2.dgt.ui.ListAdapter.MessageList.MessageAdapter;
 import com.obd2.dgt.ui.ListAdapter.MessageList.MessageItem;
 import com.obd2.dgt.ui.MainActivity;
-import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
-import com.obd2.dgt.ui.MainListActivity.DiagnosisActivity;
-import com.obd2.dgt.ui.MainListActivity.RecordActivity;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.util.ArrayList;
@@ -96,8 +93,11 @@ public class MessageActivity extends AppBaseActivity {
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dlg_two_button);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        TextView dialog_two_button_text = dialog.findViewById(R.id.dialog_two_button_text);
+        TextView dialog_two_title_text = dialog.findViewById(R.id.dialog_two_title_text);
+        dialog_two_title_text.setText(R.string.delete_message_title);
+        TextView dialog_two_button_text = dialog.findViewById(R.id.dialog_two_content_text);
         dialog_two_button_text.setText(R.string.delete_all_message);
         ImageView dialog_two_no_btn = dialog.findViewById(R.id.dialog_two_no_btn);
         dialog_two_no_btn.setOnClickListener(view -> {

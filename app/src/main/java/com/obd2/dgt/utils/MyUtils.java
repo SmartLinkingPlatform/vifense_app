@@ -43,6 +43,8 @@ public class MyUtils {
     public static Class<?> currentActivity = null;
     public static Context mContext = null;
     public static boolean run_main = false;
+    public static boolean loading_obd_data = false;
+    public static boolean show_dash_dialog = false;
     public static DisplayMetrics metrics;
     public static float mDpX = 1;
     public static float mDpY = 1;

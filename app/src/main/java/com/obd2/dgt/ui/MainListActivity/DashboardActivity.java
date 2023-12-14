@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,7 +74,12 @@ public class DashboardActivity extends AppBaseActivity {
     boolean isLongClicking = false;
     private static final long LONG_CLICK_THRESHOLD = 1000;
     private Handler longClickHandler = new Handler(Looper.getMainLooper());
+    Dialog loadingDialog;
+    Dialog errDialog;
+    ImageView dlg_warning_img;
+
     private GestureDetector gestureDetector;
+
     private static DashboardActivity instance;
     public static DashboardActivity getInstance() {
         return instance;
@@ -655,6 +662,8 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_speed_text.setText("0");
         gauge_engine_text.setText("0");
         gauge_rpm_text.setText("0");
+        gauge_real_fuel_text.setText("0.0");
+        gauge_battery_text.setText("0");
         isShow = false;
     }
 
@@ -663,46 +672,57 @@ public class DashboardActivity extends AppBaseActivity {
         protected Boolean doInBackground(String... str) {
             while (isShow) {
                 try {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //차량 속도
-                            gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
-                            gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);
-                            //엔진 부하
-                            gauge_engine_img.setRotation(getRotationValueI(Integer.parseInt(MyUtils.ecu_engine_load), 100));
-                            gauge_engine_text.setText(MyUtils.ecu_engine_load);
-                            //엔진 RPM
-                            gauge_rpm_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_rpm), 16400));
-                            gauge_rpm_text.setText(MyUtils.ecu_engine_rpm);
-                            //주행 거리
-                            mileage_date.setText(CommonFunc.getCurrentDate() + "(" + getString(CommonFunc.getCurrentWeek()) + ")");
-                            gauge_mileage_text.setText(MyUtils.ecu_mileage);
-                            //순간 연료 소모량
-                            //순간 연료 소모량이 0이면 "PID 0110 - 스로틀 위치" 와 "PID 010D - 연료 압력"으로 계산한다.
-                            double consumptionRate = 0;
-                            if (Float.parseFloat(MyUtils.ecu_fuel_rate) == 0) {
-                                double mafLPH = Double.parseDouble(MyUtils.ecu_maf);
-                                consumptionRate = Double.parseDouble(MyUtils.ecu_throttle_position) * mafLPH;
+                    if (!MyUtils.isObdSocket || !MyUtils.isPaired) {
+                        showSocketError();
+                        stopDashboardGauge();
+                        isShow = false;
+                    }else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (MyUtils.loading_obd_data) {
+                                    showLoadingOBDData(false);
+                                    //차량 속도
+                                    gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
+                                    gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);
+                                    //엔진 부하
+                                    gauge_engine_img.setRotation(getRotationValueI(Integer.parseInt(MyUtils.ecu_engine_load), 100));
+                                    gauge_engine_text.setText(MyUtils.ecu_engine_load);
+                                    //엔진 RPM
+                                    gauge_rpm_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_rpm), 16400));
+                                    gauge_rpm_text.setText(MyUtils.ecu_engine_rpm);
+                                    //주행 거리
+                                    mileage_date.setText(CommonFunc.getCurrentDate() + "(" + getString(CommonFunc.getCurrentWeek()) + ")");
+                                    gauge_mileage_text.setText(MyUtils.ecu_mileage);
+                                    //순간 연료 소모량
+                                    //순간 연료 소모량이 0이면 "PID 0110 - 스로틀 위치" 와 "PID 010D - 연료 압력"으로 계산한다.
+                                    double consumptionRate = 0;
+                                    if (Float.parseFloat(MyUtils.ecu_fuel_rate) == 0) {
+                                        double mafLPH = Double.parseDouble(MyUtils.ecu_maf);
+                                        consumptionRate = Double.parseDouble(MyUtils.ecu_throttle_position) * mafLPH;
 
-                                float D = (float) 0.92;
-                                consumptionRate = (mafLPH / (14.7 * 820 * D)) * 3600;
+                                        float D = (float) 0.92;
+                                        consumptionRate = (mafLPH / (14.7 * 820 * D)) * 3600;
 
-                                MyUtils.ecu_fuel_rate = String.valueOf(Math.round(consumptionRate * 10) / (float)10);
+                                        MyUtils.ecu_fuel_rate = String.valueOf(Math.round(consumptionRate * 10) / (float) 10);
+                                    }
+                                    gauge_real_fuel_text.setText(MyUtils.ecu_fuel_rate);
+                                    //연료 소모량
+                                    gauge_fuel_text.setText(MyUtils.ecu_fuel_consume);
+                                    //냉각수 온도
+                                    gauge_temp_text.setText(MyUtils.ecu_coolant_temp);
+                                    //배터리 전압
+                                    gauge_battery_text.setText(MyUtils.ecu_battery_voltage);
+                                    //주행 시간
+                                    gauge_dtime_text.setText(MyUtils.ecu_driving_time);
+                                } else {
+                                    showLoadingOBDData(true);
+                                }
                             }
-                            gauge_real_fuel_text.setText(MyUtils.ecu_fuel_rate);
-                            //연료 소모량
-                            gauge_fuel_text.setText(MyUtils.ecu_fuel_consume);
-                            //냉각수 온도
-                            gauge_temp_text.setText(MyUtils.ecu_coolant_temp);
-                            //배터리 전압
-                            gauge_battery_text.setText(MyUtils.ecu_battery_voltage);
-                            //주행 시간
-                            gauge_dtime_text.setText(MyUtils.ecu_driving_time);
-                        }
-                    });
-                    showErrorDialog();
-                    SystemClock.sleep(1000);
+                        });
+                        showErrorDialog();
+                        SystemClock.sleep(1000);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -712,9 +732,69 @@ public class DashboardActivity extends AppBaseActivity {
         }
     }
 
+    TextView dialog_loading_text;
+    private void showLoadingOBDData(boolean b) {
+        if (loadingDialog == null) {
+            loadingDialog = new Dialog(DashboardActivity.this);
+            loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            loadingDialog.setCancelable(true);
+            loadingDialog.setContentView(R.layout.dlg_loading);
+            loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog_loading_text = loadingDialog.findViewById(R.id.dialog_loading_text);
+        }
+        if (b) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    MyUtils.show_dash_dialog = true;
+                    if (!MyUtils.isObdSocket) {
+                        dialog_loading_text.setText(R.string.non_connecting_text);
+                    } else {
+                        dialog_loading_text.setText(R.string.loading_obd_data);
+                    }
 
-    Dialog errDialog;
-    ImageView dlg_warning_img;
+                    loadingDialog.show();
+                }
+            });
+        } else {
+            if (MyUtils.show_dash_dialog) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyUtils.show_dash_dialog = false;
+                        loadingDialog.dismiss();
+                    }
+                });
+            }
+        }
+    }
+
+    public void showSocketError() {
+        showLoadingOBDData(false);
+        if (loadingDialog == null) {
+            loadingDialog = new Dialog(DashboardActivity.this);
+            loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            loadingDialog.setCancelable(true);
+            loadingDialog.setContentView(R.layout.dlg_loading);
+            loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog_loading_text = loadingDialog.findViewById(R.id.dialog_loading_text);
+        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog_loading_text.setText(R.string.connecting_error_text);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        MyUtils.show_dash_dialog = false;
+                        loadingDialog.dismiss();
+                    }
+                }, 2000);
+                loadingDialog.show();
+            }
+        });
+    }
 
     public void showErrorDialog() {
         if (MyUtils.err_idx > 0) {
@@ -728,6 +808,7 @@ public class DashboardActivity extends AppBaseActivity {
                         errDialog.setCancelable(false);
                         errDialog.setContentView(R.layout.dlg_error);
                         errDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        errDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         TextView dlg_error_text = errDialog.findViewById(R.id.dlg_error_text);
                         dlg_warning_img = errDialog.findViewById(R.id.dlg_warning_img);
 

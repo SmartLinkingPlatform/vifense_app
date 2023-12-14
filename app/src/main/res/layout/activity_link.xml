@@ -33,6 +33,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 app:srcCompat="@drawable/prev_black_btn" />
+
+            <ImageView
+                android:id="@+id/refresh_btn"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+                app:srcCompat="@drawable/refresh" />
+            <ProgressBar
+                android:id="@+id/refresh_cycle"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="10dp"
+                android:indeterminate="true"
+                android:indeterminateDrawable="@drawable/refresh_ico"
+                android:progress="0" />
+
         </FrameLayout>
 
         <FrameLayout

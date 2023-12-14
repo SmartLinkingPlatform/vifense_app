@@ -149,9 +149,14 @@ public class LoginActivity extends AppBaseActivity {
         onRLChangeLayount(LoginActivity.this, MainActivity.class);
         finish();
     }
-    public void onFailedStart() {
+    public void onNonUser() {
         progress_layout.setVisibility(View.GONE);
-        Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_LONG).show();
+    }
+
+    public void onFailedPassword() {
+        progress_layout.setVisibility(View.GONE);
+        Toast.makeText(getApplicationContext(), R.string.error_password, Toast.LENGTH_LONG).show();
     }
 
     //DataBase setting
