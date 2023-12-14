@@ -3,7 +3,6 @@ package com.obd2.dgt.ui.MainListActivity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
@@ -31,9 +30,7 @@ import com.obd2.dgt.R;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.AddGauge.GaugeAdapter;
 import com.obd2.dgt.ui.ListAdapter.AddGauge.GaugeItem;
-import com.obd2.dgt.ui.LoginActivity;
 import com.obd2.dgt.ui.MainActivity;
-import com.obd2.dgt.ui.SplashActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.GaugeViewInfo;
 import com.obd2.dgt.utils.MyUtils;
@@ -73,13 +70,14 @@ public class DashboardActivity extends AppBaseActivity {
     boolean isShortClicking = false;
     boolean isLongClicking = false;
     private static final long LONG_CLICK_THRESHOLD = 1000;
-    private Handler longClickHandler = new Handler(Looper.getMainLooper());
+    private final Handler longClickHandler = new Handler(Looper.getMainLooper());
     Dialog loadingDialog;
     Dialog errDialog;
     ImageView dlg_warning_img;
 
     private GestureDetector gestureDetector;
 
+    @SuppressLint("StaticFieldLeak")
     private static DashboardActivity instance;
     public static DashboardActivity getInstance() {
         return instance;
@@ -306,8 +304,6 @@ public class DashboardActivity extends AppBaseActivity {
                     GaugeViewInfo gaugeViewInfo = new GaugeViewInfo(gauge_view, Integer.parseInt(info[3]), info[1], pointF, Integer.parseInt(info[0]), Integer.parseInt(info[2]));
                     viewInfo.add(gaugeViewInfo);
                 } else {
-                    //gauge_view.setX(MyUtils.gauge_pos[pos_index].x);
-                    //gauge_view.setY(MyUtils.gauge_pos[pos_index].y);
                     gauge_view.setVisibility(View.GONE);
                 }
             }
@@ -352,11 +348,11 @@ public class DashboardActivity extends AppBaseActivity {
         addItems = new ArrayList<>();
         clearAllGaugeLayout();
         int gauge_cnt = GaugeInfoTable.getGaugeEnableCount();
-        if (gauge_cnt >= 6)
+        if (gauge_cnt >= 6) {
             is_nav = true;
-        else
+        } else {
             is_nav = false;
-
+        }
         GaugeInfoTable.getGaugeOrderTable();
         initGaugeItemInfo();
         showAddButton();
@@ -478,13 +474,10 @@ public class DashboardActivity extends AppBaseActivity {
         }
     };
 
-    private Runnable longClickRunnable = new Runnable() {
-        @Override
-        public void run() {
-            isLongClicking = true;
-            isShortClicking = false;
-            onLongTouchEvent();
-        }
+    private final Runnable longClickRunnable = () -> {
+        isLongClicking = true;
+        isShortClicking = false;
+        onLongTouchEvent();
     };
 
     //터치 무비
@@ -649,12 +642,7 @@ public class DashboardActivity extends AppBaseActivity {
         if (Integer.parseInt(MyUtils.ecu_engine_load) > 0) {
             if (!isShow) {
                 isShow = true;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        new GaugeAsyncTask().execute("GaugeInfo");
-                    }
-                });
+                runOnUiThread(() -> new GaugeAsyncTask().execute("GaugeInfo"));
             }
         }
     }
@@ -677,47 +665,44 @@ public class DashboardActivity extends AppBaseActivity {
                         stopDashboardGauge();
                         isShow = false;
                     }else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (MyUtils.loading_obd_data) {
-                                    //showLoadingOBDData(false);
-                                    //차량 속도
-                                    gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
-                                    gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);
-                                    //엔진 부하
-                                    gauge_engine_img.setRotation(getRotationValueI(Integer.parseInt(MyUtils.ecu_engine_load), 100));
-                                    gauge_engine_text.setText(MyUtils.ecu_engine_load);
-                                    //엔진 RPM
-                                    gauge_rpm_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_rpm), 16400));
-                                    gauge_rpm_text.setText(MyUtils.ecu_engine_rpm);
-                                    //주행 거리
-                                    mileage_date.setText(CommonFunc.getCurrentDate() + "(" + getString(CommonFunc.getCurrentWeek()) + ")");
-                                    gauge_mileage_text.setText(MyUtils.ecu_mileage);
-                                    //순간 연료 소모량
-                                    //순간 연료 소모량이 0이면 "PID 0110 - 스로틀 위치" 와 "PID 010D - 연료 압력"으로 계산한다.
-                                    double consumptionRate = 0;
-                                    if (Float.parseFloat(MyUtils.ecu_fuel_rate) == 0) {
-                                        double mafLPH = Double.parseDouble(MyUtils.ecu_maf);
-                                        consumptionRate = Double.parseDouble(MyUtils.ecu_throttle_position) * mafLPH;
+                        runOnUiThread(() -> {
+                            if (MyUtils.loading_obd_data) {
+                                //showLoadingOBDData(false);
+                                //차량 속도
+                                gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
+                                gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);
+                                //엔진 부하
+                                gauge_engine_img.setRotation(getRotationValueI(Integer.parseInt(MyUtils.ecu_engine_load), 100));
+                                gauge_engine_text.setText(MyUtils.ecu_engine_load);
+                                //엔진 RPM
+                                gauge_rpm_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_rpm), 16400));
+                                gauge_rpm_text.setText(MyUtils.ecu_engine_rpm);
+                                //주행 거리
+                                mileage_date.setText(CommonFunc.getCurrentDate() + "(" + getString(CommonFunc.getCurrentWeek()) + ")");
+                                gauge_mileage_text.setText(MyUtils.ecu_mileage);
+                                //순간 연료 소모량
+                                //순간 연료 소모량이 0이면 "PID 0110 - 스로틀 위치" 와 "PID 010D - 연료 압력"으로 계산한다.
+                                double consumptionRate = 0;
+                                if (Float.parseFloat(MyUtils.ecu_fuel_rate) == 0) {
+                                    double mafLPH = Double.parseDouble(MyUtils.ecu_maf);
+                                    consumptionRate = Double.parseDouble(MyUtils.ecu_throttle_position) * mafLPH;
 
-                                        float D = (float) 0.92;
-                                        consumptionRate = (mafLPH / (14.7 * 820 * D)) * 3600;
+                                    float D = (float) 0.92;
+                                    consumptionRate = (mafLPH / (14.7 * 820 * D)) * 3600;
 
-                                        MyUtils.ecu_fuel_rate = String.valueOf(Math.round(consumptionRate * 10) / (float) 10);
-                                    }
-                                    gauge_real_fuel_text.setText(MyUtils.ecu_fuel_rate);
-                                    //연료 소모량
-                                    gauge_fuel_text.setText(MyUtils.ecu_fuel_consume);
-                                    //냉각수 온도
-                                    gauge_temp_text.setText(MyUtils.ecu_coolant_temp);
-                                    //배터리 전압
-                                    gauge_battery_text.setText(MyUtils.ecu_battery_voltage);
-                                    //주행 시간
-                                    gauge_dtime_text.setText(MyUtils.ecu_driving_time);
-                                //} else {
-                                    //showLoadingOBDData(true);
+                                    MyUtils.ecu_fuel_rate = String.valueOf(Math.round(consumptionRate * 10) / (float) 10);
                                 }
+                                gauge_real_fuel_text.setText(MyUtils.ecu_fuel_rate);
+                                //연료 소모량
+                                gauge_fuel_text.setText(MyUtils.ecu_fuel_consume);
+                                //냉각수 온도
+                                gauge_temp_text.setText(MyUtils.ecu_coolant_temp);
+                                //배터리 전압
+                                gauge_battery_text.setText(MyUtils.ecu_battery_voltage);
+                                //주행 시간
+                                gauge_dtime_text.setText(MyUtils.ecu_driving_time);
+                            //} else {
+                                //showLoadingOBDData(true);
                             }
                         });
                         showErrorDialog();
@@ -779,81 +764,57 @@ public class DashboardActivity extends AppBaseActivity {
             loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog_loading_text = loadingDialog.findViewById(R.id.dialog_loading_text);
         }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                dialog_loading_text.setText(R.string.connecting_error_text);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        MyUtils.show_dash_dialog = false;
-                        loadingDialog.dismiss();
-                    }
-                }, 2000);
-                loadingDialog.show();
-            }
+        runOnUiThread(() -> {
+            dialog_loading_text.setText(R.string.connecting_error_text);
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                MyUtils.show_dash_dialog = false;
+                loadingDialog.dismiss();
+            }, 2000);
+            loadingDialog.show();
         });
     }
 
     public void showErrorDialog() {
         if (MyUtils.err_idx > 0) {
             if (!MyUtils.is_error_dlg) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        MyUtils.is_error_dlg = true;
-                        errDialog = new Dialog(DashboardActivity.this);
-                        errDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        errDialog.setCancelable(false);
-                        errDialog.setContentView(R.layout.dlg_error);
-                        errDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                        errDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        TextView dlg_error_text = errDialog.findViewById(R.id.dlg_error_text);
-                        dlg_warning_img = errDialog.findViewById(R.id.dlg_warning_img);
+                runOnUiThread(() -> {
+                    MyUtils.is_error_dlg = true;
+                    errDialog = new Dialog(DashboardActivity.this);
+                    errDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    errDialog.setCancelable(false);
+                    errDialog.setContentView(R.layout.dlg_error);
+                    errDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    errDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView dlg_error_text = errDialog.findViewById(R.id.dlg_error_text);
+                    dlg_warning_img = errDialog.findViewById(R.id.dlg_warning_img);
 
-                        if (MyUtils.err_idx == 1) {
-                            dlg_error_text.setText(R.string.show_error_idle);
-                        } else if (MyUtils.err_idx == 2) {
-                            dlg_error_text.setText(R.string.show_error_fast);
-                        } else if (MyUtils.err_idx == 3) {
-                            dlg_error_text.setText(R.string.show_error_quick);
-                        } else if (MyUtils.err_idx == 4) {
-                            dlg_error_text.setText(R.string.show_error_brake);
-                        } else if (MyUtils.err_idx == 5) {
-                            dlg_error_text.setText(R.string.show_error_system);
-                            MyUtils.ecu_trouble_code = "";
-                        } else if (MyUtils.err_idx == 6) {
-                            dlg_error_text.setText(R.string.show_error_consume);
-                            MyUtils.ecu_consume_warning = "";
-                        }
-                        errDialog.show();
-
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                errDialog.dismiss();
-                                MyUtils.is_error_dlg = false;
-                                MyUtils.err_idx = 0;
-                            }
-                        }, 2000);
+                    if (MyUtils.err_idx == 1) {
+                        dlg_error_text.setText(R.string.show_error_idle);
+                    } else if (MyUtils.err_idx == 2) {
+                        dlg_error_text.setText(R.string.show_error_fast);
+                    } else if (MyUtils.err_idx == 3) {
+                        dlg_error_text.setText(R.string.show_error_quick);
+                    } else if (MyUtils.err_idx == 4) {
+                        dlg_error_text.setText(R.string.show_error_brake);
+                    } else if (MyUtils.err_idx == 5) {
+                        dlg_error_text.setText(R.string.show_error_system);
+                        MyUtils.ecu_trouble_code = "";
+                    } else if (MyUtils.err_idx == 6) {
+                        dlg_error_text.setText(R.string.show_error_consume);
+                        MyUtils.ecu_consume_warning = "";
                     }
+                    errDialog.show();
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(() -> {
+                        errDialog.dismiss();
+                        MyUtils.is_error_dlg = false;
+                        MyUtils.err_idx = 0;
+                    }, 2000);
                 });
             }
         }
-    }
-
-    public void animErrDlg(boolean b) {
-        if (b) {
-            dlg_warning_img.setAlpha(25);
-        } else {
-            dlg_warning_img.setAlpha(50);
-        }
-    }
-
-    public void hiddenErrorDialog() {
-        errDialog.dismiss();
     }
 
     @Override
