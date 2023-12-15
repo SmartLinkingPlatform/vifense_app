@@ -30,9 +30,9 @@ public class MyInfoTable {
             e.printStackTrace();
         }
     }
-    public static int getExistMyInfoTable(String[] fields) {
+    public static int getExistMyInfoTable(String val) {
         try {
-            String where = "name='" + fields[0] + "' and phone='" + fields[1] + "'";
+            String where = "phone='" + val + "'";
             Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "name", where);
             if (cursor != null && cursor.getCount() > 0) {
                 return cursor.getCount();

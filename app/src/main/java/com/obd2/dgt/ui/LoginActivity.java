@@ -67,7 +67,6 @@ public class LoginActivity extends AppBaseActivity {
             login_id_text.setText(MyUtils.my_phone);
             login_pwd_text.setText(encode_pwd);
         }
-
     }
 
     private void initLayout() {
@@ -133,15 +132,18 @@ public class LoginActivity extends AppBaseActivity {
         
         MyUtils.my_id = Integer.parseInt(user_info.get(0));
         MyUtils.admin_id = Integer.parseInt(user_info.get(4));
-        if (MyUtils.my_name.isEmpty()) {
-            String[][] params = new String[][]{
-                    {"phone", user_info.get(1)},
-                    {"name", user_info.get(2)},
-                    {"password", user_info.get(3)},
-                    {"cid", user_info.get(4)},
-                    {"condition", "1"}
-            };
+        String[][] params = new String[][]{
+                {"phone", user_info.get(1)},
+                {"name", user_info.get(2)},
+                {"password", user_info.get(3)},
+                {"cid", user_info.get(4)},
+                {"condition", "1"}
+        };
+        if (MyInfoTable.getExistMyInfoTable(user_phone) == 0) {
             MyInfoTable.insertMyInfoTable(params);
+            MyInfoTable.getMyInfoTable();
+        } else {
+            MyInfoTable.updateMyInfoTable(params);
             MyInfoTable.getMyInfoTable();
         }
         ServiceStart();

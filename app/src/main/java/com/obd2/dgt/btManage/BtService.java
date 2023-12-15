@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.view.View;
 
@@ -27,35 +29,33 @@ public class BtService {
     private final String MOD_PREFIX1 = "41";
     private final String MOD_PREFIX2 = " 41 ";
     private final String MOD_PREFIX3 = "7E8";
+    private boolean startedEngine = false;
     private BluetoothDevice btDevice;
-    boolean isSocket = false;
+    boolean running = false;
 
     public BtService() {
     }
 
     @SuppressLint("MissingPermission")
-    public void connectDevice(BluetoothDevice bluetoothDevice) {
-        MyUtils.isSocketError = false;
+    public void connectOBD2Device(BluetoothDevice bluetoothDevice) {
         btDevice = bluetoothDevice;
         // Rfcomm 채널을 통해 블루투스 디바이스와 통신하는 소켓 생성
+        Handler handler = new Handler(Looper.getMainLooper());
         try {
             if (socket == null) {
                 socket = btDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
                 socket.connect();
                 if (socket.isConnected()) {
-                    isSocket = true;
+                    running = true;
                     Thread.sleep(1000);
                 }
             }
         } catch (Exception e) {
-            socket = null;
-            MyUtils.btSocket = null;
-            MyUtils.isObdSocket = false;
-            MyUtils.isSocketError = true;
-            MyUtils.isPaired = false;
+            closeSocket();
+            MainActivity.getInstance().showDisconnectedStatus(1);
             e.printStackTrace();
         }
-        if (isSocket) {
+        if (running) {
             try {
                 outputStream = socket.getOutputStream();
             } catch (IOException e) {
@@ -79,13 +79,16 @@ public class BtService {
         workerThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while (isSocket) {
+                while (running) {
                     if (Thread.currentThread().isInterrupted()) {
                         break;
                     }
                     try {
                         // 데이터를 수신했는지 확인합니다.
-                        int byteAvailable = inputStream.available();
+                        int byteAvailable = 0;
+                        if (inputStream != null) {
+                            byteAvailable = inputStream.available();
+                        }
                         // 데이터가 수신 된 경우
                         if (byteAvailable > 0) {
                             // 입력 스트림에서 바이트 단위로 읽어 옵니다.
@@ -94,23 +97,22 @@ public class BtService {
                             final String rawResponse = new String(rawBytes, "UTF-8");
                             String res = rawResponse.toLowerCase();
                             if (res.contains("elm") || res.contains("ok")) {
-                                MyUtils.isObdSocket = true;
-                                MyUtils.loading_obd_data = true;
+                                getIgnitionMonitor();
+                                continue;
                             }
                             ArrayList<String> responses = getResponses(rawResponse);
                             for (String response : responses) {
                                 ResponseCalculator.ResponseCalculator(response);
                             }
-                        } else {
-                            if (MyUtils.isObdSocket) {
-                                MyUtils.isSocketError = true;
-                                MyUtils.loading_obd_data = false;
-                            }
                         }
-                        setOutStream();
+
+                        if (startedEngine) {
+                            MyUtils.isObdSocket = true;
+                            MyUtils.loading_obd_data = true;
+                            sendStreamData();
+                        }
                     } catch (Exception e) {
                         closeSocket();
-                        MainActivity.getInstance().showDisconnectedStatus();
                         e.printStackTrace();
                     }
                 }
@@ -126,16 +128,20 @@ public class BtService {
                     "ATD",
                     "ATZ"
             };
+            if (outputStream == null)
+                return;
             for (String msg : msgs) {
                 outputStream.write(msg.getBytes());
-                //SystemClock.sleep(100);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public void setOutStream() {
+
+    public void sendStreamData() {
         try {
+            if (outputStream == null)
+                return;
             for (String[] info : MyUtils.enum_info) {
                 String msg = "01" + info[1];
                 try {
@@ -197,79 +203,40 @@ public class BtService {
         return resVal;
     }
 
-/*
-    //고장진단 코드 읽기
-    public void getFaultCodes() {
-        new FaultCodeTask().execute();
-    }
-    private class FaultCodeTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            readFaultCodes(socket);
-            return null;
-        }
-        private void readFaultCodes(BluetoothSocket socket) {
-            try {
-                // OBD-II 명령을 사용하여 고장 코드 읽기
-                // "03"은 현재 발생 중인 고장 코드를 의미합니다.
-                String obdCommand = "03";
-                outputStream.write(obdCommand.getBytes());
-
-                // 응답 데이터를 읽습니다.
-                byte[] buffer = new byte[1024];
-                int bytesRead = inputStream.read(buffer);
-
-                // 읽은 데이터를 문자열로 변환하여 표시
-                String obdData = new String(buffer, 0, bytesRead);
-
-                // 고장 코드를 추출하여 표시 또는 다른 작업 수행
-                String faultCodes = extractFaultCodes(obdData);
-                handleFaultCodes(faultCodes);
-
-            } catch (IOException e) {
-                e.printStackTrace();
+    int repeat = 0;
+    private void getIgnitionMonitor() {
+        OBD2ApiCommand command = new OBD2ApiCommand(socket);
+        String ignition_monitor = command.getIgnitionMonitorStatus();
+        if (ignition_monitor.equalsIgnoreCase("on")) {
+            startedEngine = true;
+        } else {
+            repeat++;
+            if (repeat < 3) {
+                getIgnitionMonitor();
             }
-        }
-        private String extractFaultCodes(String obdData) {
-            return obdData.replace(">", "").trim();
-        }
-        private void handleFaultCodes(String faultCodes) {
-            // 고장 코드를 처리하는 로직 추가
-            TroubleCodes tcoc = new TroubleCodes();
-            String result = tcoc.getFormattedResult(faultCodes);
-            if(result==null)
-                result = "";
-            if(!result.equals("")) {
-                //String[] dtcArray = result.split("\\n");
-                //for (String code : dtcArray) {
-                //    String explanation = getFaultCodeExplanation(code);
-                //    System.out.println("Fault Code: " + code + ", Explanation: " + explanation);
-                //}
-
-            }else{
-                //addListItem("No error codes received.");
-            }
+            closeSocket();
+            MainActivity.getInstance().showDisconnectedStatus(1);
         }
     }
-*/
-
     public void closeSocket(){
         try {
             if (socket != null && socket.isConnected()) {
                 socket.close();
-                socket = null;
-                isSocket = false;
-                MyUtils.isSocketError = false;
-                MyUtils.isPaired = false;
-                MyUtils.isObdSocket = false;
                 if (workerThread != null) {
                     workerThread.interrupt();
                     workerThread = null;
                 }
-                outputStream = null;
-                inputStream = null;
-                MyUtils.btSocket = null;
             }
+            socket = null;
+            running = false;
+            outputStream = null;
+            inputStream = null;
+            startedEngine = false;
+            MyUtils.isPaired = false;
+            MyUtils.isObdSocket = false;
+            MyUtils.loading_obd_data = false;
+            MyUtils.btSocket = null;
+            MainActivity.getInstance().isConnecting = false;
         } catch (IOException e) {
             e.printStackTrace();
         }

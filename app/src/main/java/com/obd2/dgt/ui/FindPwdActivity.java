@@ -119,11 +119,7 @@ public class FindPwdActivity extends AppBaseActivity {
 
     //인증번호 받기 버튼 클릭
     private void onGetAuthCodeClick() {
-        String[] params = new String[]{
-                find_name_text.getText().toString(),
-                find_id_text.getText().toString()
-        };
-        int exist_int = MyInfoTable.getExistMyInfoTable(params);
+        int exist_int = MyInfoTable.getExistMyInfoTable(find_id_text.getText().toString());
         if (exist_int > 0) {
             Intent intent = new Intent(FindPwdActivity.this, AuthActivity.class);
             intent.putExtra("dataKey", "find");

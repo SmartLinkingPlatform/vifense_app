@@ -137,7 +137,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_speed_img = findViewById(R.id.gauge_speed_img);
         gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
         gauge_speed_text = findViewById(R.id.gauge_speed_text);
-        gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);
+        gauge_speed_text.setText("-");
         speed_close_btn = findViewById(R.id.speed_close_btn);
         speed_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_speed_layout));
         speed_close_btn.setVisibility(View.GONE);
@@ -150,7 +150,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_engine_img = findViewById(R.id.gauge_engine_img);
         gauge_engine_img.setRotation(getRotationValueI(Integer.parseInt(MyUtils.ecu_engine_load), 100));
         gauge_engine_text = findViewById(R.id.gauge_engine_text);
-        gauge_engine_text.setText(MyUtils.ecu_engine_load);
+        gauge_engine_text.setText("-");
         engine_close_btn = findViewById(R.id.engine_close_btn);
         engine_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_engine_layout));
         engine_close_btn.setVisibility(View.GONE);
@@ -163,7 +163,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_rpm_img = findViewById(R.id.gauge_rpm_img);
         gauge_rpm_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_engine_rpm), 16400));
         gauge_rpm_text = findViewById(R.id.gauge_rpm_text);
-        gauge_rpm_text.setText(MyUtils.ecu_engine_rpm);
+        gauge_rpm_text.setText("-");
         rpm_close_btn = findViewById(R.id.rpm_close_btn);
         rpm_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_rpm_layout));
         rpm_close_btn.setVisibility(View.GONE);
@@ -176,7 +176,7 @@ public class DashboardActivity extends AppBaseActivity {
         mileage_date = findViewById(R.id.mileage_date);
         mileage_date.setText(CommonFunc.getCurrentDate() + "(" + getString(CommonFunc.getCurrentWeek()) + ")");
         gauge_mileage_text = findViewById(R.id.gauge_mileage_text);
-        gauge_mileage_text.setText(MyUtils.ecu_mileage);
+        gauge_mileage_text.setText("-");
         mileage_close_btn = findViewById(R.id.mileage_close_btn);
         mileage_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_mileage_layout));
         mileage_close_btn.setVisibility(View.GONE);
@@ -187,7 +187,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_real_fuel_layout.setOnTouchListener(onTouchEventListener);
         gauge_real_fuel_layout.setVisibility(View.GONE);
         gauge_real_fuel_text = findViewById(R.id.gauge_real_fuel_text);
-        gauge_real_fuel_text.setText(MyUtils.ecu_fuel_rate);
+        gauge_real_fuel_text.setText("-");
         real_fuel_close_btn = findViewById(R.id.real_fuel_close_btn);
         real_fuel_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_real_fuel_layout));
         real_fuel_close_btn.setVisibility(View.GONE);
@@ -198,7 +198,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_fuel_layout.setOnTouchListener(onTouchEventListener);
         gauge_fuel_layout.setVisibility(View.GONE);
         gauge_fuel_text = findViewById(R.id.gauge_fuel_text);
-        gauge_fuel_text.setText(MyUtils.ecu_fuel_consume);
+        gauge_fuel_text.setText("-");
         fuel_close_btn = findViewById(R.id.fuel_close_btn);
         fuel_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_fuel_layout));
         fuel_close_btn.setVisibility(View.GONE);
@@ -209,7 +209,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_temp_layout.setOnTouchListener(onTouchEventListener);
         gauge_temp_layout.setVisibility(View.GONE);
         gauge_temp_text = findViewById(R.id.gauge_temp_text);
-        gauge_temp_text.setText(MyUtils.ecu_coolant_temp);
+        gauge_temp_text.setText("-");
         temp_close_btn = findViewById(R.id.temp_close_btn);
         temp_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_temp_layout));
         temp_close_btn.setVisibility(View.GONE);
@@ -220,7 +220,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_battery_layout.setOnTouchListener(onTouchEventListener);
         gauge_battery_layout.setVisibility(View.GONE);
         gauge_battery_text = findViewById(R.id.gauge_battery_text);
-        gauge_battery_text.setText(MyUtils.ecu_battery_voltage);
+        gauge_battery_text.setText("-");
         battery_close_btn = findViewById(R.id.battery_close_btn);
         battery_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_battery_layout));
         battery_close_btn.setVisibility(View.GONE);
@@ -231,7 +231,7 @@ public class DashboardActivity extends AppBaseActivity {
         gauge_dtime_layout.setOnTouchListener(onTouchEventListener);
         gauge_dtime_layout.setVisibility(View.GONE);
         gauge_dtime_text = findViewById(R.id.gauge_dtime_text);
-        gauge_dtime_text.setText(MyUtils.ecu_driving_time);
+        gauge_dtime_text.setText("--:--");
         dtime_close_btn = findViewById(R.id.dtime_close_btn);
         dtime_close_btn.setOnClickListener(view -> onGaugeCloseClick(gauge_dtime_layout));
         dtime_close_btn.setVisibility(View.GONE);
@@ -639,7 +639,7 @@ public class DashboardActivity extends AppBaseActivity {
     }
 
     public void startDashboardGauge() {
-        if (Integer.parseInt(MyUtils.ecu_engine_load) > 0) {
+        if (Integer.parseInt(MyUtils.ecu_engine_load) > 0 || Integer.parseInt(MyUtils.ecu_engine_rpm) > 10) {
             if (!isShow) {
                 isShow = true;
                 runOnUiThread(() -> new GaugeAsyncTask().execute("GaugeInfo"));
@@ -661,7 +661,7 @@ public class DashboardActivity extends AppBaseActivity {
             while (isShow) {
                 try {
                     if (!MyUtils.isObdSocket || !MyUtils.isPaired) {
-                        showSocketError();
+                        //showSocketError();
                         stopDashboardGauge();
                         isShow = false;
                     }else {
@@ -685,10 +685,14 @@ public class DashboardActivity extends AppBaseActivity {
                                 double consumptionRate = 0;
                                 if (Float.parseFloat(MyUtils.ecu_fuel_rate) == 0) {
                                     double mafLPH = Double.parseDouble(MyUtils.ecu_maf);
-                                    consumptionRate = Double.parseDouble(MyUtils.ecu_throttle_position) * mafLPH;
+                                    // Air-Fuel Ratio (가정값, 실제 값으로 대체 가능)
+                                    float airFuelRatio = 14.7f;
+                                    // Fuel Density (휘발유의 경우, 가정값)
+                                    float fuelDensity = 0.74f;  // kg/L
+                                    consumptionRate = (mafLPH - Double.parseDouble(MyUtils.ecu_throttle_position)) * fuelDensity / airFuelRatio;
 
-                                    float D = (float) 0.92;
-                                    consumptionRate = (mafLPH / (14.7 * 820 * D)) * 3600;
+                                    //float D = (float) 0.92;
+                                    //consumptionRate = (mafLPH / (14.7 * 820 * D)) * 3600;
 
                                     MyUtils.ecu_fuel_rate = String.valueOf(Math.round(consumptionRate * 10) / (float) 10);
                                 }
@@ -717,8 +721,8 @@ public class DashboardActivity extends AppBaseActivity {
         }
     }
 
-    TextView dialog_loading_text;
-    /*private void showLoadingOBDData(boolean b) {
+    /*TextView dialog_loading_text;
+    private void showLoadingOBDData(boolean b) {
         if (loadingDialog == null) {
             loadingDialog = new Dialog(DashboardActivity.this);
             loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -753,7 +757,7 @@ public class DashboardActivity extends AppBaseActivity {
             }
         }
     }*/
-
+/*
     public void showSocketError() {
         //showLoadingOBDData(false);
         if (loadingDialog == null) {
@@ -773,7 +777,7 @@ public class DashboardActivity extends AppBaseActivity {
             }, 2000);
             loadingDialog.show();
         });
-    }
+    }*/
 
     public void showErrorDialog() {
         if (MyUtils.err_idx > 0) {

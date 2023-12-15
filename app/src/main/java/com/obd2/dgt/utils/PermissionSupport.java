@@ -53,7 +53,6 @@ public class PermissionSupport {
             RECEIVE_BOOT_COMPLETED,
             WRITE_EXTERNAL_STORAGE,
             READ_EXTERNAL_STORAGE
-
     };
 
     private final String[] permissions3 = {

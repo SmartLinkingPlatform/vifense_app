@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -178,5 +179,27 @@ public class CommonFunc {
             min_sec = str_m + m_unit + " " + str_s + s_unit;
         }
         return min_sec;
+    }
+
+    public static int getArrayToIndex(int[] arr, String val) {
+        int idx = 0;
+        for (int res : arr) {
+            String txt = MyUtils.mContext.getString(res);
+            if (txt.equalsIgnoreCase(val)) {
+                return idx;
+            }
+            idx++;
+        }
+        return 0;
+    }
+    public static int getYearsToIndex(String val) {
+        int idx = 0;
+        for (String y : MyUtils.create_years) {
+            if (y.equalsIgnoreCase(val)) {
+                return idx;
+            }
+            idx++;
+        }
+        return 0;
     }
 }

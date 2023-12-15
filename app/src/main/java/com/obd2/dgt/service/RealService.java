@@ -8,16 +8,13 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.SystemClock;
 
 import androidx.core.app.NotificationCompat;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.btManage.BtService;
-import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
@@ -58,14 +55,15 @@ public class RealService extends Service {
                         MyUtils.btService = new BtService();
                     } else {
                         if (mainThread != null && MyUtils.isObdSocket) {
-                            if (MyUtils.isSocketError) {
-                                MyUtils.btService.closeSocket();
-                                MainActivity.getInstance().showDisconnectedStatus();
-                            }
-                            //MyUtils.btService.setOutStreamPID();
+                            err_cnt = 0;
                             getDrivingStatus();
                             getFuelConsumption();
-                            showError();
+                            showWarningDialog();
+                        } else {
+                            if (MyUtils.btSocket != null && err_cnt > 30) {
+                                stopParameters();
+                            }
+                            err_cnt++;
                         }
                     }
 
@@ -100,6 +98,9 @@ public class RealService extends Service {
         speed_brake = false;
         int speed = Integer.parseInt(MyUtils.ecu_vehicle_speed);
         int load = Integer.parseInt(MyUtils.ecu_engine_load);
+        int rpm = Integer.parseInt(MyUtils.ecu_engine_rpm);
+
+        //속도가 0이상, 엔진부하가 0보다 크면 시동상태
         if(speed >= 0 && load > 0) { //차량이 엔진을 켠 상태
             if (MyUtils.showGauge) {
                 DashboardActivity.getInstance().startDashboardGauge();
@@ -162,8 +163,10 @@ public class RealService extends Service {
         prev_speed = speed;
     }
     private void getFuelConsumption() {
-        fuel_consumption += Double.parseDouble(MyUtils.ecu_fuel_rate) / 3600;
-        MyUtils.ecu_fuel_consume = String.valueOf(Math.round(fuel_consumption * 10) / (float)10.0);
+        if (Integer.parseInt(MyUtils.ecu_vehicle_speed) > 0) {
+            fuel_consumption += Double.parseDouble(MyUtils.ecu_fuel_rate) / 3600;
+            MyUtils.ecu_fuel_consume = String.valueOf(Math.round(fuel_consumption * 10) / (float) 10.0);
+        }
     }
 
     @SuppressLint({"LaunchActivityFromNotification", "MissingPermission"})
@@ -214,7 +217,7 @@ public class RealService extends Service {
         stopSelf();
     }
 
-    private void showError() {
+    private void showWarningDialog() {
         if (MyUtils.is_error_dlg) {
             return;
         }
@@ -247,14 +250,12 @@ public class RealService extends Service {
 
     @SuppressLint("MissingPermission")
     public void StopService() {
+        running = false;
         if (mainThread != null) {
             mainThread.interrupt();
             mainThread = null;
         }
         Thread.currentThread().interrupt();
-        MyUtils.isObdSocket = false;
-        running = false;
-        stopEngineStatus();
     }
 
     private void stopEngineStatus() {
@@ -282,21 +283,25 @@ public class RealService extends Service {
                     {"brake_cnt", String.valueOf(MyUtils.brake_speed_cnt)}
             };
             WebHttpConnect.onSaveDrivingInfoRequest(params);
+            stopParameters();
+        }
+    }
 
-            //if gauge page
-            if (MyUtils.showGauge) {
-                DashboardActivity.getInstance().stopDashboardGauge();
-            }
-
-            time = 0;
-            idling_time = 0;
-            average_speed = 0;
-            driving_distance = 0;
-            down_score_fast = 0;
-            down_score_quick = 0;
-            down_score_brake = 0;
-            start_time = "";
-            end_time = "";
+    private void stopParameters() {
+        time = 0;
+        fuel_consumption = 0;
+        idling_time = 0;
+        average_speed = 0;
+        driving_distance = 0;
+        down_score_fast = 0;
+        down_score_quick = 0;
+        down_score_brake = 0;
+        start_time = "";
+        end_time = "";
+        MyUtils.btService.closeSocket();
+        MainActivity.getInstance().showDisconnectedStatus(0);
+        if (MyUtils.showGauge) {
+            DashboardActivity.getInstance().stopDashboardGauge();
         }
     }
 

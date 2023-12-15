@@ -3,6 +3,7 @@ package com.obd2.dgt.btManage;
 import android.bluetooth.BluetoothSocket;
 
 import com.github.pires.obd.commands.ObdCommand;
+import com.github.pires.obd.commands.control.IgnitionMonitorCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
 import com.github.pires.obd.commands.fuel.*;
 import com.github.pires.obd.commands.pressure.FuelPressureCommand;
@@ -51,7 +52,7 @@ public class OBD2ApiCommand {
             MyUtils.ecu_fuel_rate = String.valueOf(consumptionRate);
 
             double fuelLevel = fuelLevelCommand.getFuelLevel();
-            if(fuelLevel > 0) {
+            if (fuelLevel > 0) {
                 // 연료 소모량 계산 (차량의 연료 소모율은 시간당 소비되는 연료량이므로 주의)
                 double fuelConsumption = consumptionRate / fuelLevel;
                 MyUtils.ecu_fuel_consume = String.valueOf(Math.round(fuelConsumption * 10) / 10.0);
@@ -100,6 +101,32 @@ public class OBD2ApiCommand {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //차량의 사용 중 상태
+    public String getIgnitionMonitorStatus() {
+        String status = "off";
+        try {
+            EchoOffCommand echoOffCommand = new EchoOffCommand();
+            echoOffCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
+
+            LineFeedOffCommand lineFeedOffCommand = new LineFeedOffCommand();
+            lineFeedOffCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
+
+            TimeoutCommand timeoutCommand = new TimeoutCommand(125);
+            timeoutCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
+
+            SelectProtocolCommand selectProtocolCommand = new SelectProtocolCommand(ObdProtocols.AUTO);
+            selectProtocolCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
+
+            IgnitionMonitorCommand ignitionCommand = new IgnitionMonitorCommand();
+            ignitionCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
+            ignitionCommand.isIgnitionOn();
+            status = ignitionCommand.getFormattedResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return status;
     }
 
 }

@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.LinkDevice.DeviceAdapter;
 import com.obd2.dgt.ui.ListAdapter.LinkDevice.DeviceItem;
@@ -141,25 +142,27 @@ public class LinkInfoActivity extends AppBaseActivity {
             methodAdapter.notifyDataSetChanged();
         }
     };
+    int select_item = 0;
     private PairedAdapter.ItemClickListener pairedListListener = new PairedAdapter.ItemClickListener() {
         @SuppressLint({"NotifyDataSetChanged", "MissingPermission"})
         @Override
         public void onItemClick(View v, int position) {
             for (int i = 0; i < pairedItems.size(); i++) {
                 if (position == i) {
+                    select_item = position;
                     MyUtils.obd2_name = pairedItems.get(i).device.getName();
                     MyUtils.obd2_address = pairedItems.get(i).device.getAddress();
                     if (!MyUtils.isObdSocket) {
                         pairedItems.get(i).selected = true;
-                        MyUtils.isSocketError = false;
                         MyUtils.isPaired = true;
                         showDialog();
                     } else {
                         //OBD2 연결 끊기
-                        MyUtils.isSocketError = false;
                         pairedItems.get(i).selected = false;
                         MyUtils.btService.closeSocket();
-                        MainActivity.getInstance().showDisconnectedStatus();
+                        MainActivity.getInstance().showDisconnectedStatus(0);
+                        //DB 저장
+                        DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
                         finish();
                     }
                 } else {
@@ -323,6 +326,8 @@ public class LinkInfoActivity extends AppBaseActivity {
                 dialog_two_question_text.setText(R.string.bt_link_question);
                 ImageView dialog_two_no_btn = dialog.findViewById(R.id.dialog_two_no_btn);
                 dialog_two_no_btn.setOnClickListener(view -> {
+                    pairedItems.get(select_item).selected = false;
+                    pairedAdapter.setData(pairedItems);
                     dialog.dismiss();
                 });
                 ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);

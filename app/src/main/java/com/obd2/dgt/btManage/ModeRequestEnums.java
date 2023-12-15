@@ -14,7 +14,7 @@ public enum ModeRequestEnums {
     FUEL_TANK_LEVEL("2F"),
     TOTAL_DISTANCE_CODE("31"),
     BATTERY_VOLTAGE("42"),
-    FUEL_RATE_LITER("5E"),
+    FUEL_RATE_LPH("5E"),
     FUEL_RATE_GAL("9D"),
     //MILEAGE("A6"),
     //RUN_TIME("7F")

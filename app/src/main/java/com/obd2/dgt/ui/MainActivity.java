@@ -13,11 +13,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +54,7 @@ public class MainActivity extends AppBaseActivity {
     ArrayList<MainListItem> mainListItems = new ArrayList<>();
     MainListAdapter mainListAdapter;
     int link_index = 0;
-    boolean isRun = false;
+    public boolean isConnecting = false;
     Dialog dialog;
     private static MainActivity instance;
     public static MainActivity getInstance() {
@@ -66,23 +68,23 @@ public class MainActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         instance = this;
-        isRun = true;
 
         requestRankingInfo();
         initLayout();
 
         if (!MyUtils.run_main) {
             MyUtils.run_main = true;
+            SystemClock.sleep(1000);
             if (MyUtils.isPaired) {
                 if (MyUtils.isObdSocket) {
                     link_index = 22;
                     showConnectingLink(link_index);
-                }/*
+                }
                 else {
                     if (MyUtils.savedSocketStatus) {
                         obdConnectDevice();
                     }
-                }*/
+                }
             }
 
         }
@@ -335,16 +337,16 @@ public class MainActivity extends AppBaseActivity {
             dot_img_6.setImageResource(R.drawable.dot_on);
             con_img_3.setImageResource(R.drawable.ecu_on);
             connect_btn.setImageResource(R.drawable.connect_btn_press);
+            connect_device_text.setText(R.string.connected_obd2_text);
         }
     }
 
     //장치 연결 스레드
     boolean obd2link = false;
-    int last_cnt = 0;
     class ConnectDeviceAsyncTask extends AsyncTask<String, Integer, Boolean> {
         @SuppressLint({"MissingPermission", "WrongThread"})
         protected Boolean doInBackground(String... str) {
-            while (isRun) {
+            while (isConnecting) {
                 try {
                     if (!MyUtils.isObdSocket) {
                         connect_device_text.setText(R.string.connecting_obd2_text);
@@ -359,36 +361,31 @@ public class MainActivity extends AppBaseActivity {
                                 link_index = 10;
                                 if (!obd2link) {
                                     obd2link = true;
-                                    MyUtils.btService.connectDevice(pairedDevice);
+                                    MyUtils.btService.connectOBD2Device(pairedDevice);
                                     DeviceInfoTable.updateDeviceInfoTable(pairedDevice.getName(), pairedDevice.getAddress(), "1", "1");
                                 }
                             }
-                        }
-
-                        if (MyUtils.isSocketError) {
-                            if (MyUtils.show_dash_dialog) {
-                                DashboardActivity.getInstance().showSocketError();
-                            }
-                            link_index = 0;
-                            isRun = false;
-                            isConClick = true;
-                            connect_device_text.setText(R.string.connecting_error_text);
                         }
                         showConnectingLink(link_index);
                         Thread.sleep(400);
                     } else {
                         link_index = 22;
-                        connect_device_text.setText(R.string.connected_obd2_text);
                         showConnectingLink(link_index);
-                        isRun = false;
+                        isConnecting = false;
                         isConClick = true;
-                        last_cnt = 0;
                     }
-                    last_cnt++;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
+            /*if (MyUtils.show_dash_dialog) {
+                DashboardActivity.getInstance().showSocketError();
+            }*/
+            link_index = 0;
+            isConnecting = false;
+            isConClick = true;
+
             ConnectDeviceAsyncTask.this.cancel(true);
             return false;
         }
@@ -400,22 +397,16 @@ public class MainActivity extends AppBaseActivity {
         con_img_1.setImageResource(R.drawable.icon_on);
         pairedDevice = CommonFunc.getPairedDevice();
         if (pairedDevice != null) {
-            isRun = true;
+            isConnecting = true;
             obd2link = false;
             link_index = 0;
-            //MyUtils.isObdSocket = false;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    new ConnectDeviceAsyncTask().execute("BtConnectInfo");
-                }
-            });
+            runOnUiThread(() -> new ConnectDeviceAsyncTask().execute("BtConnectInfo"));
         } else {
-            showDisconnectedStatus();
+            showDisconnectedStatus(0);
         }
     }
 
-    public void showDisconnectedStatus() {
+    public void showDisconnectedStatus(int idx) {
         dot_img_1.setImageResource(R.drawable.dot_off);
         dot_img_2.setImageResource(R.drawable.dot_off);
         dot_img_3.setImageResource(R.drawable.dot_off);
@@ -425,9 +416,10 @@ public class MainActivity extends AppBaseActivity {
         dot_img_6.setImageResource(R.drawable.dot_off);
         con_img_3.setImageResource(R.drawable.ecu_off);
         connect_btn.setImageResource(R.drawable.connect_btn_off);
-        connect_device_text.setText("");
-        //DB 저장
-        DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
+        if (idx == 0)
+            connect_device_text.setText("");
+        else
+            connect_device_text.setText(R.string.connecting_error_text);
     }
 
     public void showMessageIcon() {

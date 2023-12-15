@@ -22,8 +22,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class MyUtils {
-    public static String server_url = "http://192.168.1.6";
-    //public static String server_url = "https://dgt.vifense.com";
+    //public static String server_url = "http://192.168.1.6";
+    public static String server_url = "https://dgt.vifense.com";
     public static String signup_url = "https://dgt.vifense.com/mok/auth_signup.html";
     public static String find_url = "https://dgt.vifense.com/mok/auth_findpwd.html";
     public static String call_company = "/mobile.companyInfo";
@@ -105,7 +105,7 @@ public class MyUtils {
             {"FUEL_TANK_LEVEL", "2F"},      //연료 탱크 레벨
             {"TOTAL_DISTANCE_CODE", "31"},        //주행 거리
             {"BATTERY_VOLTAGE", "42"},      //배터리 전압
-            {"FUEL_RATE_LITER", "5E"},      //순간 연료 소모량 l/h
+            {"FUEL_RATE_LPH", "5E"},      //순간 연료 소모량 l/h
             {"FUEL_RATE_GAL", "9D"},       //순간 연료 소모량 g/s
     };
     public static String ecu_engine_load = "0";
@@ -115,7 +115,7 @@ public class MyUtils {
     public static String ecu_timing_advance = "0";
     public static String ecu_fuel_tank_level = "0";
     public static String ecu_fuel_rate = "0";
-    public static String ecu_fuel_rate_gram = "0";
+    public static String ecu_fuel_gal = "0";
     public static String ecu_fuel_consume = "0";
     public static String ecu_battery_voltage = "0";
     public static int ecu_total_distance = 0;
@@ -126,6 +126,7 @@ public class MyUtils {
     public static String ecu_throttle_position = "0";
     public static String ecu_trouble_code = "";
     public static String ecu_consume_warning = "";
+    public static String ecu_ignition_monitor = "off";
     public static boolean is_trouble = false;
     public static boolean is_consume = false;
     public static boolean is_error_dlg = false;
@@ -155,7 +156,6 @@ public class MyUtils {
     public static boolean savedSocketStatus = false;
     public static boolean isObdSocket = false;
     public static String con_method = "";
-    public static boolean isSocketError = false;
 
     public static int sel_car_id = 0;
     public static boolean showGauge = false;

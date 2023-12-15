@@ -6,7 +6,7 @@ import com.obd2.dgt.btManage.PIDsFormulas.TOTAL_DISTANCE_CODE;
 import com.obd2.dgt.btManage.PIDsFormulas.ENGINE_LOAD;
 import com.obd2.dgt.btManage.PIDsFormulas.ENGINE_RPM;
 import com.obd2.dgt.btManage.PIDsFormulas.FUEL_RATE_GAL;
-import com.obd2.dgt.btManage.PIDsFormulas.FUEL_RATE_LITER;
+import com.obd2.dgt.btManage.PIDsFormulas.FUEL_RATE_LPH;
 import com.obd2.dgt.btManage.PIDsFormulas.FUEL_TANK_LEVEL;
 import com.obd2.dgt.btManage.PIDsFormulas.MAF_AIR_FLOW;
 import com.obd2.dgt.btManage.PIDsFormulas.THROTTLE_POSITION;
@@ -53,11 +53,11 @@ public class ResponseCalculator {
             case  "FUEL_TANK_LEVEL":
                 MyUtils.ecu_fuel_tank_level = FUEL_TANK_LEVEL.read(firstHex);
                 break;
-            case  "FUEL_RATE_LITER":
-                MyUtils.ecu_fuel_rate = FUEL_RATE_LITER.read(firstHex, secondHex);
+            case  "FUEL_RATE_LPH":
+                MyUtils.ecu_fuel_rate = FUEL_RATE_LPH.read(firstHex, secondHex);
                 break;
-            case  "FUEL_RATE_GRAM":
-                MyUtils.ecu_fuel_rate_gram = FUEL_RATE_GAL.read(firstHex);
+            case  "FUEL_RATE_GAL":
+                MyUtils.ecu_fuel_gal = FUEL_RATE_GAL.read(firstHex);
                 break;
             case  "TOTAL_DISTANCE_CODE":
                 MyUtils.ecu_total_distance = TOTAL_DISTANCE_CODE.read(firstHex, secondHex);

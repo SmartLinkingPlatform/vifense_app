@@ -184,7 +184,7 @@ public class AppBaseActivity extends AppCompatActivity {
                     break;
                 case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
                     MyUtils.btService.closeSocket();
-                    MainActivity.getInstance().showDisconnectedStatus();
+                    MainActivity.getInstance().showDisconnectedStatus(0);
                     break;
 
                 case BluetoothAdapter.ACTION_DISCOVERY_STARTED: //블루투스 기기 검색 시작

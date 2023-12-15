@@ -109,9 +109,19 @@
                                         <FrameLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
+                                            android:layout_gravity="center"
                                             android:layout_weight="1">
 
+                                            <!--<com.obd2.dgt.ui.ProgressView
+                                                android:id="@+id/bt_link_bar"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="match_parent"
+                                                android:layout_gravity="center">
+
+                                            </com.obd2.dgt.ui.ProgressView>-->
+
                                             <LinearLayout
+                                                android:id="@+id/bt_link_bar_disable"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:orientation="horizontal">
@@ -175,7 +185,16 @@
                                             android:layout_height="match_parent"
                                             android:layout_weight="1">
 
+                                            <!--<com.obd2.dgt.ui.ProgressView
+                                                android:id="@+id/ecu_link_bar"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="match_parent"
+                                                android:layout_gravity="center">
+
+                                            </com.obd2.dgt.ui.ProgressView>-->
+
                                             <LinearLayout
+                                                android:id="@+id/ecu_link_bar_disable"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:orientation="horizontal">
