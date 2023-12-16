@@ -661,13 +661,11 @@ public class DashboardActivity extends AppBaseActivity {
             while (isShow) {
                 try {
                     if (!MyUtils.isObdSocket || !MyUtils.isPaired) {
-                        //showSocketError();
                         stopDashboardGauge();
                         isShow = false;
                     }else {
                         runOnUiThread(() -> {
                             if (MyUtils.loading_obd_data) {
-                                //showLoadingOBDData(false);
                                 //차량 속도
                                 gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
                                 gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);
@@ -690,10 +688,6 @@ public class DashboardActivity extends AppBaseActivity {
                                     // Fuel Density (휘발유의 경우, 가정값)
                                     float fuelDensity = 0.74f;  // kg/L
                                     consumptionRate = (mafLPH - Double.parseDouble(MyUtils.ecu_throttle_position)) * fuelDensity / airFuelRatio;
-
-                                    //float D = (float) 0.92;
-                                    //consumptionRate = (mafLPH / (14.7 * 820 * D)) * 3600;
-
                                     MyUtils.ecu_fuel_rate = String.valueOf(Math.round(consumptionRate * 10) / (float) 10);
                                 }
                                 gauge_real_fuel_text.setText(MyUtils.ecu_fuel_rate);
@@ -705,8 +699,6 @@ public class DashboardActivity extends AppBaseActivity {
                                 gauge_battery_text.setText(MyUtils.ecu_battery_voltage);
                                 //주행 시간
                                 gauge_dtime_text.setText(MyUtils.ecu_driving_time);
-                            //} else {
-                                //showLoadingOBDData(true);
                             }
                         });
                         showErrorDialog();
@@ -720,64 +712,6 @@ public class DashboardActivity extends AppBaseActivity {
             return false;
         }
     }
-
-    /*TextView dialog_loading_text;
-    private void showLoadingOBDData(boolean b) {
-        if (loadingDialog == null) {
-            loadingDialog = new Dialog(DashboardActivity.this);
-            loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            loadingDialog.setCancelable(true);
-            loadingDialog.setContentView(R.layout.dlg_loading);
-            loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialog_loading_text = loadingDialog.findViewById(R.id.dialog_loading_text);
-        }
-        if (b) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    MyUtils.show_dash_dialog = true;
-                    if (!MyUtils.isObdSocket) {
-                        dialog_loading_text.setText(R.string.non_connecting_text);
-                    } else {
-                        dialog_loading_text.setText(R.string.loading_obd_data);
-                    }
-
-                    loadingDialog.show();
-                }
-            });
-        } else {
-            if (MyUtils.show_dash_dialog) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        MyUtils.show_dash_dialog = false;
-                        loadingDialog.dismiss();
-                    }
-                });
-            }
-        }
-    }*/
-/*
-    public void showSocketError() {
-        //showLoadingOBDData(false);
-        if (loadingDialog == null) {
-            loadingDialog = new Dialog(DashboardActivity.this);
-            loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            loadingDialog.setCancelable(true);
-            loadingDialog.setContentView(R.layout.dlg_loading);
-            loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            dialog_loading_text = loadingDialog.findViewById(R.id.dialog_loading_text);
-        }
-        runOnUiThread(() -> {
-            dialog_loading_text.setText(R.string.connecting_error_text);
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                MyUtils.show_dash_dialog = false;
-                loadingDialog.dismiss();
-            }, 2000);
-            loadingDialog.show();
-        });
-    }*/
 
     public void showErrorDialog() {
         if (MyUtils.err_idx > 0) {
@@ -808,7 +742,6 @@ public class DashboardActivity extends AppBaseActivity {
                         dlg_error_text.setText(R.string.show_error_consume);
                         MyUtils.ecu_consume_warning = "";
                     }
-                    errDialog.show();
 
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
@@ -816,6 +749,8 @@ public class DashboardActivity extends AppBaseActivity {
                         MyUtils.is_error_dlg = false;
                         MyUtils.err_idx = 0;
                     }, 2000);
+
+                    errDialog.show();
                 });
             }
         }

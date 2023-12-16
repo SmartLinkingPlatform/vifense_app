@@ -211,13 +211,15 @@ public class RealService extends Service {
         stopSelf();
     }
 
+    boolean is_idling = false;
     private void showWarningDialog() {
         if (MyUtils.is_error_dlg) {
             return;
         }
         MyUtils.err_idx = 0;
-        if (idling_time > 180) {
+        if (idling_time > 180 && !is_idling) {
             MyUtils.err_idx = 1;
+            is_idling = true;
         }
         if (speed_fast) {
             MyUtils.err_idx = 2;
@@ -235,6 +237,10 @@ public class RealService extends Service {
         if (!MyUtils.ecu_consume_warning.isEmpty()) {
             MyUtils.is_consume = true;
             MyUtils.err_idx = 6;
+        }
+
+        if (MyUtils.err_idx > 1) {
+            is_idling = false;
         }
 
         if (MyUtils.err_idx > 0) {
