@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -100,6 +101,7 @@ public class MessageActivity extends AppBaseActivity {
             dialog_two_title_text.setText(R.string.delete_message_title);
             TextView dialog_two_button_text = dialog.findViewById(R.id.dialog_two_content_text);
             dialog_two_button_text.setText(R.string.delete_all_message);
+            dialog_two_button_text.setGravity(Gravity.CENTER);
             ImageView dialog_two_no_btn = dialog.findViewById(R.id.dialog_two_no_btn);
             dialog_two_no_btn.setOnClickListener(view -> {
                 dialog.dismiss();

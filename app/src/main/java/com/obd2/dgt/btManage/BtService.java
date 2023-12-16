@@ -135,16 +135,19 @@ public class BtService {
 
     public void sendStreamData() {
         try {
-            if (outputStream == null)
-                return;
             for (String[] info : MyUtils.enum_info) {
                 String msg = "01" + info[1];
                 try {
-                    outputStream.write(msg.getBytes());
+                    if (outputStream != null)
+                        outputStream.write(msg.getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Thread.sleep(100);
+                if (running) {
+                    SystemClock.sleep(100);
+                } else {
+                    break;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

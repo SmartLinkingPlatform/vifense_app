@@ -30,9 +30,6 @@ public class ResponseCalculator {
         String calculationMethod = ModeRequestEnums.getEnum(PID);
 
         switch (calculationMethod) {
-            case "MONITOR_STATUS":
-                MyUtils.ecu_monitor_status = MONITOR_STATUS.read(firstHex, secondHex, thirdHex, fourthHex);
-                break;
             case "ENGINE_LOAD":
                 MyUtils.ecu_engine_load = ENGINE_LOAD.read(firstHex);
                 break;
@@ -45,9 +42,6 @@ public class ResponseCalculator {
             case "VEHICLE_SPEED":
                 MyUtils.ecu_vehicle_speed = VEHICLE_SPEED.read(firstHex);
                 break;
-            case "TIMING_ADVANCE":
-                //MyUtils.ecu_timing_advance = TIMING_ADVANCE.read(firstHex);
-                break;
             case  "MAF_AIR_FLOW":
                 MyUtils.ecu_maf = MAF_AIR_FLOW.read(firstHex, secondHex);
                 break;
@@ -59,9 +53,6 @@ public class ResponseCalculator {
                 break;
             case  "FUEL_RATE_LPH":
                 MyUtils.ecu_fuel_rate = FUEL_RATE_LPH.read(firstHex, secondHex);
-                break;
-            case  "FUEL_RATE_GAL":
-                MyUtils.ecu_fuel_gal = FUEL_RATE_GAL.read(firstHex);
                 break;
             case  "TOTAL_DISTANCE_CODE":
                 MyUtils.ecu_total_distance = TOTAL_DISTANCE_CODE.read(firstHex, secondHex);

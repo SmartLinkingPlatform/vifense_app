@@ -95,19 +95,19 @@ public class MyUtils {
     };
 
     public static String[][] enum_info = {
-            {"MONITOR_STATUS", "01"},       //모니터 상태
+            //{"MONITOR_STATUS", "01"},       //모니터 상태
             {"ENGINE_LOAD", "04"},          //엔진 부하
             {"COOLANT_TEMPERATURE", "05"},  //냉각수 온도
             {"ENGINE_RPM", "0C"},           //엔진 RPM
             {"VEHICLE_SPEED", "0D"},        //차량 속도
-            //{"TIMING_ADVANCE", "0E"},       //주행 시간
+            //{"TIMING_ADVANCE", "0E"},     //주행 시간
             {"MAF_AIR_FLOW", "10"},         //흡입 공기량
             {"THROTTLE_POSITION", "11"},    //스로틀 위치
             {"FUEL_TANK_LEVEL", "2F"},      //연료 탱크 레벨
-            {"TOTAL_DISTANCE_CODE", "31"},        //주행 거리
+            {"TOTAL_DISTANCE_CODE", "31"},  //주행 거리
             {"BATTERY_VOLTAGE", "42"},      //배터리 전압
-            {"FUEL_RATE_LPH", "5E"},      //순간 연료 소모량 l/h
-            {"FUEL_RATE_GAL", "9D"},       //순간 연료 소모량 g/s
+            {"FUEL_RATE_LPH", "5E"}         //순간 연료 소모량 l/h
+            //{"FUEL_RATE_GAL", "9D"},       //순간 연료 소모량 g/s
     };
     public static String ecu_monitor_status = "off";
     public static String ecu_engine_load = "0";

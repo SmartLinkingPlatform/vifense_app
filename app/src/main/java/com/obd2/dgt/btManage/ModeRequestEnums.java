@@ -4,21 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ModeRequestEnums {
-    MONITOR_STATUS("01"),
     ENGINE_LOAD("04"),
     COOLANT_TEMPERATURE("05"),
     ENGINE_RPM("0C"),
     VEHICLE_SPEED("0D"),
-    //TIMING_ADVANCE("0E"),
     MAF_AIR_FLOW("10"),
     THROTTLE_POSITION("11"),
     FUEL_TANK_LEVEL("2F"),
     TOTAL_DISTANCE_CODE("31"),
     BATTERY_VOLTAGE("42"),
-    FUEL_RATE_LPH("5E"),
-    FUEL_RATE_GAL("9D"),
-    //MILEAGE("A6"),
-    //RUN_TIME("7F")
+    FUEL_RATE_LPH("5E")
     ;
 
     private static final Map methodMap = new HashMap();
