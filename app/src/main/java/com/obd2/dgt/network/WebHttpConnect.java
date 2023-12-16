@@ -1,5 +1,6 @@
 package com.obd2.dgt.network;
 
+import android.app.Application;
 import android.graphics.Bitmap;
 
 import com.obd2.dgt.dbManage.TableInfo.CompanyTable;

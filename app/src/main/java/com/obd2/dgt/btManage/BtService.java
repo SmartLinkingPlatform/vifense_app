@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.ui.LoginActivity;
@@ -54,6 +55,7 @@ public class BtService {
             closeSocket();
             MainActivity.getInstance().showDisconnectedStatus(1);
             e.printStackTrace();
+            Toast.makeText(MyUtils.mContext, " 오류 발생 :" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         if (running) {
             try {
@@ -138,8 +140,14 @@ public class BtService {
             for (String[] info : MyUtils.enum_info) {
                 String msg = "01" + info[1];
                 try {
-                    if (outputStream != null)
+                    if (outputStream != null) {
+                        if(msg.equals("0104"))
+                            MyUtils.test_ecu_engine_load = "0";
+                        if(msg.equals("010C"))
+                            MyUtils.test_ecu_engine_rpm = "0";
+
                         outputStream.write(msg.getBytes());
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

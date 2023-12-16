@@ -32,12 +32,14 @@ public class ResponseCalculator {
         switch (calculationMethod) {
             case "ENGINE_LOAD":
                 MyUtils.ecu_engine_load = ENGINE_LOAD.read(firstHex);
+                MyUtils.test_ecu_engine_load = MyUtils.ecu_engine_load;
                 break;
             case "COOLANT_TEMPERATURE":
                 MyUtils.ecu_coolant_temp = COOLANT_TEMPERATURE.read(firstHex);
                 break;
             case "ENGINE_RPM":
                 MyUtils.ecu_engine_rpm = ENGINE_RPM.read(firstHex, secondHex);
+                MyUtils.test_ecu_engine_rpm = MyUtils.ecu_engine_rpm;
                 break;
             case "VEHICLE_SPEED":
                 MyUtils.ecu_vehicle_speed = VEHICLE_SPEED.read(firstHex);

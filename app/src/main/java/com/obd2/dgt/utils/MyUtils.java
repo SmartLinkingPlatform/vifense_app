@@ -111,8 +111,10 @@ public class MyUtils {
     };
     public static String ecu_monitor_status = "off";
     public static String ecu_engine_load = "0";
+    public static String test_ecu_engine_load = "0";
     public static String ecu_coolant_temp = "0";
     public static String ecu_engine_rpm = "0";
+    public static String test_ecu_engine_rpm = "0";
     public static String ecu_vehicle_speed = "0";
     public static String ecu_timing_advance = "0";
     public static String ecu_fuel_tank_level = "0";
