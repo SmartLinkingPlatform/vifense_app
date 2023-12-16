@@ -95,21 +95,16 @@ public class BtService {
                             byte[] rawBytes = new byte[byteAvailable];
                             inputStream.read(rawBytes);
                             final String rawResponse = new String(rawBytes, "UTF-8");
-                            String res = rawResponse.toLowerCase();
-                            if (res.contains("elm") || res.contains("ok")) {
-                                getIgnitionMonitor();
-                                continue;
-                            }
                             ArrayList<String> responses = getResponses(rawResponse);
                             for (String response : responses) {
                                 ResponseCalculator.ResponseCalculator(response);
                             }
                         }
-
-                        if (startedEngine) {
+                        sendStreamData();
+                        if (Integer.parseInt(MyUtils.ecu_engine_load) > 0 &&
+                            Integer.parseInt(MyUtils.ecu_engine_rpm) > 0) {
                             MyUtils.isObdSocket = true;
                             MyUtils.loading_obd_data = true;
-                            sendStreamData();
                         }
                     } catch (Exception e) {
                         closeSocket();
@@ -145,8 +140,7 @@ public class BtService {
             for (String[] info : MyUtils.enum_info) {
                 String msg = "01" + info[1];
                 try {
-                    if (MyUtils.isObdSocket)
-                        outputStream.write(msg.getBytes());
+                    outputStream.write(msg.getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -203,7 +197,7 @@ public class BtService {
         return resVal;
     }
 
-    int repeat = 0;
+    /*int repeat = 0;
     private void getIgnitionMonitor() {
         OBD2ApiCommand command = new OBD2ApiCommand(socket);
         String ignition_monitor = command.getIgnitionMonitorStatus();
@@ -217,9 +211,10 @@ public class BtService {
             closeSocket();
             MainActivity.getInstance().showDisconnectedStatus(1);
         }
-    }
+    }*/
     public void closeSocket(){
         try {
+            running = false;
             if (socket != null && socket.isConnected()) {
                 socket.close();
                 if (workerThread != null) {
@@ -228,7 +223,6 @@ public class BtService {
                 }
             }
             socket = null;
-            running = false;
             outputStream = null;
             inputStream = null;
             startedEngine = false;

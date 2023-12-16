@@ -107,22 +107,24 @@ public class OBD2ApiCommand {
     public String getIgnitionMonitorStatus() {
         String status = "off";
         try {
+            TimeoutCommand timeoutCommand = new TimeoutCommand(10000);
+            timeoutCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
+
             EchoOffCommand echoOffCommand = new EchoOffCommand();
             echoOffCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
 
             LineFeedOffCommand lineFeedOffCommand = new LineFeedOffCommand();
             lineFeedOffCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
 
-            TimeoutCommand timeoutCommand = new TimeoutCommand(125);
-            timeoutCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
-
             SelectProtocolCommand selectProtocolCommand = new SelectProtocolCommand(ObdProtocols.AUTO);
             selectProtocolCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
 
             IgnitionMonitorCommand ignitionCommand = new IgnitionMonitorCommand();
-            ignitionCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
-            ignitionCommand.isIgnitionOn();
-            status = ignitionCommand.getFormattedResult();
+            if (obdSocket.isConnected()) {
+                ignitionCommand.run(obdSocket.getInputStream(), obdSocket.getOutputStream());
+                ignitionCommand.isIgnitionOn();
+                status = ignitionCommand.getFormattedResult();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -6,8 +6,8 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="230dp"
+        android:layout_width="320dp"
+        android:layout_height="240dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/dlg_bg"
         tools:ignore="MissingConstraints">
@@ -29,7 +29,7 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.1">
+                    android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/dialog_two_title_text"
@@ -45,7 +45,7 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.9">
+                    android:layout_weight="0.75">
 
                     <TextView
                         android:id="@+id/dialog_two_content_text"
@@ -53,7 +53,6 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/pretendard_regular"
-                        android:gravity="center"
                         android:lines="5"
                         android:maxLines="5"
                         android:paddingLeft="5dp"

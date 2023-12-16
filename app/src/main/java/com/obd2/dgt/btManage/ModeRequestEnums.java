@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ModeRequestEnums {
+    MONITOR_STATUS("01"),
     ENGINE_LOAD("04"),
     COOLANT_TEMPERATURE("05"),
     ENGINE_RPM("0C"),

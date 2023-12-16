@@ -63,17 +63,20 @@ public class LoginActivity extends AppBaseActivity {
         initLayout();
 
         if (!MyUtils.my_phone.isEmpty() && !MyUtils.my_pwd.isEmpty()) {
-            String encode_pwd = Crypt.decrypt(MyUtils.my_pwd);
-            login_id_text.setText(MyUtils.my_phone);
-            login_pwd_text.setText(encode_pwd);
+            if (!MyUtils.new_login) {
+                String encode_pwd = Crypt.decrypt(MyUtils.my_pwd);
+                login_id_text.setText(MyUtils.my_phone);
+                login_pwd_text.setText(encode_pwd);
+            }
         }
+        MyUtils.new_login = false;
     }
 
     private void initLayout() {
         login_id_text = findViewById(R.id.login_id_text);
-        login_id_text.setText(MyUtils.my_phone);
+        //login_id_text.setText(MyUtils.my_phone);
         login_pwd_text = findViewById(R.id.login_pwd_text);
-        login_pwd_text.setText(MyUtils.my_pwd);
+        //login_pwd_text.setText(MyUtils.my_pwd);
 
         find_pwd_btn = findViewById(R.id.find_pwd_btn);
         find_pwd_btn.setOnClickListener(view -> gotoFindPwdActivity());
@@ -109,6 +112,14 @@ public class LoginActivity extends AppBaseActivity {
 
         progress_layout.setVisibility(View.VISIBLE);
         String encode_pwd = Crypt.encrypt(user_pwd);
+        if (!MyUtils.my_phone.isEmpty() && !MyUtils.my_pwd.isEmpty()) {
+            if (!user_phone.equalsIgnoreCase(MyUtils.my_phone) ||
+                    !encode_pwd.equalsIgnoreCase(MyUtils.my_pwd)) {
+                Toast.makeText(getApplicationContext(), R.string.error_other_login, Toast.LENGTH_SHORT).show();
+                progress_layout.setVisibility(View.GONE);
+                return;
+            }
+        }
 
         String[][] msgparams = new String[][]{
                 {"msg_id", String.valueOf(MyUtils.lastMsgID)},

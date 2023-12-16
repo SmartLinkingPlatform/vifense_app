@@ -80,11 +80,11 @@ public class MainActivity extends AppBaseActivity {
                     link_index = 22;
                     showConnectingLink(link_index);
                 }
-                else {
+                /*else {
                     if (MyUtils.savedSocketStatus) {
                         obdConnectDevice();
                     }
-                }
+                }*/
             }
 
         }
@@ -343,6 +343,7 @@ public class MainActivity extends AppBaseActivity {
 
     //장치 연결 스레드
     boolean obd2link = false;
+    int delay = 0;
     class ConnectDeviceAsyncTask extends AsyncTask<String, Integer, Boolean> {
         @SuppressLint({"MissingPermission", "WrongThread"})
         protected Boolean doInBackground(String... str) {
@@ -364,11 +365,17 @@ public class MainActivity extends AppBaseActivity {
                                     MyUtils.btService.connectOBD2Device(pairedDevice);
                                     DeviceInfoTable.updateDeviceInfoTable(pairedDevice.getName(), pairedDevice.getAddress(), "1", "1");
                                 }
+                                if (delay > 10) {
+                                    MyUtils.btService.closeSocket();
+                                    delay = 0;
+                                }
+                                delay++;
                             }
                         }
                         showConnectingLink(link_index);
                         Thread.sleep(400);
                     } else {
+                        delay = 0;
                         link_index = 22;
                         showConnectingLink(link_index);
                         isConnecting = false;

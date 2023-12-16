@@ -59,15 +59,9 @@ public class RealService extends Service {
                             getDrivingStatus();
                             getFuelConsumption();
                             showWarningDialog();
-                        } else {
-                            if (MyUtils.btSocket != null && err_cnt > 30) {
-                                stopParameters();
-                            }
-                            err_cnt++;
                         }
                     }
-
-                    SystemClock.sleep(1000); // 1000 milisecond (1 second)
+                    SystemClock.sleep(1000);
                 } else {
                     boolean interrupted = Thread.interrupted();
                     if (interrupted) {
@@ -283,8 +277,8 @@ public class RealService extends Service {
                     {"brake_cnt", String.valueOf(MyUtils.brake_speed_cnt)}
             };
             WebHttpConnect.onSaveDrivingInfoRequest(params);
-            stopParameters();
         }
+        stopParameters();
     }
 
     private void stopParameters() {

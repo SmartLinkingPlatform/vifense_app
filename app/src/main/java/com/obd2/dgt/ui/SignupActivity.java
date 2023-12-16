@@ -262,9 +262,13 @@ public class SignupActivity extends AppBaseActivity {
                 {"cid", String.valueOf(MyUtils.admin_id)},
                 {"condition", "1"}
         };
-        MyInfoTable.insertMyInfoTable(fields);
-
-        showSignSuccessDialog();
+        if (MyInfoTable.insertMyInfoTable(fields) != -1) {
+            MyInfoTable.getMyInfoTable();
+            showSignSuccessDialog();
+            MyUtils.new_login = true;
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.error_save_db, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onFailedSignup() {

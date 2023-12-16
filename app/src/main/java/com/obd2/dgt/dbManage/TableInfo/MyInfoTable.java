@@ -57,14 +57,15 @@ public class MyInfoTable {
         return 0;
     }
 
-    public static void insertMyInfoTable(String[][] fields) {
+    public static long insertMyInfoTable(String[][] fields) {
         try {
             if (getMyInfoTableCount() == 0) {
-                MyUtils.db_connect.sqlInsert(table_name, fields);
+                return MyUtils.db_connect.sqlInsert(table_name, fields);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public static void updateMyInfoTable(String[][] fields) {

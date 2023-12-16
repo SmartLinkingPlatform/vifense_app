@@ -50,12 +50,13 @@ public class CompanyTable {
         return cname;
     }
 
-    public static void insertCompanyInfoTable(String[][] fields) {
+    public static long insertCompanyInfoTable(String[][] fields) {
         try {
-            MyUtils.db_connect.sqlInsert(table_name, fields);
+            return MyUtils.db_connect.sqlInsert(table_name, fields);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public static void deleteAllCompanyInfoTable() {

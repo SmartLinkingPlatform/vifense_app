@@ -47,12 +47,13 @@ public class MessageInfoTable {
         }
     }
 
-    public static void insertMessageTable(String[][] fields) {
+    public static long insertMessageTable(String[][] fields) {
         try {
-            MyUtils.db_connect.sqlInsert(table_name, fields);
+            return MyUtils.db_connect.sqlInsert(table_name, fields);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public static void updateMessageTable(String field, String active, String idx) {

@@ -95,6 +95,7 @@ public class MyUtils {
     };
 
     public static String[][] enum_info = {
+            {"MONITOR_STATUS", "01"},       //모니터 상태
             {"ENGINE_LOAD", "04"},          //엔진 부하
             {"COOLANT_TEMPERATURE", "05"},  //냉각수 온도
             {"ENGINE_RPM", "0C"},           //엔진 RPM
@@ -108,6 +109,7 @@ public class MyUtils {
             {"FUEL_RATE_LPH", "5E"},      //순간 연료 소모량 l/h
             {"FUEL_RATE_GAL", "9D"},       //순간 연료 소모량 g/s
     };
+    public static String ecu_monitor_status = "off";
     public static String ecu_engine_load = "0";
     public static String ecu_coolant_temp = "0";
     public static String ecu_engine_rpm = "0";
@@ -131,6 +133,7 @@ public class MyUtils {
     public static boolean is_consume = false;
     public static boolean is_error_dlg = false;
     public static int err_idx = 0;
+    public static boolean new_login = false;
 
     public static String[] link_methods = {
             "Bluetooth",

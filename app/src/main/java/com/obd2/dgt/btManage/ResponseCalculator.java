@@ -2,6 +2,7 @@ package com.obd2.dgt.btManage;
 
 import com.obd2.dgt.btManage.PIDsFormulas.BATTERY_VOLTAGE;
 import com.obd2.dgt.btManage.PIDsFormulas.COOLANT_TEMPERATURE;
+import com.obd2.dgt.btManage.PIDsFormulas.MONITOR_STATUS;
 import com.obd2.dgt.btManage.PIDsFormulas.TOTAL_DISTANCE_CODE;
 import com.obd2.dgt.btManage.PIDsFormulas.ENGINE_LOAD;
 import com.obd2.dgt.btManage.PIDsFormulas.ENGINE_RPM;
@@ -29,6 +30,9 @@ public class ResponseCalculator {
         String calculationMethod = ModeRequestEnums.getEnum(PID);
 
         switch (calculationMethod) {
+            case "MONITOR_STATUS":
+                MyUtils.ecu_monitor_status = MONITOR_STATUS.read(firstHex, secondHex, thirdHex, fourthHex);
+                break;
             case "ENGINE_LOAD":
                 MyUtils.ecu_engine_load = ENGINE_LOAD.read(firstHex);
                 break;

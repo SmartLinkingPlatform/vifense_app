@@ -41,30 +41,15 @@ public class PermissionSupport {
             RECEIVE_BOOT_COMPLETED,
 
     };
+
     private final String[] permissions2 = {
             BLUETOOTH,
             BLUETOOTH_ADMIN,
-            BLUETOOTH_SCAN,
-            BLUETOOTH_CONNECT,
             ACCESS_COARSE_LOCATION,
             ACCESS_FINE_LOCATION,
             POST_NOTIFICATIONS,
             FOREGROUND_SERVICE,
-            RECEIVE_BOOT_COMPLETED,
-            WRITE_EXTERNAL_STORAGE,
-            READ_EXTERNAL_STORAGE
-    };
-
-    private final String[] permissions3 = {
-            BLUETOOTH,
-            BLUETOOTH_ADMIN,
-            ACCESS_COARSE_LOCATION,
-            ACCESS_FINE_LOCATION,
-            POST_NOTIFICATIONS,
-            FOREGROUND_SERVICE,
-            RECEIVE_BOOT_COMPLETED,
-            WRITE_EXTERNAL_STORAGE,
-            READ_EXTERNAL_STORAGE
+            RECEIVE_BOOT_COMPLETED
 
     };
     private List permissionList;
@@ -80,14 +65,7 @@ public class PermissionSupport {
         int result;
         permissionList = new ArrayList<>();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S_V2) {
-            for (String pm : permissions) {
-                result = ContextCompat.checkSelfPermission(context, pm);
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    permissionList.add(pm);
-                }
-            }
-        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             for (String pm : permissions) {
                 result = ContextCompat.checkSelfPermission(context, pm);
                 if (result != PackageManager.PERMISSION_GRANTED) {
@@ -95,7 +73,7 @@ public class PermissionSupport {
                 }
             }
         } else {
-            for (String pm : permissions3) {
+            for (String pm : permissions2) {
                 result = ContextCompat.checkSelfPermission(context, pm);
                 if (result != PackageManager.PERMISSION_GRANTED) {
                     permissionList.add(pm);

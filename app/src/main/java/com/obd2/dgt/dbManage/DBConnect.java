@@ -156,17 +156,20 @@ public class DBConnect extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void sqlInsert(String table, String[][] rows) {
+    public long sqlInsert(String table, String[][] rows) {
+        long ret = -1;
         if (rows.length > 0) {
             ContentValues row = new ContentValues();
             for (int i = 0; i < rows.length; i++) {
                 row.put(rows[i][0], rows[i][1]);
             }
-            m_db.insert(table, null, row);
+            ret = m_db.insert(table, null, row);
         }
+        return ret;
     }
 
-    public void sqlInsert(String table, List<String[]> rows) {
+    public long sqlInsert(String table, List<String[]> rows) {
+        long ret = -1;
         if (rows.size() > 0) {
             ContentValues row = new ContentValues();
             for (int i = 0; i < rows.size(); i++) {
@@ -174,6 +177,7 @@ public class DBConnect extends SQLiteOpenHelper {
             }
             m_db.insert(table, null, row);
         }
+        return ret;
     }
 
     public long sqlinsertOrThrow(String table, String[][] rows) {

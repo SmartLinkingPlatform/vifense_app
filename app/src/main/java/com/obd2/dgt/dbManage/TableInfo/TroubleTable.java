@@ -37,12 +37,13 @@ public class TroubleTable {
         }
     }
 
-    public static void insertTroubleTable(String[][] fields) {
+    public static long insertTroubleTable(String[][] fields) {
         try {
-            MyUtils.db_connect.sqlInsert(table_name, fields);
+            return MyUtils.db_connect.sqlInsert(table_name, fields);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     public static void deleteTroubleTable(int id) {
