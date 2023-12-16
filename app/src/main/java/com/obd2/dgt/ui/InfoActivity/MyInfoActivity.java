@@ -100,8 +100,8 @@ public class MyInfoActivity extends AppBaseActivity {
             carAdapter = new CarAdapter(getContext(), carItems, carListListener);
             my_info_car_recycle_view.setAdapter(carAdapter);
 
-            my_info_car_add_btn = findViewById(R.id.my_info_car_add_btn);
-            my_info_car_add_btn.setOnClickListener(view -> onMyInfoAddCarClick());
+            //my_info_car_add_btn = findViewById(R.id.my_info_car_add_btn);
+            //my_info_car_add_btn.setOnClickListener(view -> onMyInfoAddCarClick());
         }
     }
     private CarAdapter.ItemClickListener carListListener = new CarAdapter.ItemClickListener() {

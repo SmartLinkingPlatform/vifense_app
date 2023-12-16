@@ -122,10 +122,10 @@
 
                             <ImageView
                                 android:id="@+id/dialog_two_ok_btn"
-                                android:layout_width="100dp"
+                                android:layout_width="105dp"
                                 android:layout_height="40dp"
                                 android:layout_gravity="center_horizontal|center_vertical"
-                                app:srcCompat="@drawable/confirm_off" />
+                                app:srcCompat="@drawable/confirm_on" />
 
                             <TextView
                                 android:id="@+id/dialog_two_btn_ok_text"
@@ -134,7 +134,7 @@
                                 android:layout_gravity="center_horizontal|center_vertical"
                                 android:fontFamily="@font/pretendard_semibold"
                                 android:text="@string/confirm_text"
-                                android:textColor="@color/title_color"
+                                android:textColor="@color/white"
                                 android:textSize="18sp" />
 
                         </FrameLayout>
