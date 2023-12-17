@@ -1,8 +1,6 @@
 package com.obd2.dgt.dbManage.TableInfo;
 
-import android.app.Activity;
 import android.database.Cursor;
-import android.widget.Toast;
 
 import com.obd2.dgt.utils.GaugeViewInfo;
 import com.obd2.dgt.utils.MyUtils;
@@ -43,24 +41,17 @@ public class MessageInfoTable {
                 }
             } else {
                 MyUtils.messageInfo = new ArrayList<>();
-                Toast.makeText(MyUtils.mContext, "-" + table_name + "-  생성되지 않았습니다.", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(MyUtils.mContext, " 오류 발생 :" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
     public static long insertMessageTable(String[][] fields) {
         try {
-            long rt = MyUtils.db_connect.sqlInsert(table_name, fields);
-            if(rt < 0)
-                Toast.makeText(MyUtils.mContext, "" + table_name + " 에 insert 시에 오류 발생", Toast.LENGTH_SHORT).show();
-            else
-                return rt;
+            return MyUtils.db_connect.sqlInsert(table_name, fields);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(MyUtils.mContext, "" + table_name + " 에 insert 시에 오류 발생 : " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return -1;
     }

@@ -1,6 +1,7 @@
 package com.obd2.dgt.ui.InfoActivity;
 
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -161,6 +162,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         };
 
         CarInfoTable.updateCarInfoTable(Integer.parseInt(car_id), fields);
+        SystemClock.sleep(100);
         CarInfoTable.getCarInfoTable();
         car_mod_progress_layout.setVisibility(View.GONE);
         onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);

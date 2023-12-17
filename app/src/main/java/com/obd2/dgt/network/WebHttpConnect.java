@@ -1,8 +1,9 @@
 package com.obd2.dgt.network;
 
-import android.app.Application;
 import android.graphics.Bitmap;
+import android.widget.Toast;
 
+import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.CompanyTable;
 import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
 import com.obd2.dgt.network.http.HttpCall;
@@ -298,6 +299,7 @@ public class WebHttpConnect {
                         JSONObject res = new JSONObject(response);
                         String msg = res.getString("msg");
                         if (msg.equals("ok")) {
+                            Toast.makeText(MyUtils.mContext, R.string.send_driving_data, Toast.LENGTH_LONG).show();
                             MyUtils.max_speed = 0;
                             //MyUtils.ecu_total_distance = 0;
                             //MyUtils.ecu_mileage = "0";

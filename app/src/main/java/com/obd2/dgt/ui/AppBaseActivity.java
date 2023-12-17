@@ -154,55 +154,55 @@ public class AppBaseActivity extends AppCompatActivity {
         @SuppressLint("MissingPermission")
         @Override
         public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();   //입력된 action
-            final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            //입력된 action에 따라서 함수를 처리한다
-            switch (action) {
-                case BluetoothAdapter.ACTION_STATE_CHANGED: //블루투스의 연결 상태 변경
-                    final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
-                    switch (state) {
-                        case BluetoothAdapter.STATE_OFF:
-                            checkBluetoothAdapter();
-                            break;
-                        case BluetoothAdapter.STATE_TURNING_OFF:
+        final String action = intent.getAction();   //입력된 action
+        final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+        //입력된 action에 따라서 함수를 처리한다
+        switch (action) {
+            case BluetoothAdapter.ACTION_STATE_CHANGED: //블루투스의 연결 상태 변경
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+                switch (state) {
+                    case BluetoothAdapter.STATE_OFF:
+                        checkBluetoothAdapter();
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_OFF:
 
-                            break;
-                        case BluetoothAdapter.STATE_ON:
-                            Log.d("bluetooth connect status", "STATE_ON");
-                            break;
-                        case BluetoothAdapter.STATE_TURNING_ON:
-                            Log.d("bluetooth connect status", "STATE_TURNING_ON");
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        Log.d("bluetooth connect status", "STATE_ON");
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_ON:
+                        Log.d("bluetooth connect status", "STATE_TURNING_ON");
 
-                            break;
-                    }
+                        break;
+                }
 
-                    break;
-                case BluetoothDevice.ACTION_ACL_CONNECTED:  //블루투스 기기 페어링 하기
-                    LinkInfoActivity.getInstance().onChangedPairedDeviceList(device);
-                    break;
-                case BluetoothDevice.ACTION_BOND_STATE_CHANGED:
-                    break;
-                case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
-                    MyUtils.btService.closeSocket();
-                    MainActivity.getInstance().showDisconnectedStatus(0);
-                    break;
+                break;
+            case BluetoothDevice.ACTION_ACL_CONNECTED:  //블루투스 기기 페어링 하기
+                LinkInfoActivity.getInstance().onChangedPairedDeviceList(device);
+                break;
+            case BluetoothDevice.ACTION_BOND_STATE_CHANGED:
+                break;
+            case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
+                MyUtils.btService.closeSocket();
+                MainActivity.getInstance().showDisconnectedStatus(0);
+                break;
 
-                case BluetoothAdapter.ACTION_DISCOVERY_STARTED: //블루투스 기기 검색 시작
-                    break;
-                case BluetoothDevice.ACTION_FOUND:  //블루투스 기기 검색 됨, 블루투스 기기가 근처에서 검색될 때마다 수행됨
-                    String device_name = device.getName();
-                    if (device_name != null) {
-                        LinkInfoActivity.getInstance().onChangedScanningDeviceList(device);
-                    }
-                    break;
-                case BluetoothAdapter.ACTION_DISCOVERY_FINISHED:    //블루투스 기기 검색 종료
-                    MyUtils.mBluetoothAdapter.cancelDiscovery();
-                    LinkInfoActivity.getInstance().onStopSearch();
-                    break;
-                case BluetoothDevice.ACTION_PAIRING_REQUEST:
+            case BluetoothAdapter.ACTION_DISCOVERY_STARTED: //블루투스 기기 검색 시작
+                break;
+            case BluetoothDevice.ACTION_FOUND:  //블루투스 기기 검색 됨, 블루투스 기기가 근처에서 검색될 때마다 수행됨
+                String device_name = device.getName();
+                if (device_name != null) {
+                    LinkInfoActivity.getInstance().onChangedScanningDeviceList(device);
+                }
+                break;
+            case BluetoothAdapter.ACTION_DISCOVERY_FINISHED:    //블루투스 기기 검색 종료
+                MyUtils.mBluetoothAdapter.cancelDiscovery();
+                LinkInfoActivity.getInstance().onStopSearch();
+                break;
+            case BluetoothDevice.ACTION_PAIRING_REQUEST:
 
-                    break;
-            }
+                break;
+        }
 
         }
     };

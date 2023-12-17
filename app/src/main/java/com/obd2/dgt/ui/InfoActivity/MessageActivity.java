@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,11 +128,13 @@ public class MessageActivity extends AppBaseActivity {
 
     public void onMessageShow(String id) {
         MessageInfoTable.updateMessageTable("show", "1", id);
+        SystemClock.sleep(100);
         MessageInfoTable.getMessageInfoTable();
     }
 
     public void onMessageDeleteClick(String id){
         MessageInfoTable.updateMessageTable("active", "0", id);
+        SystemClock.sleep(100);
         MessageInfoTable.getMessageInfoTable();
 
         MessageItem item;

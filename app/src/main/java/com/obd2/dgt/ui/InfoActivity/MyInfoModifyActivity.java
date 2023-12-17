@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -103,6 +104,7 @@ public class MyInfoModifyActivity extends AppBaseActivity {
         dialog_normal_text = dialog.findViewById(R.id.dialog_normal_text);
     }
 
+    String[][] fields = new String[][]{};
     private void onMyInfoModifyClick() {
         String pwd = myinfo_mod_pwd.getText().toString();
         String pwd_conf = myinfo_mod_confirm_pwd.getText().toString();
@@ -116,12 +118,10 @@ public class MyInfoModifyActivity extends AppBaseActivity {
                 isMode = true;
                 mymod_progress_layout.setVisibility(View.VISIBLE);
                 String encode_pwd = Crypt.encrypt(pwd);
-                String[][] fields = new String[][]{
+                fields = new String[][]{
                         {"password", encode_pwd},
                         {"cid", c_ids[myinfo_mod_company_spinner.getSelectedItemPosition()]}
                 };
-                MyInfoTable.updateMyInfoTable(fields);
-                MyInfoTable.getMyInfoTable();
 
                 String update_date = CommonFunc.getDateTime();
                 //서버에 등록
@@ -141,9 +141,15 @@ public class MyInfoModifyActivity extends AppBaseActivity {
     }
 
     public void onSuccessModify() {
-        isMode = false;
-        mymod_progress_layout.setVisibility(View.GONE);
-        showConfirmDialog(true);
+        if (fields != null && fields.length > 0) {
+            MyInfoTable.updateMyInfoTable(fields);
+            SystemClock.sleep(100);
+            MyInfoTable.getMyInfoTable();
+            fields = new String[][]{};
+            isMode = false;
+            mymod_progress_layout.setVisibility(View.GONE);
+            showConfirmDialog(true);
+        }
     }
     public void onFailedModify() {
         isMode = false;

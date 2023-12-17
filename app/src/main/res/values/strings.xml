@@ -81,6 +81,7 @@
     <string name="error_login_pwd">비밀번호를 입력하십시오</string>
     <string name="error_sel_company">소속사 정보가 없습니다.</string>
     <string name="loading_obd_data">데이터를 읽어 들이는 중입니다.</string>
+    <string name="send_driving_data">주행 정보를 서버로 전송 하였습니다.</string>
 
     <string name="mileage_month">월 주행 거리</string>
     <string name="mileage_today">오늘 주행 거리</string>

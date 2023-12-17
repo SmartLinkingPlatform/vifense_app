@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -263,6 +264,7 @@ public class SignupActivity extends AppBaseActivity {
                 {"condition", "1"}
         };
         if (MyInfoTable.insertMyInfoTable(fields) != -1) {
+            SystemClock.sleep(100);
             MyInfoTable.getMyInfoTable();
             showSignSuccessDialog();
             MyUtils.new_login = true;

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -136,7 +137,7 @@ public class CarInfoActivity extends AppBaseActivity {
                 {"gas", reg_car_gas_text.getText().toString()}
         };
         CarInfoTable.insertCarInfoTable(fields);
-
+        SystemClock.sleep(100);
         isMode = false;
         car_progress_layout.setVisibility(View.GONE);
 

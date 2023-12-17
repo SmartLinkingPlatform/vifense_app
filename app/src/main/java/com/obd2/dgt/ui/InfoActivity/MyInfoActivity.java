@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,20 +54,10 @@ public class MyInfoActivity extends AppBaseActivity {
         my_info_phone.setText(MyUtils.my_phone);
 
         my_info_name = findViewById(R.id.my_info_name);
-        if(MyUtils.my_name.isEmpty()) {
-            my_info_name.setText("");
-            Toast.makeText(MyUtils.mContext, "오류: MyUtils.my_name 값이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
-        }
-        else
-            my_info_name.setText(MyUtils.my_name);
+        my_info_name.setText(MyUtils.my_name);
 
         my_info_company = findViewById(R.id.my_info_company);
-        if(MyUtils.my_company.isEmpty()) {
-            my_info_company.setText("");
-            Toast.makeText(MyUtils.mContext, "오류: MyUtils.my_company 값이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
-        }
-        else
-            my_info_company.setText(MyUtils.my_company);
+        my_info_company.setText(MyUtils.my_company);
 
         user_info_mod_btn = findViewById(R.id.user_info_mod_btn);
         user_info_mod_btn.setOnClickListener(view -> onMyInfoModifyClick());
@@ -110,10 +99,6 @@ public class MyInfoActivity extends AppBaseActivity {
             }
             carAdapter = new CarAdapter(getContext(), carItems, carListListener);
             my_info_car_recycle_view.setAdapter(carAdapter);
-
-            if(MyUtils.carInfo.size() < 1) {
-                Toast.makeText(MyUtils.mContext, "오류: MyUtils.carInfo.size() 값이 존재하지 않습니다", Toast.LENGTH_SHORT).show();
-            }
 
             //my_info_car_add_btn = findViewById(R.id.my_info_car_add_btn);
             //my_info_car_add_btn.setOnClickListener(view -> onMyInfoAddCarClick());
