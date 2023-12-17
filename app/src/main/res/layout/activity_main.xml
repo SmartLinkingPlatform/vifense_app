@@ -80,7 +80,7 @@
                                                         android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:layout_gravity="center_horizontal|center_vertical"
-                                                        app:srcCompat="@drawable/user_btn_state" />
+                                                        android:background="@drawable/user_btn_state" />
                                                 </FrameLayout>
 
                                                 <FrameLayout
@@ -103,7 +103,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_horizontal|center_vertical"
-                                                app:srcCompat="@drawable/icon_off" />
+                                                android:background="@drawable/icon_off" />
                                         </FrameLayout>
 
                                         <FrameLayout
@@ -136,7 +136,7 @@
                                                         android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:layout_gravity="center_horizontal|center_vertical"
-                                                        app:srcCompat="@drawable/dot_off" />
+                                                        android:background="@drawable/dot_off" />
                                                 </FrameLayout>
 
                                                 <FrameLayout
@@ -149,7 +149,7 @@
                                                         android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:layout_gravity="center_horizontal|center_vertical"
-                                                        app:srcCompat="@drawable/dot_off" />
+                                                        android:background="@drawable/dot_off" />
                                                 </FrameLayout>
 
                                                 <FrameLayout
@@ -162,7 +162,7 @@
                                                         android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:layout_gravity="center_horizontal|center_vertical"
-                                                        app:srcCompat="@drawable/dot_off" />
+                                                        android:background="@drawable/dot_off" />
                                                 </FrameLayout>
                                             </LinearLayout>
                                         </FrameLayout>
@@ -177,7 +177,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_horizontal|center_vertical"
-                                                app:srcCompat="@drawable/bluetooth_off" />
+                                                android:background="@drawable/bluetooth_off" />
                                         </FrameLayout>
 
                                         <FrameLayout
@@ -209,7 +209,7 @@
                                                         android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:layout_gravity="center_horizontal|center_vertical"
-                                                        app:srcCompat="@drawable/dot_off" />
+                                                        android:background="@drawable/dot_off" />
                                                 </FrameLayout>
 
                                                 <FrameLayout
@@ -222,7 +222,7 @@
                                                         android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:layout_gravity="center_horizontal|center_vertical"
-                                                        app:srcCompat="@drawable/dot_off" />
+                                                        android:background="@drawable/dot_off" />
                                                 </FrameLayout>
 
                                                 <FrameLayout
@@ -235,7 +235,7 @@
                                                         android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:layout_gravity="center_horizontal|center_vertical"
-                                                        app:srcCompat="@drawable/dot_off" />
+                                                        android:background="@drawable/dot_off" />
                                                 </FrameLayout>
                                             </LinearLayout>
                                         </FrameLayout>
@@ -250,7 +250,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center_horizontal|center_vertical"
-                                                app:srcCompat="@drawable/ecu_off" />
+                                                android:background="@drawable/ecu_off" />
                                         </FrameLayout>
 
                                         <FrameLayout
@@ -268,7 +268,7 @@
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="center_vertical"
-                                                    app:srcCompat="@drawable/connect_btn_state" />
+                                                    android:background="@drawable/connect_btn_state" />
 
                                                 <TextView
                                                     android:id="@+id/textView2"
@@ -305,7 +305,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="end"
                                         android:layout_marginEnd="15dp"
-                                        app:srcCompat="@drawable/mail_off" />
+                                        android:background="@drawable/mail_off" />
                                 </FrameLayout>
                             </LinearLayout>
                         </FrameLayout>

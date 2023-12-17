@@ -95,7 +95,7 @@ public class RealService extends Service {
         int rpm = Integer.parseInt(MyUtils.ecu_engine_rpm);
 
         //속도가 0이상, 엔진부하가 0보다 크면 시동상태
-        if(speed >= 0 && load > 0) { //차량이 엔진을 켠 상태
+        if(speed >= 0 && load > 0) { //차량이 엔진이 작동 된 상태
             if (MyUtils.showGauge) {
                 DashboardActivity.getInstance().startDashboardGauge();
             }

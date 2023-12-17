@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.ui.LoginActivity;
@@ -50,6 +51,7 @@ public class BtService {
                 }
             }
         } catch (Exception e) {
+            Toast.makeText(MyUtils.mContext, R.string.error_ecu_socket, Toast.LENGTH_LONG).show();
             closeSocket();
             MainActivity.getInstance().showDisconnectedStatus(1);
             e.printStackTrace();
@@ -100,8 +102,10 @@ public class BtService {
                             }
                         }
                         sendStreamData();
-                        if (Integer.parseInt(MyUtils.ecu_engine_load) > 0 &&
-                            Integer.parseInt(MyUtils.ecu_engine_rpm) > 0) {
+                        if (Float.parseFloat(MyUtils.ecu_vehicle_speed) > 0 ||
+                                Float.parseFloat(MyUtils.ecu_engine_load) > 0 ||
+                                Float.parseFloat(MyUtils.ecu_engine_rpm) > 0 ||
+                                Float.parseFloat(MyUtils.ecu_coolant_temp) > 0) {
                             MyUtils.isObdSocket = true;
                             MyUtils.loading_obd_data = true;
                         }

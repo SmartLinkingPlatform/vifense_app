@@ -112,7 +112,7 @@ public class MainActivity extends AppBaseActivity {
 
     private void initLayout() {
         con_img_1 = findViewById(R.id.con_img_1);
-        con_img_1.setImageResource(R.drawable.icon_on);
+        con_img_1.setBackgroundResource(R.drawable.icon_on);
         con_img_2 = findViewById(R.id.con_img_2);
         con_img_3 = findViewById(R.id.con_img_3);
         dot_img_1 = findViewById(R.id.dot_img_1);
@@ -140,7 +140,7 @@ public class MainActivity extends AppBaseActivity {
 
         message_btn = findViewById(R.id.message_btn);
         if (MyUtils.msg_show) {
-            message_btn.setImageResource(R.drawable.mail_btn_state);
+            message_btn.setBackgroundResource(R.drawable.mail_btn_state);
         }
         message_btn.setOnClickListener(view -> onShowMailClick());
 
@@ -231,112 +231,112 @@ public class MainActivity extends AppBaseActivity {
     }
 
     private void showConnectingLink(int index) {
-        connect_btn.setImageResource(R.drawable.connect_btn_on);
+        connect_btn.setBackgroundResource(R.drawable.connect_btn_on);
         if (index == 0) {
-            dot_img_1.setImageResource(R.drawable.dot_off);
-            dot_img_2.setImageResource(R.drawable.dot_off);
-            dot_img_3.setImageResource(R.drawable.dot_off);
-            con_img_2.setImageResource(R.drawable.bluetooth_off);
-            dot_img_4.setImageResource(R.drawable.dot_off);
-            dot_img_5.setImageResource(R.drawable.dot_off);
-            dot_img_6.setImageResource(R.drawable.dot_off);
-            con_img_3.setImageResource(R.drawable.ecu_off);
-            connect_btn.setImageResource(R.drawable.connect_btn_off);
+            dot_img_1.setBackgroundResource(R.drawable.dot_off);
+            dot_img_2.setBackgroundResource(R.drawable.dot_off);
+            dot_img_3.setBackgroundResource(R.drawable.dot_off);
+            con_img_2.setBackgroundResource(R.drawable.bluetooth_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_off);
+            dot_img_5.setBackgroundResource(R.drawable.dot_off);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
+            con_img_3.setBackgroundResource(R.drawable.ecu_off);
+            connect_btn.setBackgroundResource(R.drawable.connect_btn_off);
         } else if (index == 1) {
-            dot_img_1.setImageResource(R.drawable.dot_off);
-            dot_img_2.setImageResource(R.drawable.dot_off);
-            dot_img_3.setImageResource(R.drawable.dot_off);
+            dot_img_1.setBackgroundResource(R.drawable.dot_off);
+            dot_img_2.setBackgroundResource(R.drawable.dot_off);
+            dot_img_3.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 2) {
-            dot_img_1.setImageResource(R.drawable.dot_on);
-            dot_img_2.setImageResource(R.drawable.dot_off);
-            dot_img_3.setImageResource(R.drawable.dot_off);
+            dot_img_1.setBackgroundResource(R.drawable.dot_on);
+            dot_img_2.setBackgroundResource(R.drawable.dot_off);
+            dot_img_3.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 3) {
-            dot_img_1.setImageResource(R.drawable.dot_on);
-            dot_img_2.setImageResource(R.drawable.dot_on);
-            dot_img_3.setImageResource(R.drawable.dot_off);
+            dot_img_1.setBackgroundResource(R.drawable.dot_on);
+            dot_img_2.setBackgroundResource(R.drawable.dot_on);
+            dot_img_3.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 4) {
-            dot_img_1.setImageResource(R.drawable.dot_on);
-            dot_img_2.setImageResource(R.drawable.dot_on);
-            dot_img_3.setImageResource(R.drawable.dot_on);
+            dot_img_1.setBackgroundResource(R.drawable.dot_on);
+            dot_img_2.setBackgroundResource(R.drawable.dot_on);
+            dot_img_3.setBackgroundResource(R.drawable.dot_on);
         } else if (index == 5) {
-            dot_img_1.setImageResource(R.drawable.dot_off);
-            dot_img_2.setImageResource(R.drawable.dot_off);
-            dot_img_3.setImageResource(R.drawable.dot_off);
+            dot_img_1.setBackgroundResource(R.drawable.dot_off);
+            dot_img_2.setBackgroundResource(R.drawable.dot_off);
+            dot_img_3.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 6) {
-            dot_img_1.setImageResource(R.drawable.dot_on);
-            dot_img_2.setImageResource(R.drawable.dot_off);
-            dot_img_3.setImageResource(R.drawable.dot_off);
+            dot_img_1.setBackgroundResource(R.drawable.dot_on);
+            dot_img_2.setBackgroundResource(R.drawable.dot_off);
+            dot_img_3.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 7) {
-            dot_img_1.setImageResource(R.drawable.dot_on);
-            dot_img_2.setImageResource(R.drawable.dot_on);
-            dot_img_3.setImageResource(R.drawable.dot_off);
+            dot_img_1.setBackgroundResource(R.drawable.dot_on);
+            dot_img_2.setBackgroundResource(R.drawable.dot_on);
+            dot_img_3.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 8) {
-            dot_img_1.setImageResource(R.drawable.dot_on);
-            dot_img_2.setImageResource(R.drawable.dot_on);
-            dot_img_3.setImageResource(R.drawable.dot_on);
+            dot_img_1.setBackgroundResource(R.drawable.dot_on);
+            dot_img_2.setBackgroundResource(R.drawable.dot_on);
+            dot_img_3.setBackgroundResource(R.drawable.dot_on);
         } else if (index == 9) {
-            dot_img_1.setImageResource(R.drawable.dot_on);
-            dot_img_2.setImageResource(R.drawable.dot_on);
-            dot_img_3.setImageResource(R.drawable.dot_on);
-            con_img_2.setImageResource(R.drawable.bluetooth_on);
+            dot_img_1.setBackgroundResource(R.drawable.dot_on);
+            dot_img_2.setBackgroundResource(R.drawable.dot_on);
+            dot_img_3.setBackgroundResource(R.drawable.dot_on);
+            con_img_2.setBackgroundResource(R.drawable.bluetooth_on);
         } else if (index == 10) {
-            dot_img_4.setImageResource(R.drawable.dot_off);
-            dot_img_5.setImageResource(R.drawable.dot_off);
-            dot_img_6.setImageResource(R.drawable.dot_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_off);
+            dot_img_5.setBackgroundResource(R.drawable.dot_off);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 11) {
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_off);
-            dot_img_6.setImageResource(R.drawable.dot_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_off);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 12) {
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_on);
-            dot_img_6.setImageResource(R.drawable.dot_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_on);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 13) {
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_on);
-            dot_img_6.setImageResource(R.drawable.dot_on);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_on);
+            dot_img_6.setBackgroundResource(R.drawable.dot_on);
         } else if (index == 14) {
-            dot_img_4.setImageResource(R.drawable.dot_off);
-            dot_img_5.setImageResource(R.drawable.dot_off);
-            dot_img_6.setImageResource(R.drawable.dot_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_off);
+            dot_img_5.setBackgroundResource(R.drawable.dot_off);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 15) {
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_off);
-            dot_img_6.setImageResource(R.drawable.dot_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_off);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 16) {
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_on);
-            dot_img_6.setImageResource(R.drawable.dot_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_on);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 17) {
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_on);
-            dot_img_6.setImageResource(R.drawable.dot_on);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_on);
+            dot_img_6.setBackgroundResource(R.drawable.dot_on);
         } else if (index == 18) {
-            dot_img_4.setImageResource(R.drawable.dot_off);
-            dot_img_5.setImageResource(R.drawable.dot_off);
-            dot_img_6.setImageResource(R.drawable.dot_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_off);
+            dot_img_5.setBackgroundResource(R.drawable.dot_off);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 19) {
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_off);
-            dot_img_6.setImageResource(R.drawable.dot_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_off);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 20) {
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_on);
-            dot_img_6.setImageResource(R.drawable.dot_off);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_on);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
         } else if (index == 21) {
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_on);
-            dot_img_6.setImageResource(R.drawable.dot_on);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_on);
+            dot_img_6.setBackgroundResource(R.drawable.dot_on);
         } else if (index == 22) {
-            dot_img_1.setImageResource(R.drawable.dot_on);
-            dot_img_2.setImageResource(R.drawable.dot_on);
-            dot_img_3.setImageResource(R.drawable.dot_on);
-            con_img_2.setImageResource(R.drawable.bluetooth_on);
-            dot_img_4.setImageResource(R.drawable.dot_on);
-            dot_img_5.setImageResource(R.drawable.dot_on);
-            dot_img_6.setImageResource(R.drawable.dot_on);
-            con_img_3.setImageResource(R.drawable.ecu_on);
-            connect_btn.setImageResource(R.drawable.connect_btn_press);
+            dot_img_1.setBackgroundResource(R.drawable.dot_on);
+            dot_img_2.setBackgroundResource(R.drawable.dot_on);
+            dot_img_3.setBackgroundResource(R.drawable.dot_on);
+            con_img_2.setBackgroundResource(R.drawable.bluetooth_on);
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_on);
+            dot_img_6.setBackgroundResource(R.drawable.dot_on);
+            con_img_3.setBackgroundResource(R.drawable.ecu_on);
+            connect_btn.setBackgroundResource(R.drawable.connect_btn_press);
             connect_device_text.setText(R.string.connected_obd2_text);
         }
     }
@@ -352,7 +352,6 @@ public class MainActivity extends AppBaseActivity {
                     if (!MyUtils.isObdSocket) {
                         connect_device_text.setText(R.string.connecting_obd2_text);
                         isConClick = false;
-                        link_index++;
                         if (!MyUtils.isPaired) {
                             if (link_index > 8) {
                                 link_index = 1;
@@ -374,6 +373,7 @@ public class MainActivity extends AppBaseActivity {
                         }
                         showConnectingLink(link_index);
                         Thread.sleep(400);
+                        link_index++;
                     } else {
                         delay = 0;
                         link_index = 22;
@@ -401,7 +401,7 @@ public class MainActivity extends AppBaseActivity {
     BluetoothDevice pairedDevice = null;
     @SuppressLint("MissingPermission")
     public void obdConnectDevice() {
-        con_img_1.setImageResource(R.drawable.icon_on);
+        con_img_1.setBackgroundResource(R.drawable.icon_on);
         pairedDevice = CommonFunc.getPairedDevice();
         if (pairedDevice != null) {
             isConnecting = true;
@@ -414,15 +414,9 @@ public class MainActivity extends AppBaseActivity {
     }
 
     public void showDisconnectedStatus(int idx) {
-        dot_img_1.setImageResource(R.drawable.dot_off);
-        dot_img_2.setImageResource(R.drawable.dot_off);
-        dot_img_3.setImageResource(R.drawable.dot_off);
-        con_img_2.setImageResource(R.drawable.bluetooth_off);
-        dot_img_4.setImageResource(R.drawable.dot_off);
-        dot_img_5.setImageResource(R.drawable.dot_off);
-        dot_img_6.setImageResource(R.drawable.dot_off);
-        con_img_3.setImageResource(R.drawable.ecu_off);
-        connect_btn.setImageResource(R.drawable.connect_btn_off);
+        isConnecting = false;
+        link_index = 0;
+        showConnectingLink(link_index);
         if (idx == 0)
             connect_device_text.setText("");
         else
@@ -431,9 +425,9 @@ public class MainActivity extends AppBaseActivity {
 
     public void showMessageIcon() {
         if (MyUtils.msg_show) {
-            message_btn.setImageResource(R.drawable.mail_btn_state);
+            message_btn.setBackgroundResource(R.drawable.mail_btn_state);
         } else {
-            message_btn.setImageResource(R.drawable.mail_off);
+            message_btn.setBackgroundResource(R.drawable.mail_off);
         }
     }
 
