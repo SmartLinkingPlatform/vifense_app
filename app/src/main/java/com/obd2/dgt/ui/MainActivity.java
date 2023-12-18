@@ -364,9 +364,14 @@ public class MainActivity extends AppBaseActivity {
                                     MyUtils.btService.connectOBD2Device(pairedDevice);
                                     DeviceInfoTable.updateDeviceInfoTable(pairedDevice.getName(), pairedDevice.getAddress(), "1", "1");
                                 }
-                                if (delay > 10) {
+                                if (delay > 20) {
                                     MyUtils.btService.closeSocket();
+                                    link_index = 0;
+                                    isConnecting = false;
+                                    isConClick = true;
                                     delay = 0;
+                                    showDisconnectedStatus(link_index);
+                                    break;
                                 }
                                 delay++;
                             }
@@ -389,9 +394,6 @@ public class MainActivity extends AppBaseActivity {
             /*if (MyUtils.show_dash_dialog) {
                 DashboardActivity.getInstance().showSocketError();
             }*/
-            link_index = 0;
-            isConnecting = false;
-            isConClick = true;
 
             ConnectDeviceAsyncTask.this.cancel(true);
             return false;
