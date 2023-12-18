@@ -46,17 +46,20 @@ public class DBConnect extends SQLiteOpenHelper {
 
     }
 
-    public void createDatabase() {
+    public int createDatabase() {
         String path = m_db_path + m_db_name;
         try {
             File f = new File(path);
             if (!f.exists()) {
                 copyDatabase();
+                return 2;
+            } else {
+                return 1;
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return 0;
         }
-
     }
 
     private void copyDatabase() throws IOException {

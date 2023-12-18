@@ -70,6 +70,7 @@ public class LoginActivity extends AppBaseActivity {
             }
         }
         MyUtils.new_login = false;
+        Toast.makeText(getApplicationContext(), R.string.app_version, Toast.LENGTH_SHORT).show();
     }
 
     private void initLayout() {
@@ -120,13 +121,6 @@ public class LoginActivity extends AppBaseActivity {
                 return;
             }
         }
-
-        String[][] msgparams = new String[][]{
-                {"msg_id", String.valueOf(MyUtils.lastMsgID)},
-                {"user_phone", user_phone}
-        };
-        WebHttpConnect.onMessageInfoRequest(msgparams);
-
 
         String visit_date = CommonFunc.getDateTime();
         String[][] params = new String[][]{

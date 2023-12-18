@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Vifense</string>
+    <string name="app_version">v0.1.1</string>
     <string name="app_running">Vifense 앱이 실행 중 입니다.</string>
     <string name="user_id">아이디</string>
     <string name="user_pwd">비밀번호</string>
@@ -59,7 +60,7 @@
     <string name="check_network_error">서버에 접속할수 없습니다.</string>
     <string name="error_auth">휴대폰 인증을 하여야 합니다.</string>
     <string name="error_login">가입하지 않은 ID입니다.  회원가입을 먼저 하십시오</string>
-    <string name="error_password">비밀번호가 정확하지 않습니다.</string>
+    <string name="error_password">로그인 정보가 정확 하지 않습니다.</string>
     <string name="error_signup_duplicate">이미 등록된 사용자 입니다.</string>
     <string name="error_signup_fail">사용자 등록에 실패 하였습니다.</string>
     <string name="error_save_db">디비 저장에 실패 하였습니다.</string>

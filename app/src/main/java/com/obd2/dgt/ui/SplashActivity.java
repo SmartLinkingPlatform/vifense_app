@@ -25,7 +25,14 @@ public class SplashActivity extends AppBaseActivity {
 
         //read db - AppStatus table
         DBConnect m_DBCon = new DBConnect(this.getContext());
-        m_DBCon.createDatabase();
+        int is_db = m_DBCon.createDatabase();
+        if (is_db == 1) {
+            Toast.makeText(getApplicationContext(), "vifense db가 존재 합니다.", Toast.LENGTH_SHORT).show();
+        } else if (is_db == 2) {
+            Toast.makeText(getApplicationContext(), "vifense db가 존재 하지 않습니다.", Toast.LENGTH_SHORT).show();
+        } else if (is_db == 0) {
+            Toast.makeText(getApplicationContext(), "vifense db 생성 오류 입니다.", Toast.LENGTH_SHORT).show();
+        }
         MyUtils.db_connect = m_DBCon;
         try {
             m_DBCon.getDatabase();

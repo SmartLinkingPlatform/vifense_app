@@ -108,6 +108,19 @@ public class MainActivity extends AppBaseActivity {
         MyUtils.mileage_score = values[0];
         MyUtils.safety_score = values[1];
         showRankingInfo();
+
+        //메일 받기
+        String[][] msgparams = new String[][]{
+                {"msg_id", String.valueOf(MyUtils.lastMsgID)},
+                {"user_phone", MyUtils.my_phone}
+        };
+        WebHttpConnect.onMessageInfoRequest(msgparams);
+    }
+
+    public void setMessageStatus() {
+        if (MyUtils.msg_show) {
+            message_btn.setBackgroundResource(R.drawable.mail_btn_state);
+        }
     }
 
     private void initLayout() {
@@ -139,9 +152,6 @@ public class MainActivity extends AppBaseActivity {
         connect_btn.setOnClickListener(view -> onConnectDeviceClick());
 
         message_btn = findViewById(R.id.message_btn);
-        if (MyUtils.msg_show) {
-            message_btn.setBackgroundResource(R.drawable.mail_btn_state);
-        }
         message_btn.setOnClickListener(view -> onShowMailClick());
 
         ranking_view_btn = findViewById(R.id.ranking_view_btn);

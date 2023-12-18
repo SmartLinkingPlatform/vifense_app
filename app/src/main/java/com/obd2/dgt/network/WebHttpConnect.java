@@ -344,6 +344,7 @@ public class WebHttpConnect {
                         }
                     }
                     MessageInfoTable.getMessageInfoTable();
+                    MainActivity.getInstance().setMessageStatus();
                 }
             }
         }.execute(httpCallPost);
