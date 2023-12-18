@@ -70,7 +70,6 @@ public class LoginActivity extends AppBaseActivity {
             }
         }
         MyUtils.new_login = false;
-        Toast.makeText(getApplicationContext(), R.string.app_version, Toast.LENGTH_SHORT).show();
     }
 
     private void initLayout() {
@@ -128,7 +127,6 @@ public class LoginActivity extends AppBaseActivity {
                 {"user_pwd", encode_pwd},
                 {"visit_date", visit_date}
         };
-
         WebHttpConnect.onLoginRequest(params);
     }
 

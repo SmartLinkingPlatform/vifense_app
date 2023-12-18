@@ -5,6 +5,10 @@ import android.app.AlertDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
+import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.network.NetworkStatus;
@@ -201,5 +205,13 @@ public class CommonFunc {
             idx++;
         }
         return 0;
+    }
+
+    public static void showToastOnUIThread(final String message) {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(() -> {
+            Toast.makeText(MyUtils.mContext, message, Toast.LENGTH_SHORT).show();
+            handler.removeMessages(0);
+        }, 1000);
     }
 }

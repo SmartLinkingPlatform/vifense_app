@@ -183,7 +183,8 @@ public class AppBaseActivity extends AppCompatActivity {
             case BluetoothDevice.ACTION_BOND_STATE_CHANGED:
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
-                MyUtils.btService.closeSocket();
+                MyUtils.con_OBD = false;
+                MyUtils.obdConnect.closeSocket();
                 MainActivity.getInstance().showDisconnectedStatus(0);
                 break;
 

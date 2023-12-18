@@ -12,18 +12,18 @@ public class DeviceInfoTable {
         try {
             Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "*", "");
             if (cursor != null && cursor.getCount() > 0) {
-                    cursor.moveToFirst();
-                    MyUtils.obd2_name = cursor.getString(0); //OBD2 장치 이름
-                    MyUtils.obd2_address = cursor.getString(1); //OBD2 장치 MAC 주소
-                    //OBD2 장치 페어링 상태
-                    if (cursor.getString(2).equals("1")) {
-                        MyUtils.isPaired = true;
-                    }
-                    //OBD2 장치 소켓 연결 상태
-                    if (cursor.getString(3).equals("1")) {
-                        MyUtils.savedSocketStatus = true;
-                    }
-                    MyUtils.con_method = cursor.getString(4); //Bluetooth 연결 방식
+                cursor.moveToFirst();
+                MyUtils.obd2_name = cursor.getString(0); //OBD2 장치 이름
+                MyUtils.obd2_address = cursor.getString(1); //OBD2 장치 MAC 주소
+                //OBD2 장치 페어링 상태
+                if (cursor.getString(2).equals("1")) {
+                    //MyUtils.isPaired = true;
+                }
+                //OBD2 장치 소켓 연결 상태
+                if (cursor.getString(3).equals("1")) {
+                    MyUtils.savedSocketStatus = true;
+                }
+                MyUtils.con_method = cursor.getString(4); //Bluetooth 연결 방식
             }
         } catch (Exception e) {
             e.printStackTrace();

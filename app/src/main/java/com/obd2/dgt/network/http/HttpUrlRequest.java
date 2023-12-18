@@ -50,8 +50,8 @@ public class HttpUrlRequest extends AsyncTask<HttpCall, String, String> {
             urlConnection.setRequestMethod(method);
             urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
             urlConnection.setRequestProperty("Accept", "application/json;");
-            urlConnection.setReadTimeout(20000 /* milliseconds */);
-            urlConnection.setConnectTimeout(20000 /* milliseconds */);
+            urlConnection.setReadTimeout(60000 /* milliseconds */);
+            urlConnection.setConnectTimeout(60000 /* milliseconds */);
             if(httpCall.getParams() != null && httpCall.getMethodtype() != HttpCall.GET){
                 OutputStream os = urlConnection.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, UTF_8));

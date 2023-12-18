@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothDevice;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -152,14 +153,14 @@ public class LinkInfoActivity extends AppBaseActivity {
                     select_item = position;
                     MyUtils.obd2_name = pairedItems.get(i).device.getName();
                     MyUtils.obd2_address = pairedItems.get(i).device.getAddress();
-                    if (!MyUtils.isObdSocket) {
+                    if (!MyUtils.con_ECU) {
                         pairedItems.get(i).selected = true;
-                        MyUtils.isPaired = true;
+                        //MyUtils.isPaired = true;
                         showDialog();
                     } else {
                         //OBD2 연결 끊기
                         pairedItems.get(i).selected = false;
-                        MyUtils.btService.closeSocket();
+                        MyUtils.obdConnect.closeSocket();
                         MainActivity.getInstance().showDisconnectedStatus(0);
                         //DB 저장
                         DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
@@ -290,7 +291,7 @@ public class LinkInfoActivity extends AppBaseActivity {
                 pairedItems.clear();
                 for (BluetoothDevice device : pairedDevices) {
                     PairedItem pitem;
-                    if (MyUtils.obd2_address.equals(device.getAddress()) && MyUtils.isObdSocket) {
+                    if (MyUtils.obd2_address.equals(device.getAddress()) && MyUtils.con_ECU) {
                         pitem = new PairedItem(true, device);
                     } else {
                         pitem = new PairedItem(false, device);
@@ -332,7 +333,9 @@ public class LinkInfoActivity extends AppBaseActivity {
                 });
                 ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);
                 dialog_two_ok_btn.setOnClickListener(view -> {
-                    MainActivity.getInstance().obdConnectDevice();
+                    DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "1");
+                    SystemClock.sleep(300);
+                    MainActivity.getInstance().obdConnectDevice(pairedItems.get(select_item).device);
                     finish();
                     dialog.dismiss();
                 });

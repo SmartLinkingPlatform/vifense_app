@@ -75,8 +75,8 @@ public class MainActivity extends AppBaseActivity {
         if (!MyUtils.run_main) {
             MyUtils.run_main = true;
             SystemClock.sleep(1000);
-            if (MyUtils.isPaired) {
-                if (MyUtils.isObdSocket) {
+            if (MyUtils.con_OBD) {
+                if (MyUtils.con_ECU) {
                     link_index = 22;
                     showConnectingLink(link_index);
                 }
@@ -352,36 +352,40 @@ public class MainActivity extends AppBaseActivity {
     }
 
     //장치 연결 스레드
-    boolean obd2link = false;
+    boolean obdlink = false;
+    boolean eculink = false;
     int delay = 0;
     class ConnectDeviceAsyncTask extends AsyncTask<String, Integer, Boolean> {
         @SuppressLint({"MissingPermission", "WrongThread"})
         protected Boolean doInBackground(String... str) {
             while (isConnecting) {
                 try {
-                    if (!MyUtils.isObdSocket) {
+                    if (!MyUtils.con_ECU) {
                         connect_device_text.setText(R.string.connecting_obd2_text);
                         isConClick = false;
-                        if (!MyUtils.isPaired) {
+                        if (!MyUtils.con_OBD) {
                             if (link_index > 8) {
                                 link_index = 1;
+                                if (!obdlink) {
+                                    obdlink = true;
+                                    MyUtils.obdConnect.setConnectingOBD(pairedDevice);
+                                }
+                                if (delay > 2) {
+                                    delay = 0;
+                                    obdlink = false;
+                                }
+                                delay++;
                             }
                         } else {
                             if (link_index > 21) {
                                 link_index = 10;
-                                if (!obd2link) {
-                                    obd2link = true;
-                                    MyUtils.btService.connectOBD2Device(pairedDevice);
-                                    DeviceInfoTable.updateDeviceInfoTable(pairedDevice.getName(), pairedDevice.getAddress(), "1", "1");
+                                if (!eculink) {
+                                    eculink = true;
+                                    MyUtils.obdConnect.setConnectingECU(pairedDevice);
                                 }
-                                if (delay > 20) {
-                                    MyUtils.btService.closeSocket();
-                                    link_index = 0;
-                                    isConnecting = false;
-                                    isConClick = true;
+                                if (delay > 2) {
                                     delay = 0;
-                                    showDisconnectedStatus(link_index);
-                                    break;
+                                    eculink = false;
                                 }
                                 delay++;
                             }
@@ -412,12 +416,13 @@ public class MainActivity extends AppBaseActivity {
 
     BluetoothDevice pairedDevice = null;
     @SuppressLint("MissingPermission")
-    public void obdConnectDevice() {
+    public void obdConnectDevice(BluetoothDevice bt_obd) {
         con_img_1.setBackgroundResource(R.drawable.icon_on);
-        pairedDevice = CommonFunc.getPairedDevice();
+        pairedDevice = bt_obd;
         if (pairedDevice != null) {
             isConnecting = true;
-            obd2link = false;
+            obdlink = false;
+            eculink = false;
             link_index = 0;
             runOnUiThread(() -> new ConnectDeviceAsyncTask().execute("BtConnectInfo"));
         } else {
@@ -426,7 +431,7 @@ public class MainActivity extends AppBaseActivity {
     }
 
     public void showDisconnectedStatus(int idx) {
-        isConnecting = false;
+        isConnecting = true;
         link_index = 0;
         showConnectingLink(link_index);
         if (idx == 0)

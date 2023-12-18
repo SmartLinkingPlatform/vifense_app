@@ -11,18 +11,18 @@ public class MyInfoTable {
         try {
             Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "*", "");
             if (cursor != null && cursor.getCount() > 0) {
-                    cursor.moveToFirst();
-                    MyUtils.my_name = cursor.getString(0); //나의 이름
-                    MyUtils.my_phone = cursor.getString(1); //나의 폰 번호
-                    MyUtils.my_pwd = cursor.getString(2); //비밀 번호
-                    MyUtils.admin_id = cursor.getInt(3); //소속 회사 아이디
-                    //MyUtils.my_company = CompanyTable.getCompanyName(MyUtils.admin_id); //소속 회사 이름
-                    for (String[] companyInfo : MyUtils.companyInfo) {
-                        if (Integer.parseInt(companyInfo[1]) == MyUtils.admin_id) {
-                            MyUtils.my_company = companyInfo[2];
-                            break;
-                        }
+                cursor.moveToFirst();
+                MyUtils.my_name = cursor.getString(0); //나의 이름
+                MyUtils.my_phone = cursor.getString(1); //나의 폰 번호
+                MyUtils.my_pwd = cursor.getString(2); //비밀 번호
+                MyUtils.admin_id = cursor.getInt(3); //소속 회사 아이디
+                //MyUtils.my_company = CompanyTable.getCompanyName(MyUtils.admin_id); //소속 회사 이름
+                for (String[] companyInfo : MyUtils.companyInfo) {
+                    if (Integer.parseInt(companyInfo[1]) == MyUtils.admin_id) {
+                        MyUtils.my_company = companyInfo[2];
+                        break;
                     }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

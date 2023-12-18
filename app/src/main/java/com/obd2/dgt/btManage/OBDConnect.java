@@ -1,28 +1,22 @@
 package com.obd2.dgt.btManage;
 
 import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemClock;
-import android.view.View;
-import android.widget.Toast;
 
-import com.obd2.dgt.R;
-import com.obd2.dgt.ui.LoginActivity;
 import com.obd2.dgt.ui.MainActivity;
-import com.obd2.dgt.ui.SplashActivity;
+import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
-public class BtService {
+public class OBDConnect {
     private BluetoothSocket socket = null;
     private OutputStream outputStream = null; // 블루투스에 데이터를 출력하기 위한 출력 스트림
     private InputStream inputStream = null; // 블루투스에 데이터를 입력하기 위한 입력 스트림
@@ -30,66 +24,69 @@ public class BtService {
     private final String MOD_PREFIX1 = "41";
     private final String MOD_PREFIX2 = " 41 ";
     private final String MOD_PREFIX3 = "7E8";
-    private boolean startedEngine = false;
-    private BluetoothDevice btDevice;
     boolean running = false;
 
-    public BtService() {
+    public OBDConnect() {
     }
 
     @SuppressLint("MissingPermission")
-    public void connectOBD2Device(BluetoothDevice bluetoothDevice) {
-        btDevice = bluetoothDevice;
-        // Rfcomm 채널을 통해 블루투스 디바이스와 통신하는 소켓 생성
+    public void setConnectingOBD(BluetoothDevice obdDevice) throws IOException {
         try {
-            if (socket == null) {
-                socket = btDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
+            MyUtils.mBluetoothAdapter.cancelDiscovery();
+            socket = obdDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
+            socket.connect();
+            Method m = obdDevice.getClass().getMethod("isConnected", (Class[]) null);
+            MyUtils.con_OBD = (boolean) m.invoke(obdDevice, (Object[]) null);
+        } catch (Exception e) {
+            socket.close();
+            CommonFunc.showToastOnUIThread("OBD 연결 실패. 재 연결 중...");
+            e.printStackTrace();
+        }
+    }
+    @SuppressLint("MissingPermission")
+    public void setConnectingECU(BluetoothDevice obdDevice) throws IOException {
+        try {
+            if (socket.isConnected()) {
+                running = true;
+            } else {
+                running = false;
+                socket.close();
+                MyUtils.mBluetoothAdapter.cancelDiscovery();
+                socket = obdDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
                 socket.connect();
-                if (socket.isConnected()) {
-                    running = true;
-                    Thread.sleep(1000);
-                }
             }
         } catch (Exception e) {
-            Toast.makeText(MyUtils.mContext, R.string.error_ecu_socket, Toast.LENGTH_LONG).show();
-            closeSocket();
-            MainActivity.getInstance().showDisconnectedStatus(1);
+            socket.close();
+            CommonFunc.showToastOnUIThread("ECU 연결 실패. 재 연결 중...");
             e.printStackTrace();
         }
         if (running) {
             try {
                 outputStream = socket.getOutputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
                 inputStream = socket.getInputStream();
+                MyUtils.btSocket = socket;
+
+                getHeaderData();
+                // 데이터 수신 함수 호출
+                SystemClock.sleep(1000);
+                receiveData();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            MyUtils.btSocket = socket;
-
-            getHeaderData();
-            // 데이터 수신 함수 호출
-            receiveData();
         }
     }
 
     public void receiveData() {
-        // 데이터를 수신하기 위한 쓰레드 생성
-        workerThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (running) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        break;
-                    }
-                    try {
-                        // 데이터를 수신했는지 확인합니다.
-                        int byteAvailable = 0;
-                        if (inputStream != null) {
-                            byteAvailable = inputStream.available();
-                        }
+        workerThread = new Thread(() -> {
+            while (running) {
+                if (Thread.currentThread().isInterrupted()) {
+                    break;
+                }
+                try {
+                    int byteAvailable = 0;
+                    if (inputStream != null) {
+                        byteAvailable = inputStream.available();
+
                         // 데이터가 수신 된 경우
                         if (byteAvailable > 0) {
                             // 입력 스트림에서 바이트 단위로 읽어 옵니다.
@@ -100,19 +97,22 @@ public class BtService {
                             for (String response : responses) {
                                 ResponseCalculator.ResponseCalculator(response);
                             }
+                        } else {
+                            MyUtils.loaded_data = false;
                         }
                         sendStreamData();
                         if (Float.parseFloat(MyUtils.ecu_vehicle_speed) > 0 ||
                                 Float.parseFloat(MyUtils.ecu_engine_load) > 0 ||
                                 Float.parseFloat(MyUtils.ecu_engine_rpm) > 0 ||
                                 Float.parseFloat(MyUtils.ecu_coolant_temp) > 0) {
-                            MyUtils.isObdSocket = true;
-                            MyUtils.loading_obd_data = true;
+                            MyUtils.con_ECU = true;
+                            MyUtils.loaded_data = true;
                         }
-                    } catch (Exception e) {
-                        closeSocket();
-                        e.printStackTrace();
                     }
+                } catch (Exception e) {
+                    CommonFunc.showToastOnUIThread("ECU 데이터 수신 오류 !!!");
+                    closeSocket();
+                    e.printStackTrace();
                 }
             }
         });
@@ -203,21 +203,6 @@ public class BtService {
         return resVal;
     }
 
-    /*int repeat = 0;
-    private void getIgnitionMonitor() {
-        OBD2ApiCommand command = new OBD2ApiCommand(socket);
-        String ignition_monitor = command.getIgnitionMonitorStatus();
-        if (ignition_monitor.equalsIgnoreCase("on")) {
-            startedEngine = true;
-        } else {
-            repeat++;
-            if (repeat < 3) {
-                getIgnitionMonitor();
-            }
-            closeSocket();
-            MainActivity.getInstance().showDisconnectedStatus(1);
-        }
-    }*/
     public void closeSocket(){
         try {
             running = false;
@@ -228,15 +213,13 @@ public class BtService {
                     workerThread = null;
                 }
             }
-            socket = null;
             outputStream = null;
             inputStream = null;
-            startedEngine = false;
-            MyUtils.isPaired = false;
-            MyUtils.isObdSocket = false;
-            MyUtils.loading_obd_data = false;
+            MyUtils.con_OBD = false;
+            MyUtils.con_ECU = false;
+            MyUtils.loaded_data = false;
             MyUtils.btSocket = null;
-            MainActivity.getInstance().isConnecting = false;
+            MainActivity.getInstance().isConnecting = true;
         } catch (IOException e) {
             e.printStackTrace();
         }

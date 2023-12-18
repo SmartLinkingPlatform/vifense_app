@@ -1,29 +1,22 @@
 package com.obd2.dgt.utils;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.graphics.PointF;
 import android.util.DisplayMetrics;
 
-import com.obd2.dgt.btManage.BtService;
+import com.obd2.dgt.btManage.OBDConnect;
 import com.obd2.dgt.dbManage.DBConnect;
 import com.obd2.dgt.R;
 import com.obd2.dgt.ui.AppBaseActivity;
 
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.UUID;
 
 public class MyUtils {
-    public static String server_url = "http://192.168.1.2";
-   // public static String server_url = "https://dgt.vifense.com";
+    //public static String server_url = "http://192.168.1.4";
+    public static String server_url = "https://dgt.vifense.com";
     public static String signup_url = "https://dgt.vifense.com/mok/auth_signup.html";
     public static String find_url = "https://dgt.vifense.com/mok/auth_findpwd.html";
     public static String call_company = "/mobile.companyInfo";
@@ -42,9 +35,7 @@ public class MyUtils {
     public static AppBaseActivity appBase = null;
     public static Class<?> currentActivity = null;
     public static Context mContext = null;
-    public static boolean run_main = false;
-    public static boolean loading_obd_data = false;
-    public static boolean show_dash_dialog = false;
+
     public static DisplayMetrics metrics;
     public static float mDpX = 1;
     public static float mDpY = 1;
@@ -52,7 +43,7 @@ public class MyUtils {
     public static UUID uuid = java.util.UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
     public static BluetoothAdapter mBluetoothAdapter = null;
     public static BluetoothSocket btSocket = null;
-    public static BtService btService = null;
+    public static OBDConnect obdConnect = null;
     public static String PID = "01";
     public static int max_speed = 0; //최대 속도
     public static int idling_time = 0; //공회전 시간
@@ -155,9 +146,13 @@ public class MyUtils {
     public static String my_company = "";
     public static String obd2_name = "";
     public static String obd2_address = "";
-    public static boolean isPaired = false;
+    public static boolean con_OBD = false;
+    public static boolean con_ECU = false;
+    public static boolean run_main = false;
+    public static boolean loaded_data = false;
+    public static boolean show_dash_dialog = false;
     public static boolean savedSocketStatus = false;
-    public static boolean isObdSocket = false;
+
     public static String con_method = "";
 
     public static int sel_car_id = 0;

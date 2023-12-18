@@ -660,12 +660,12 @@ public class DashboardActivity extends AppBaseActivity {
         protected Boolean doInBackground(String... str) {
             while (isShow) {
                 try {
-                    if (!MyUtils.isObdSocket || !MyUtils.isPaired) {
+                    if (!MyUtils.con_ECU || !MyUtils.con_OBD) {
                         stopDashboardGauge();
                         isShow = false;
                     }else {
                         runOnUiThread(() -> {
-                            if (MyUtils.loading_obd_data) {
+                            if (MyUtils.loaded_data) {
                                 //차량 속도
                                 gauge_speed_img.setRotation(getRotationValueI(Float.parseFloat(MyUtils.ecu_vehicle_speed), 300));
                                 gauge_speed_text.setText(MyUtils.ecu_vehicle_speed);

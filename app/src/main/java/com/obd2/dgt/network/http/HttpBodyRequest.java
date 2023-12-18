@@ -46,8 +46,8 @@ public class HttpBodyRequest extends AsyncTask<HttpCall, String, String> {
             urlConnection.setRequestProperty("Accept", "application/json;");
             //String Authorization = "Bearer " + MyUtils.ACCESS_TOKEN;
             //urlConnection.setRequestProperty("Authorization", Authorization);
-            urlConnection.setReadTimeout(20000); //milliseconds
-            urlConnection.setConnectTimeout(30000); //milliseconds
+            urlConnection.setReadTimeout(60000); //milliseconds
+            urlConnection.setConnectTimeout(60000); //milliseconds
             if(httpCall.getMethodtype() != HttpCall.GET){
                 OutputStream os = urlConnection.getOutputStream();
                 //os.write(SendDataPacket.sendMqttDataPackage().getBytes(StandardCharsets.UTF_8));
