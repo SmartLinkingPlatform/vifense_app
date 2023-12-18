@@ -11,7 +11,6 @@ public class MyInfoTable {
         try {
             Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "*", "");
             if (cursor != null && cursor.getCount() > 0) {
-                if (cursor != null && cursor.getCount() > 0) {
                     cursor.moveToFirst();
                     MyUtils.my_name = cursor.getString(0); //나의 이름
                     MyUtils.my_phone = cursor.getString(1); //나의 폰 번호
@@ -24,7 +23,6 @@ public class MyInfoTable {
                             break;
                         }
                     }
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();

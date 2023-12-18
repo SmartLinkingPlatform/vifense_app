@@ -3,6 +3,7 @@ package com.obd2.dgt.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.obd2.dgt.dbManage.DBConnect;
@@ -28,10 +29,13 @@ public class SplashActivity extends AppBaseActivity {
         int is_db = m_DBCon.createDatabase();
         if (is_db == 1) {
             Toast.makeText(getApplicationContext(), "vifense db가 존재 합니다.", Toast.LENGTH_SHORT).show();
+            Log.d("check database", "vifense db가 존재 합니다.");
         } else if (is_db == 2) {
             Toast.makeText(getApplicationContext(), "vifense db가 존재 하지 않습니다.", Toast.LENGTH_SHORT).show();
+            Log.d("check database", "vifense db가 존재 하지 않습니다.");
         } else if (is_db == 0) {
             Toast.makeText(getApplicationContext(), "vifense db 생성 오류 입니다.", Toast.LENGTH_SHORT).show();
+            Log.d("check database", "vifense db 생성 오류 입니다.");
         }
         MyUtils.db_connect = m_DBCon;
         try {

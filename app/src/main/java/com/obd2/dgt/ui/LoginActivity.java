@@ -128,6 +128,7 @@ public class LoginActivity extends AppBaseActivity {
                 {"user_pwd", encode_pwd},
                 {"visit_date", visit_date}
         };
+
         WebHttpConnect.onLoginRequest(params);
     }
 

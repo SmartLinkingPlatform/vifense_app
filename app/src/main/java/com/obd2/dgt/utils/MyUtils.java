@@ -22,8 +22,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class MyUtils {
-    //public static String server_url = "http://192.168.1.4";
-    public static String server_url = "https://dgt.vifense.com";
+    public static String server_url = "http://192.168.1.2";
+   // public static String server_url = "https://dgt.vifense.com";
     public static String signup_url = "https://dgt.vifense.com/mok/auth_signup.html";
     public static String find_url = "https://dgt.vifense.com/mok/auth_findpwd.html";
     public static String call_company = "/mobile.companyInfo";
