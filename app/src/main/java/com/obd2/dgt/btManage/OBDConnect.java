@@ -44,6 +44,39 @@ public class OBDConnect {
         }
     }
     @SuppressLint("MissingPermission")
+    public void setConnectingECU(BluetoothDevice bluetoothDevice) {
+        //btDevice = bluetoothDevice;
+        // Rfcomm 채널을 통해 블루투스 디바이스와 통신하는 소켓 생성
+        try {
+            MyUtils.mBluetoothAdapter.cancelDiscovery();
+            socket = bluetoothDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
+            socket.connect();
+            if (socket.isConnected()) {
+                running = true;
+                Thread.sleep(1000);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (running) {
+            try {
+                outputStream = socket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                inputStream = socket.getInputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            MyUtils.btSocket = socket;
+
+            getHeaderData();
+            // 데이터 수신 함수 호출
+            receiveData();
+        }
+    }
+    /*@SuppressLint("MissingPermission")
     public void setConnectingECU(BluetoothDevice obdDevice) throws IOException {
         try {
             if (socket.isConnected()) {
@@ -74,7 +107,7 @@ public class OBDConnect {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 
     public void receiveData() {
         workerThread = new Thread(() -> {

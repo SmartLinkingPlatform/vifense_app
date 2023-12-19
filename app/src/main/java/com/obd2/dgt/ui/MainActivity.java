@@ -366,7 +366,7 @@ public class MainActivity extends AppBaseActivity {
                         if (!MyUtils.con_OBD) {
                             if (link_index > 8) {
                                 link_index = 1;
-                                if (!obdlink) {
+                                /*if (!obdlink) {
                                     obdlink = true;
                                     MyUtils.obdConnect.setConnectingOBD(pairedDevice);
                                 }
@@ -374,7 +374,7 @@ public class MainActivity extends AppBaseActivity {
                                     delay = 0;
                                     obdlink = false;
                                 }
-                                delay++;
+                                delay++;*/
                             }
                         } else {
                             if (link_index > 21) {
