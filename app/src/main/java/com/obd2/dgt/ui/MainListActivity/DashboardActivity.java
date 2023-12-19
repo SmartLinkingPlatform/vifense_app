@@ -702,7 +702,7 @@ public class DashboardActivity extends AppBaseActivity {
                             }
                         });
                         showErrorDialog();
-                        SystemClock.sleep(1000);
+                        SystemClock.sleep(500);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

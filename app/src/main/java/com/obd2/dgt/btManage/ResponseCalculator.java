@@ -48,14 +48,8 @@ public class ResponseCalculator {
             case  "THROTTLE_POSITION":
                 MyUtils.ecu_throttle_position = THROTTLE_POSITION.read(firstHex);
                 break;
-            case  "FUEL_TANK_LEVEL":
-                MyUtils.ecu_fuel_tank_level = FUEL_TANK_LEVEL.read(firstHex);
-                break;
             case  "FUEL_RATE_LPH":
                 MyUtils.ecu_fuel_rate = FUEL_RATE_LPH.read(firstHex, secondHex);
-                break;
-            case  "TOTAL_DISTANCE_CODE":
-                MyUtils.ecu_total_distance = TOTAL_DISTANCE_CODE.read(firstHex, secondHex);
                 break;
             case  "BATTERY_VOLTAGE":
                 MyUtils.ecu_battery_voltage = BATTERY_VOLTAGE.read(firstHex, secondHex);

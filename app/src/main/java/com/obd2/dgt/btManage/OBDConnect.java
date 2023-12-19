@@ -1,10 +1,10 @@
 package com.obd2.dgt.btManage;
 
 import android.annotation.SuppressLint;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.utils.CommonFunc;
@@ -15,17 +15,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 public class OBDConnect {
     private BluetoothSocket socket = null;
     private OutputStream outputStream = null; // 블루투스에 데이터를 출력하기 위한 출력 스트림
     private InputStream inputStream = null; // 블루투스에 데이터를 입력하기 위한 입력 스트림
     private Thread workerThread = null; // 문자열 수신에 사용되는 쓰레드
-    private final String MOD_PREFIX1 = "41";
-    private final String MOD_PREFIX2 = " 41 ";
-    private final String MOD_PREFIX3 = "7E8";
+    private final String MOD_PREFIX = "41";
+    private final String MOD_PREFIX2 = "7E8";
     boolean running = false;
+    BluetoothDevice obdDevice;
 
     public OBDConnect() {
     }
@@ -33,183 +32,113 @@ public class OBDConnect {
     @SuppressLint("MissingPermission")
     public void setConnectingOBD(BluetoothDevice obdDevice) {
         try {
+            this.obdDevice = obdDevice;
             MyUtils.mBluetoothAdapter.cancelDiscovery();
             socket = obdDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
             socket.connect();
             if (socket.isConnected()) {
                 MyUtils.con_OBD = true;
+                running = true;
             } else {
                 MyUtils.con_OBD = false;
             }
         } catch (Exception e) {
-            BluetoothSocket sockFallback;
-            Class<?> clazz = socket.getRemoteDevice().getClass();
-            Class<?>[] paramTypes = new Class<?>[]{Integer.TYPE};
-            try {
-                Method m = clazz.getMethod("createRfcommSocket", paramTypes);
-                Object[] params = new Object[]{1};
-                sockFallback = (BluetoothSocket) m.invoke(socket.getRemoteDevice(), params);
-                socket = sockFallback;
-            }
-            catch (Exception e2)
-            {
-                e2.printStackTrace();
-            }
-            CommonFunc.showToastOnUIThread("OBD 연결 실패. 재 연결 중...");
             e.printStackTrace();
+            String content = CommonFunc.getDateTime() + " --- ODB Connect Error --- " + e.getMessage() + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
         }
     }
+
     @SuppressLint("MissingPermission")
-    public void setConnectingECU(BluetoothDevice obdDevice) {
-        try {
-            Method m = obdDevice.getClass().getMethod("isConnected", (Class[]) null);
-            running = (boolean) m.invoke(obdDevice, (Object[]) null);
-        } catch (Exception e) {
-            CommonFunc.showToastOnUIThread("ECU 연결 실패. 재 연결 중...");
-            e.printStackTrace();
-        }
+    public void setConnectingECU() {
         if (running) {
             try {
                 outputStream = socket.getOutputStream();
                 inputStream = socket.getInputStream();
                 MyUtils.btSocket = socket;
 
-                getHeaderData();
-                // 데이터 수신 함수 호출
-                SystemClock.sleep(1000);
-                receiveData();
+                OBDProtocol protocol = new OBDProtocol(inputStream, outputStream);
+                if (protocol.autoSelectProtocol()) {
+                    // 데이터 수신 함수 호출
+                    SystemClock.sleep(1000);
+                    getDataOBDtoECU();
+                } else {
+                    CommonFunc.showToastOnUIThread("현재 차량의 ELM327 통신 프로토콜 검색중...");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void receiveData() {
+    private void sendCommand(String command) throws IOException {
+        // Send command to OBD-II adapter
+        try {
+            outputStream.write((command + "\r").getBytes());
+            outputStream.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readResponse() throws IOException {
+        byte[] buffer = new byte[1024];
+        int bytesRead = inputStream.read(buffer);
+        final String rawResponse = new String(buffer, 0, bytesRead);
+
+        String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + rawResponse + "\r\n";
+        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+
+        String response = getResponse(rawResponse);
+        if (response.length() <= 2) {
+            return;
+        }
+        Log.d("OBD-II", "response : " + response);
+        ResponseCalculator.ResponseCalculator(response);
+
+        if (Float.parseFloat(MyUtils.ecu_vehicle_speed) > 0 ||
+                Float.parseFloat(MyUtils.ecu_engine_load) > 0 ||
+                Float.parseFloat(MyUtils.ecu_engine_rpm) > 0 ||
+                Float.parseFloat(MyUtils.ecu_coolant_temp) > 0) {
+            MyUtils.con_ECU = true;
+            MyUtils.loaded_data = true;
+        }
+    }
+    private String getResponse(String rawResponse) {
+        String res = rawResponse.replaceAll("(\r\n|\r|\n|\n\r)", "");
+        res = res.replace("SEARCHING...>", "");
+        res = res.replace("SEARCHING...", "");
+        res = res.replaceAll(">", "");
+
+        String[] values = res.split(" ");
+        StringBuilder sub_str = new StringBuilder();
+        for (int i = 0; i < values.length; i++) {
+            if (i > 0) {
+                sub_str.append(values[i]);
+            }
+        }
+        res = sub_str.toString();
+        return res;
+    }
+    private void getDataOBDtoECU() {
         workerThread = new Thread(() -> {
             while (running) {
                 if (Thread.currentThread().isInterrupted()) {
                     break;
                 }
                 try {
-                    int byteAvailable = 0;
-                    if (inputStream != null) {
-                        byteAvailable = inputStream.available();
-
-                        // 데이터가 수신 된 경우
-                        if (byteAvailable > 0) {
-                            // 입력 스트림에서 바이트 단위로 읽어 옵니다.
-                            byte[] rawBytes = new byte[byteAvailable];
-                            inputStream.read(rawBytes);
-                            final String rawResponse = new String(rawBytes, "UTF-8");
-                            ArrayList<String> responses = getResponses(rawResponse);
-                            for (String response : responses) {
-                                ResponseCalculator.ResponseCalculator(response);
-                            }
-                        } else {
-                            MyUtils.loaded_data = false;
-                            CommonFunc.showToastOnUIThread("수신 데이터가 없습니다....");
-                        }
-                        sendStreamData();
-                        if (Float.parseFloat(MyUtils.ecu_vehicle_speed) > 0 ||
-                                Float.parseFloat(MyUtils.ecu_engine_load) > 0 ||
-                                Float.parseFloat(MyUtils.ecu_engine_rpm) > 0 ||
-                                Float.parseFloat(MyUtils.ecu_coolant_temp) > 0) {
-                            MyUtils.con_ECU = true;
-                            MyUtils.loaded_data = true;
-                        }
+                    for (String[] info : MyUtils.enum_info) {
+                        String msg = "01" + info[1];
+                        sendCommand(msg);
+                        readResponse();
+                        //SystemClock.sleep(150);
                     }
                 } catch (Exception e) {
-                    CommonFunc.showToastOnUIThread("ECU 데이터 수신 오류 !!!");
-                    closeSocket();
                     e.printStackTrace();
                 }
             }
         });
         workerThread.start();
-    }
-
-    private void getHeaderData() {
-        try {
-            String[] msgs = {
-                    "AT",
-                    "ATD",
-                    "ATZ"
-            };
-            if (outputStream == null)
-                return;
-            for (String msg : msgs) {
-                outputStream.write(msg.getBytes());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void sendStreamData() {
-        try {
-            for (String[] info : MyUtils.enum_info) {
-                String msg = "01" + info[1];
-                try {
-                    if (outputStream != null)
-                        outputStream.write(msg.getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (running) {
-                    SystemClock.sleep(100);
-                } else {
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    private ArrayList<String> getResponses(String rawResponse) {
-        ArrayList<String> resVal = new ArrayList<>();
-        String[] responses = rawResponse.split(" \r\r>");
-        if (responses.length == 1) {
-            responses = rawResponse.split("\r\n\r\n>");
-        }
-        if (responses.length == 1) {
-            responses = rawResponse.split("\r\r>");
-        }
-        for (String res : responses) {
-            String val = "";
-            if (res.contains(MOD_PREFIX3)) {
-                String[] values = res.split(MOD_PREFIX2);
-                for (int i = 0; i < values.length; i++) {
-                    if (i != 0) {
-                        if (i == 1)
-                            val += values[i];
-                        else
-                            val += " " + values[i];
-                    }
-                }
-            } else if (res.contains(MOD_PREFIX1)) {
-                String[] values = res.split(MOD_PREFIX1);
-                for (int i = 0; i < values.length; i++) {
-                    if (i != 0) {
-                        if (i == 1)
-                            val += values[i];
-                        else
-                            val += " " + values[i];
-                    }
-                }
-            } else {
-                String[] values = res.split(" ");
-                for (int i = 0; i < values.length; i++) {
-                    if (i != 0) {
-                        if (i == 1)
-                            val += values[i];
-                        else
-                            val += " " + values[i];
-                    }
-                }
-            }
-            resVal.add(val);
-        }
-        return resVal;
     }
 
     public void closeSocket(){
@@ -221,6 +150,15 @@ public class OBDConnect {
                     workerThread.interrupt();
                     workerThread = null;
                 }
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (MyUtils.btSocket != null) {
+                MyUtils.btSocket.close();
             }
             outputStream = null;
             inputStream = null;

@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name" translatable="false">Vifense</string>
-    <string name="app_version">Ver.0.231219.6</string>
+    <string name="app_name">Vifense</string>
+    <string name="app_version">Ver.0.231220.1</string>
     <string name="app_running">Vifense 앱이 실행 중 입니다.</string>
     <string name="user_id">아이디</string>
     <string name="user_pwd">비밀번호</string>
@@ -179,6 +179,10 @@
     <string name="safe_driving_scoring4">기본 100점에서 차감 제도로 운영</string>
 
     <string name="finish_app">\'뒤로\' 버튼을 한번 더 누르면 종료 됩니다.</string>
+    <string name="permission_failue">저장소 권한이 거부 되었습니다. 앱을 다시 실행 하여 저장소 권한을 허용해주세요.</string>
+    <string name="permission_failue1">저장소 권한이 거부되였습니다.</string>
+    <string name="permission_storage_title">저장소 권한 설정</string>
+    <string name="permission_storage_content">저장소 권한을 허용해주세요.</string>
 
     <string name="car_name_1">기아</string>
     <string name="car_name_2">르노삼성</string>

@@ -1,12 +1,30 @@
 package com.obd2.dgt.ui;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.obd2.dgt.dbManage.TableInfo.CarInfoTable;
 import com.obd2.dgt.dbManage.TableInfo.CompanyTable;
@@ -29,6 +47,11 @@ public class LoginActivity extends AppBaseActivity {
     String user_phone = "";
     String user_pwd = "";
     FrameLayout progress_layout;
+    String[] permissions  = {
+            READ_EXTERNAL_STORAGE,
+            WRITE_EXTERNAL_STORAGE
+    };
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     private static LoginActivity instance;
     public static LoginActivity getInstance() {
@@ -43,6 +66,24 @@ public class LoginActivity extends AppBaseActivity {
 
         permissionCheck();
         resetPhoneSetting();
+        if (!checkPermission()) {
+            activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult( ActivityResult result ) {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        if (Environment.isExternalStorageManager()) {
+
+                        }
+                        else
+                            Toast.makeText(LoginActivity.this, getText(R.string.permission_failue), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, getText(R.string.permission_failue), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            requestFilePermission();
+        }
 
         getDatabaseInfo();
         getWindowsSize();
@@ -183,4 +224,42 @@ public class LoginActivity extends AppBaseActivity {
         progress_layout.setVisibility(View.GONE);
     }
 
+
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        } else {
+            int readCheck = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
+            int writeCheck = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
+            return readCheck == PackageManager.PERMISSION_GRANTED && writeCheck == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    private void requestFilePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            new AlertDialog.Builder(LoginActivity.this)
+                    .setTitle(getString(R.string.permission_storage_title))
+                    .setMessage(getString(R.string.permission_storage_content))
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick( DialogInterface dialog, int which ) {
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                intent.addCategory("android.intent.category.DEFAULT");
+                                intent.setData(Uri.parse(String.format("package:%s", new Object[]{getApplicationContext().getPackageName()})));
+                                activityResultLauncher.launch(intent);
+                            } catch (Exception e) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                activityResultLauncher.launch(intent);
+                            }
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+
+        } else {
+            ActivityCompat.requestPermissions(LoginActivity.this, permissions, 30);
+        }
+    }
 }

@@ -17,6 +17,8 @@ import com.obd2.dgt.ui.LoginActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -230,5 +232,25 @@ public class CommonFunc {
             Toast.makeText(MyUtils.mContext, message, Toast.LENGTH_SHORT).show();
             handler.removeMessages(0);
         }, 1000);
+    }
+
+    public static void writeFile(String path, String filename, String content) {
+        FileWriter writer;
+        try {
+            File dir = new File(path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File file = new File(dir + "/" + filename);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            writer = new FileWriter(file, true);
+            writer.write(content);
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -381,13 +381,13 @@ public class MainActivity extends AppBaseActivity {
                                 link_index = 10;
                                 if (!eculink) {
                                     eculink = true;
-                                    MyUtils.obdConnect.setConnectingECU(pairedDevice);
+                                    MyUtils.obdConnect.setConnectingECU();
                                 }
-                                /*if (delay > 2) {
+                                if (delay > 2) {
                                     delay = 0;
                                     eculink = false;
                                 }
-                                delay++;*/
+                                delay++;
                             }
                         }
                         showConnectingLink(link_index);
