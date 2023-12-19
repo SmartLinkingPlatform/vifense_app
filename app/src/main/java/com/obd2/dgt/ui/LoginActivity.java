@@ -42,7 +42,7 @@ public class LoginActivity extends AppBaseActivity {
         instance = this;
 
         permissionCheck();
-        resetBluetoothAdapter();
+        resetPhoneSetting();
 
         getDatabaseInfo();
         getWindowsSize();

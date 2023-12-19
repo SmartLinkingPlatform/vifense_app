@@ -1,17 +1,17 @@
 package com.obd2.dgt.ui;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,6 +29,7 @@ import com.obd2.dgt.utils.PermissionSupport;
 public class AppBaseActivity extends AppCompatActivity {
     Intent foregroundServiceIntent = null;
     private PermissionSupport permission;
+    private PowerManager.WakeLock wakeLock;
 
 
     @SuppressLint("HandlerLeak")
@@ -73,13 +74,30 @@ public class AppBaseActivity extends AppCompatActivity {
         }
     }
 
-    public void resetBluetoothAdapter() {
-        if (MyUtils.mBluetoothAdapter == null) {
-            BluetoothManager bluetoothManager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
-            MyUtils.mBluetoothAdapter = bluetoothManager.getAdapter();
+    @SuppressLint("InvalidWakeLockTag")
+    public void resetPhoneSetting() {
+        MyUtils.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, getString(R.string.app_name));
+        wakeLock.acquire(10*60*1000L);
+
+        String packageName = getPackageName();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent();
+            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + packageName));
+                startActivity(intent);
+            }
         }
     }
-
+    public void releaseWakeLock() {
+        if (wakeLock != null && wakeLock.isHeld()) {
+            wakeLock.release();
+            wakeLock = null;
+        }
+    }
     @SuppressLint("MissingPermission")
     public boolean checkBluetoothAdapter() {
         MyUtils.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -183,7 +201,6 @@ public class AppBaseActivity extends AppCompatActivity {
             case BluetoothDevice.ACTION_BOND_STATE_CHANGED:
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
-                MyUtils.con_OBD = false;
                 MyUtils.obdConnect.closeSocket();
                 MainActivity.getInstance().showDisconnectedStatus(0);
                 break;

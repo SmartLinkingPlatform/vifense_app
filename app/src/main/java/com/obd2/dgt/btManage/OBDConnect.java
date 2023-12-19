@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class OBDConnect {
     private BluetoothSocket socket = null;
@@ -30,66 +31,40 @@ public class OBDConnect {
     }
 
     @SuppressLint("MissingPermission")
-    public void setConnectingOBD(BluetoothDevice obdDevice) throws IOException {
+    public void setConnectingOBD(BluetoothDevice obdDevice) {
         try {
             MyUtils.mBluetoothAdapter.cancelDiscovery();
             socket = obdDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
             socket.connect();
-            Method m = obdDevice.getClass().getMethod("isConnected", (Class[]) null);
-            MyUtils.con_OBD = (boolean) m.invoke(obdDevice, (Object[]) null);
+            if (socket.isConnected()) {
+                MyUtils.con_OBD = true;
+            } else {
+                MyUtils.con_OBD = false;
+            }
         } catch (Exception e) {
-            socket.close();
+            BluetoothSocket sockFallback;
+            Class<?> clazz = socket.getRemoteDevice().getClass();
+            Class<?>[] paramTypes = new Class<?>[]{Integer.TYPE};
+            try {
+                Method m = clazz.getMethod("createRfcommSocket", paramTypes);
+                Object[] params = new Object[]{1};
+                sockFallback = (BluetoothSocket) m.invoke(socket.getRemoteDevice(), params);
+                socket = sockFallback;
+            }
+            catch (Exception e2)
+            {
+                e2.printStackTrace();
+            }
             CommonFunc.showToastOnUIThread("OBD 연결 실패. 재 연결 중...");
             e.printStackTrace();
         }
     }
     @SuppressLint("MissingPermission")
-    public void setConnectingECU(BluetoothDevice bluetoothDevice) {
-        //btDevice = bluetoothDevice;
-        // Rfcomm 채널을 통해 블루투스 디바이스와 통신하는 소켓 생성
+    public void setConnectingECU(BluetoothDevice obdDevice) {
         try {
-            MyUtils.mBluetoothAdapter.cancelDiscovery();
-            socket = bluetoothDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
-            socket.connect();
-            if (socket.isConnected()) {
-                running = true;
-                Thread.sleep(1000);
-            }
+            Method m = obdDevice.getClass().getMethod("isConnected", (Class[]) null);
+            running = (boolean) m.invoke(obdDevice, (Object[]) null);
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (running) {
-            try {
-                outputStream = socket.getOutputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                inputStream = socket.getInputStream();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            MyUtils.btSocket = socket;
-
-            getHeaderData();
-            // 데이터 수신 함수 호출
-            receiveData();
-        }
-    }
-    /*@SuppressLint("MissingPermission")
-    public void setConnectingECU(BluetoothDevice obdDevice) throws IOException {
-        try {
-            if (socket.isConnected()) {
-                running = true;
-            } else {
-                running = false;
-                socket.close();
-                MyUtils.mBluetoothAdapter.cancelDiscovery();
-                socket = obdDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
-                socket.connect();
-            }
-        } catch (Exception e) {
-            socket.close();
             CommonFunc.showToastOnUIThread("ECU 연결 실패. 재 연결 중...");
             e.printStackTrace();
         }
@@ -107,7 +82,7 @@ public class OBDConnect {
                 e.printStackTrace();
             }
         }
-    }*/
+    }
 
     public void receiveData() {
         workerThread = new Thread(() -> {
@@ -132,6 +107,7 @@ public class OBDConnect {
                             }
                         } else {
                             MyUtils.loaded_data = false;
+                            CommonFunc.showToastOnUIThread("수신 데이터가 없습니다....");
                         }
                         sendStreamData();
                         if (Float.parseFloat(MyUtils.ecu_vehicle_speed) > 0 ||

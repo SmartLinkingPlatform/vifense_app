@@ -259,6 +259,7 @@ public class RealService extends Service {
             mainThread.interrupt();
             mainThread = null;
         }
+        MyUtils.obdConnect.closeSocket();
         Thread.currentThread().interrupt();
     }
 

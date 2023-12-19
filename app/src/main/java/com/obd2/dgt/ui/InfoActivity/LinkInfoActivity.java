@@ -27,6 +27,7 @@ import com.obd2.dgt.ui.ListAdapter.LinkDevice.PairedItem;
 import com.obd2.dgt.ui.ListAdapter.LinkMethod.MethodAdapter;
 import com.obd2.dgt.ui.ListAdapter.LinkMethod.MethodItem;
 import com.obd2.dgt.ui.MainActivity;
+import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.util.ArrayList;
@@ -155,7 +156,8 @@ public class LinkInfoActivity extends AppBaseActivity {
                     MyUtils.obd2_address = pairedItems.get(i).device.getAddress();
                     if (!MyUtils.con_ECU) {
                         pairedItems.get(i).selected = true;
-                        MyUtils.con_OBD = true;
+                        //MyUtils.con_OBD = true;
+                        CommonFunc.setUnPairedDevice();
                         showDialog();
                     } else {
                         //OBD2 연결 끊기

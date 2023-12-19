@@ -17,6 +17,7 @@ import com.obd2.dgt.ui.LoginActivity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -95,6 +96,22 @@ public class CommonFunc {
             }
         }
         return pairedDevice;
+    }
+
+    @SuppressLint("MissingPermission")
+    public static void setUnPairedDevice() {
+        BluetoothDevice pairedDevice = null;
+        Set<BluetoothDevice> pairedDevices = MyUtils.mBluetoothAdapter.getBondedDevices();
+        for (BluetoothDevice paired : pairedDevices) {
+            if (!paired.getAddress().equals(MyUtils.obd2_address)) {
+                try {
+                    Method method = paired.getClass().getMethod("removeBond");
+                    method.invoke(paired);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public static JSONArray AnalysisResponse(String response) {
