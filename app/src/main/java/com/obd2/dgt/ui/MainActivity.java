@@ -351,6 +351,14 @@ public class MainActivity extends AppBaseActivity {
         }
     }
 
+    public void setECULinkStatus(boolean status) {
+        eculink = status;
+    }
+
+    private boolean getECULinkStatus() {
+        return eculink;
+    }
+
     //장치 연결 스레드
     boolean obdlink = false;
     boolean eculink = false;
@@ -379,15 +387,9 @@ public class MainActivity extends AppBaseActivity {
                         } else {
                             if (link_index > 21) {
                                 link_index = 10;
-                                if (!eculink) {
-                                    eculink = true;
+                                if (!getECULinkStatus()) {
                                     MyUtils.obdConnect.setConnectingECU();
                                 }
-                                if (delay > 2) {
-                                    delay = 0;
-                                    eculink = false;
-                                }
-                                delay++;
                             }
                         }
                         showConnectingLink(link_index);
@@ -432,7 +434,7 @@ public class MainActivity extends AppBaseActivity {
 
     public void showDisconnectedStatus(int idx) {
         isConnecting = true;
-        link_index = 0;
+        link_index = 1;
         showConnectingLink(link_index);
         if (idx == 0)
             connect_device_text.setText("");

@@ -34,8 +34,7 @@ public class OBDConnect {
         try {
             this.obdDevice = obdDevice;
             MyUtils.mBluetoothAdapter.cancelDiscovery();
-            socket = obdDevice.createRfcommSocketToServiceRecord(MyUtils.uuid);
-            socket.connect();
+            socket = BluetoothManager.connect(obdDevice);
             if (socket.isConnected()) {
                 MyUtils.con_OBD = true;
                 running = true;
@@ -43,9 +42,8 @@ public class OBDConnect {
                 MyUtils.con_OBD = false;
             }
         } catch (Exception e) {
+            closeSocket();
             e.printStackTrace();
-            String content = CommonFunc.getDateTime() + " --- ODB Connect Error --- " + e.getMessage() + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
         }
     }
 
@@ -59,10 +57,12 @@ public class OBDConnect {
 
                 OBDProtocol protocol = new OBDProtocol(inputStream, outputStream);
                 if (protocol.autoSelectProtocol()) {
+                    MainActivity.getInstance().setECULinkStatus(true);
                     // 데이터 수신 함수 호출
                     SystemClock.sleep(1000);
                     getDataOBDtoECU();
                 } else {
+                    MainActivity.getInstance().setECULinkStatus(false);
                     CommonFunc.showToastOnUIThread("현재 차량의 ELM327 통신 프로토콜 검색중...");
                 }
             } catch (IOException e) {
@@ -102,8 +102,12 @@ public class OBDConnect {
                 Float.parseFloat(MyUtils.ecu_coolant_temp) > 0) {
             MyUtils.con_ECU = true;
             MyUtils.loaded_data = true;
+
+            content = CommonFunc.getDateTime() + " --- Success ODB-ECU Connected --- engine load:" + MyUtils.ecu_engine_load + ", rpm:" + MyUtils.ecu_engine_rpm + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
         }
     }
+
     private String getResponse(String rawResponse) {
         String res = rawResponse.replaceAll("(\r\n|\r|\n|\n\r)", "");
         res = res.replace("SEARCHING...>", "");
@@ -131,11 +135,11 @@ public class OBDConnect {
                         String msg = "01" + info[1];
                         sendCommand(msg);
                         readResponse();
-                        //SystemClock.sleep(150);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                SystemClock.sleep(200);
             }
         });
         workerThread.start();
