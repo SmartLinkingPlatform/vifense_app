@@ -171,7 +171,7 @@ public class LoginActivity extends AppBaseActivity {
         WebHttpConnect.onLoginRequest(params);
     }
 
-    public void onSuccessStart(ArrayList<String> user_info) {
+    public void onSuccessLogin(ArrayList<String> user_info) {
         DeviceInfoTable.getDeviceInfoTable();
         CarInfoTable.getCarInfoTable();
         
@@ -191,10 +191,12 @@ public class LoginActivity extends AppBaseActivity {
             MyInfoTable.updateMyInfoTable(params);
             MyInfoTable.getMyInfoTable();
         }
-        ServiceStart();
-        progress_layout.setVisibility(View.GONE);
-        onRLChangeLayount(LoginActivity.this, MainActivity.class);
-        finish();
+
+        //차량정보 조회
+        params = new String[][]{
+                {"user_id", String.valueOf(MyUtils.my_id)}
+        };
+        WebHttpConnect.onCarListRequest(params);
     }
     public void onNonUser() {
         progress_layout.setVisibility(View.GONE);
@@ -204,6 +206,33 @@ public class LoginActivity extends AppBaseActivity {
     public void onFailedPassword() {
         progress_layout.setVisibility(View.GONE);
         Toast.makeText(getApplicationContext(), R.string.error_password, Toast.LENGTH_LONG).show();
+    }
+
+    public void onSuccessCarList(ArrayList<String> car_info) {
+        String[][] params = new String[][]{
+                {"car_id", car_info.get(0)},
+                {"number", car_info.get(1)},
+                {"manufacturer", CommonFunc.findManufacturer(car_info.get(2))},
+                {"model", CommonFunc.findModel(car_info.get(3))},
+                {"create_date", CommonFunc.findCreateYear(car_info.get(4))},
+                {"fuel_type", CommonFunc.findFuelType(car_info.get(5))},
+                {"gas", car_info.get(6)}
+        };
+        if (MyUtils.carInfo.size() == 0) {
+            CarInfoTable.insertCarInfoTable(params);
+            CarInfoTable.getCarInfoTable();
+        }
+        ServiceStart();
+        progress_layout.setVisibility(View.GONE);
+        onRLChangeLayount(LoginActivity.this, MainActivity.class);
+        finish();
+    }
+
+    public void onFailedCarList() {
+        ServiceStart();
+        progress_layout.setVisibility(View.GONE);
+        onRLChangeLayount(LoginActivity.this, MainActivity.class);
+        finish();
     }
 
     //DataBase setting

@@ -25,6 +25,7 @@ public class MyUtils {
     public static String user_login = "/mobile.userLogin";
     public static String user_modify = "/mobile.userInfoModify";
     public static String reg_car = "/mobile.regCarInfo";
+    public static String list_car = "/mobile.listCarInfo";
     public static String mod_car = "/mobile.modCarInfo";
     public static String del_car = "/mobile.delCarInfo";
     public static String read_driving = "/mobile.readDriving";

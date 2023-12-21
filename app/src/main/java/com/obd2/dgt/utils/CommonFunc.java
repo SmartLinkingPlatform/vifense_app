@@ -234,6 +234,44 @@ public class CommonFunc {
         }, 1000);
     }
 
+    public static String findManufacturer(String val) {
+        String index = "0";
+        for (int i = 0; i < MyUtils.company_names.length; i++) {
+            if (val.equals(MyUtils.mContext.getString(MyUtils.company_names[i]))) {
+                index = String.valueOf(i);
+            }
+        }
+        return index;
+    }
+
+    public static String findModel(String val) {
+        String index = "0";
+        for (int i = 0; i < MyUtils.model_names.length; i++) {
+            if (val.equals(MyUtils.mContext.getString(MyUtils.model_names[i]))) {
+                index = String.valueOf(i);
+            }
+        }
+        return index;
+    }
+    public static String findCreateYear(String val) {
+        String index = "0";
+        for (int i = 0; i < MyUtils.create_years.size(); i++) {
+            if (val.equals(MyUtils.create_years.get(i))) {
+                index = String.valueOf(i);
+            }
+        }
+        return index;
+    }
+    public static String findFuelType(String val) {
+        String index = "0";
+        for (int i = 0; i < MyUtils.fuel_types.length; i++) {
+            if (val.equals(MyUtils.mContext.getString(MyUtils.fuel_types[i]))) {
+                index = String.valueOf(i);
+            }
+        }
+        return index;
+    }
+
     public static void writeFile(String path, String filename, String content) {
         FileWriter writer;
         try {

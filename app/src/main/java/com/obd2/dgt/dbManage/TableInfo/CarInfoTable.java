@@ -53,7 +53,8 @@ public class CarInfoTable {
 
     public static long insertCarInfoTable(String[][] fields) {
         try {
-            return MyUtils.db_connect.sqlInsert(table_name, fields);
+            long res = MyUtils.db_connect.sqlInsert(table_name, fields);
+            return res;
         } catch (Exception e) {
             e.printStackTrace();
         }

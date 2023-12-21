@@ -132,7 +132,7 @@ public class WebHttpConnect {
                             user_info.add(res.getString("user_name"));
                             user_info.add(res.getString("user_pwd"));
                             user_info.add(res.getString("admin_id"));
-                            LoginActivity.getInstance().onSuccessStart(user_info);
+                            LoginActivity.getInstance().onSuccessLogin(user_info);
                         } else if (msg.equals("nonuser")){
                             LoginActivity.getInstance().onNonUser();
                         } else {
@@ -188,6 +188,39 @@ public class WebHttpConnect {
                             CarInfoActivity.getInstance().onDuplicationRegisterCar();
                         } else {
                             CarInfoActivity.getInstance().onFailedRegisterCar();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute(httpCallPost);
+    }
+
+    //서버에 차량 정보 조회 보내기
+    public static void onCarListRequest(String[][] values) {
+        serverCallHttpFunc(values, MyUtils.list_car);
+        new HttpUrlRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (!response.isEmpty()) {
+                    try {
+                        JSONObject res = new JSONObject(response);
+                        String msg = res.getString("msg");
+                        if (msg.equals("ok")) {
+                            ArrayList<String> car_info = new ArrayList<>();
+                            car_info.add(res.getString("car_id"));
+                            car_info.add(res.getString("number"));
+                            car_info.add(res.getString("manufacturer"));
+                            car_info.add(res.getString("car_model"));
+                            car_info.add(res.getString("car_date"));
+                            car_info.add(res.getString("car_fuel"));
+                            car_info.add(res.getString("car_gas"));
+
+                            LoginActivity.getInstance().onSuccessCarList(car_info);
+                        } else {
+                            LoginActivity.getInstance().onFailedCarList();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
