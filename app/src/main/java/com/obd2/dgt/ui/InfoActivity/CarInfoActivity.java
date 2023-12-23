@@ -121,7 +121,8 @@ public class CarInfoActivity extends AppBaseActivity {
                     {"user_id", String.valueOf(MyUtils.my_id)},
                     {"admin_id", String.valueOf(MyUtils.admin_id)}
             };
-            WebHttpConnect.onCarRegisterRequest(params);
+            CommonFunc.sendParamData(params);
+            WebHttpConnect.onCarRegisterRequest();
         }
 
     }

@@ -71,37 +71,12 @@ public class CustomWebChromeClient extends WebChromeClient {
         });
         AuthActivity.getInstance().webview_frame.addView(newWebView);
 
-        //newWebView.addJavascriptInterface(new WebAppInterface(newWebView.getContext()), "DGTApp");
-
         ((WebView.WebViewTransport)resultMsg.obj).setWebView(newWebView);
         resultMsg.sendToTarget();
 
         return true;
     }
 
-/*
-    private class WebAppInterface {
-        Context mContext;
-
-        WebAppInterface(Context c) {
-            mContext = c;
-        }
-
-        // This function can be called in our JS script now
-        @JavascriptInterface
-        public void receivedAuthInfo(String value) {
-            try {
-                if (value != null && value.isEmpty()) {
-                    JSONObject receiveObj = new JSONObject(value);
-                    user_name = receiveObj.getString("userName");
-                    user_phone = receiveObj.getString("userPhone");
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-*/
     @Override
     public void onCloseWindow(WebView window) {
         Log.i(getClass().getName(), "onCloseWindow");

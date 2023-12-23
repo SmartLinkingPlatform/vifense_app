@@ -131,7 +131,8 @@ public class MyInfoModifyActivity extends AppBaseActivity {
                         {"admin_id", c_ids[myinfo_mod_company_spinner.getSelectedItemPosition()]},
                         {"update_date", update_date}
                 };
-                WebHttpConnect.onModifyUserRequest(params);
+                CommonFunc.sendParamData(params);
+                WebHttpConnect.onModifyUserRequest();
             }
         } else {
             isMode = false;

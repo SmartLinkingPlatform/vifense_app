@@ -15,6 +15,7 @@ import com.obd2.dgt.network.NetworkStatus;
 import com.obd2.dgt.ui.LoginActivity;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -272,6 +273,7 @@ public class CommonFunc {
         return index;
     }
 
+    //로그파일 쓰기
     public static void writeFile(String path, String filename, String content) {
         FileWriter writer;
         try {
@@ -290,5 +292,17 @@ public class CommonFunc {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void sendParamData(String[][] values) {
+        JSONObject SendDataPackage = new JSONObject();
+        try {
+            for (int i = 0; i < values.length; i++) {
+                SendDataPackage.put(values[i][0], values[i][1]);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        MyUtils.sendRequestData = SendDataPackage.toString();
     }
 }

@@ -93,7 +93,7 @@ public class OBDConnect {
         if (response.length() <= 2) {
             return;
         }
-        Log.d("OBD-II", "response : " + response);
+
         ResponseCalculator.ResponseCalculator(response);
 
         if (Float.parseFloat(MyUtils.ecu_vehicle_speed) > 0 ||
@@ -102,16 +102,13 @@ public class OBDConnect {
                 Float.parseFloat(MyUtils.ecu_coolant_temp) > 0) {
             MyUtils.con_ECU = true;
             MyUtils.loaded_data = true;
-
-            content = CommonFunc.getDateTime() + " --- Success ODB-ECU Connected --- engine load:" + MyUtils.ecu_engine_load + ", rpm:" + MyUtils.ecu_engine_rpm + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
         }
     }
 
     private String getResponse(String rawResponse) {
         String res = rawResponse.replaceAll("(\r\n|\r|\n|\n\r)", "");
-        res = res.replace("SEARCHING...>", "");
-        res = res.replace("SEARCHING...", "");
+        res = res.replace("SEARCHING...>", "").replace("NODATA", "");
+        res = res.replace("SEARCHING...", "").replace("NODATA", "");
         res = res.replaceAll(">", "");
 
         String[] values = res.split(" ");

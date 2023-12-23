@@ -79,7 +79,8 @@ public class RankingInfoActivity extends AppBaseActivity {
                     {"user_id", String.valueOf(MyUtils.my_id)},
                     {"driving_date", driving_date}
             };
-            WebHttpConnect.onDrivingRankingRequest(params);
+            CommonFunc.sendParamData(params);
+            WebHttpConnect.onDrivingRankingRequest();
         }
     }
 

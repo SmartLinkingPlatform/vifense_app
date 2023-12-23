@@ -126,7 +126,7 @@ public class LoginActivity extends AppBaseActivity {
         register_btn.setOnClickListener(view -> gotoSignupActivity());
 
         login_btn = findViewById(R.id.login_btn);
-        login_btn.setOnClickListener(view -> gotoMainActivity());
+        login_btn.setOnClickListener(view -> getAuthToken());
 
         progress_layout = findViewById(R.id.progress_layout);
         progress_layout.setVisibility(View.GONE);
@@ -139,7 +139,7 @@ public class LoginActivity extends AppBaseActivity {
         onRLChangeLayount(LoginActivity.this, SignupActivity.class);
         finish();
     }
-    private void gotoMainActivity(){
+    private void getAuthToken() {
         user_phone = login_id_text.getText().toString();
         user_pwd = login_pwd_text.getText().toString();
         if (user_phone.isEmpty()) {
@@ -162,41 +162,52 @@ public class LoginActivity extends AppBaseActivity {
             }
         }
 
+        String[][] params = new String[][]{
+                {"user_phone", user_phone},
+                {"user_pwd", encode_pwd}
+        };
+        WebHttpConnect.onTokenRequest(params);
+    }
+    public void onSuccessGetToken(){
         String visit_date = CommonFunc.getDateTime();
         String[][] params = new String[][]{
                 {"user_phone", user_phone},
-                {"user_pwd", encode_pwd},
                 {"visit_date", visit_date}
         };
-        WebHttpConnect.onLoginRequest(params);
+        CommonFunc.sendParamData(params);
+        WebHttpConnect.onLoginRequest();
     }
 
     public void onSuccessLogin(ArrayList<String> user_info) {
         DeviceInfoTable.getDeviceInfoTable();
         CarInfoTable.getCarInfoTable();
-        
+
         MyUtils.my_id = Integer.parseInt(user_info.get(0));
         MyUtils.admin_id = Integer.parseInt(user_info.get(4));
-        String[][] params = new String[][]{
+        String encode_pwd = Crypt.encrypt(user_pwd);
+
+        String[][] dbparams = new String[][]{
                 {"phone", user_info.get(1)},
                 {"name", user_info.get(2)},
-                {"password", user_info.get(3)},
+                {"password", encode_pwd},
                 {"cid", user_info.get(4)},
                 {"condition", "1"}
         };
         if (MyInfoTable.getExistMyInfoTable(user_phone) == 0) {
-            MyInfoTable.insertMyInfoTable(params);
+            MyInfoTable.insertMyInfoTable(dbparams);
             MyInfoTable.getMyInfoTable();
         } else {
-            MyInfoTable.updateMyInfoTable(params);
+            MyInfoTable.updateMyInfoTable(dbparams);
             MyInfoTable.getMyInfoTable();
         }
 
+
         //차량정보 조회
-        params = new String[][]{
+        String[][] params = new String[][]{
                 {"user_id", String.valueOf(MyUtils.my_id)}
         };
-        WebHttpConnect.onCarListRequest(params);
+        CommonFunc.sendParamData(params);
+        WebHttpConnect.onCarListRequest();
     }
     public void onNonUser() {
         progress_layout.setVisibility(View.GONE);
@@ -222,13 +233,14 @@ public class LoginActivity extends AppBaseActivity {
             CarInfoTable.insertCarInfoTable(params);
             CarInfoTable.getCarInfoTable();
         }
-        ServiceStart();
-        progress_layout.setVisibility(View.GONE);
-        onRLChangeLayount(LoginActivity.this, MainActivity.class);
-        finish();
+        gotoMainPage();
     }
 
     public void onFailedCarList() {
+        gotoMainPage();
+    }
+
+    private void gotoMainPage() {
         ServiceStart();
         progress_layout.setVisibility(View.GONE);
         onRLChangeLayount(LoginActivity.this, MainActivity.class);

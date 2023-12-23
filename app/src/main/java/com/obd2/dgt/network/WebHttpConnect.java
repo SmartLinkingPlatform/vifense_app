@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.CompanyTable;
 import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
+import com.obd2.dgt.network.http.HttpBodyRequest;
 import com.obd2.dgt.network.http.HttpCall;
 import com.obd2.dgt.network.http.HttpUrlRequest;
 import com.obd2.dgt.ui.FindPwdActivity;
@@ -47,6 +48,11 @@ public class WebHttpConnect {
             paramsPost.put(values[i][0], values[i][1]);
         }
         httpCallPost.setParams(paramsPost);
+    }
+    private static void serverCallFunc(String ajx) {
+        httpCallPost.setMethodtype(HttpCall.POST);
+        String url = MyUtils.server_url + ajx;
+        httpCallPost.setUrl(url);
     }
 
     //서버에 회사 리스트 요청
@@ -114,10 +120,38 @@ public class WebHttpConnect {
         }.execute(httpCallPost);
     }
 
-    //서버에 로그인 정보 보내기
-    public static void onLoginRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.user_login);
+    //서버에 토큰 정보 요청
+    public static void onTokenRequest(String[][] values) {
+        serverCallHttpFunc(values, MyUtils.auth_token);
         new HttpUrlRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (!response.isEmpty()) {
+                    try {
+                        JSONObject res = new JSONObject(response);
+                        String msg = res.getString("msg");
+                        if (msg.equals("ok")) {
+                            MyUtils.ACCESS_TOKEN = res.getString("access_token");
+
+                            LoginActivity.getInstance().onSuccessGetToken();
+                        } else if (msg.equals("nonuser")){
+                            LoginActivity.getInstance().onNonUser();
+                        } else {
+                            LoginActivity.getInstance().onFailedPassword();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute(httpCallPost);
+    }
+
+    //서버에 로그인 정보 보내기
+    public static void onLoginRequest() {
+        serverCallFunc(MyUtils.user_login);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -147,9 +181,9 @@ public class WebHttpConnect {
     }
 
     //서버에 나의 정보 수정 내용 보내기
-    public static void onModifyUserRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.user_modify);
-        new HttpUrlRequest(){
+    public static void onModifyUserRequest() {
+        serverCallFunc(MyUtils.user_modify);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -171,9 +205,9 @@ public class WebHttpConnect {
     }
 
     //서버에 차량 등록 정보 보내기
-    public static void onCarRegisterRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.reg_car);
-        new HttpUrlRequest(){
+    public static void onCarRegisterRequest() {
+        serverCallFunc(MyUtils.reg_car);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -198,9 +232,9 @@ public class WebHttpConnect {
     }
 
     //서버에 차량 정보 조회 보내기
-    public static void onCarListRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.list_car);
-        new HttpUrlRequest(){
+    public static void onCarListRequest() {
+        serverCallFunc(MyUtils.list_car);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -231,9 +265,9 @@ public class WebHttpConnect {
     }
 
     //서버에 차량 정보 수정 보내기
-    public static void onCarModifyRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.mod_car);
-        new HttpUrlRequest(){
+    public static void onCarModifyRequest() {
+        serverCallFunc(MyUtils.mod_car);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -255,9 +289,9 @@ public class WebHttpConnect {
     }
 
     //서버에 차량 정보 삭제 보내기
-    public static void onCarDeleteRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.del_car);
-        new HttpUrlRequest(){
+    public static void onCarDeleteRequest() {
+        serverCallFunc(MyUtils.del_car);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -279,9 +313,9 @@ public class WebHttpConnect {
     }
 
     //차량 주행 정보 요청
-    public static void onReadDrivingInfoRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.read_driving);
-        new HttpUrlRequest(){
+    public static void onReadDrivingInfoRequest() {
+        serverCallFunc(MyUtils.read_driving);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -321,9 +355,9 @@ public class WebHttpConnect {
     }
 
     //차량의 주행 정보 보내기
-    public static void onSaveDrivingInfoRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.save_driving);
-        new HttpUrlRequest(){
+    public static void onSaveDrivingInfoRequest() {
+        serverCallFunc(MyUtils.save_driving);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -351,9 +385,9 @@ public class WebHttpConnect {
     }
 
     //새로운 메세지 리스트 요청
-    public static void onMessageInfoRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.mgs_list);
-        new HttpUrlRequest(){
+    public static void onMessageInfoRequest() {
+        serverCallFunc(MyUtils.mgs_list);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -384,9 +418,9 @@ public class WebHttpConnect {
     }
 
     //랭킹 정보 요청
-    public static void onDrivingRankingRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.driving_ranking);
-        new HttpUrlRequest(){
+    public static void onDrivingRankingRequest() {
+        serverCallFunc(MyUtils.driving_ranking);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -439,9 +473,9 @@ public class WebHttpConnect {
     }
 
     //메인화면 랭킹정보
-    public static void onRankingRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.ranking);
-        new HttpUrlRequest(){
+    public static void onRankingRequest() {
+        serverCallFunc(MyUtils.ranking);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);
@@ -469,9 +503,9 @@ public class WebHttpConnect {
     }
 
     //서버에 새 비밀번호 저장
-    public static void onNewPasswordRequest(String[][] values) {
-        serverCallHttpFunc(values, MyUtils.new_pwd);
-        new HttpUrlRequest(){
+    public static void onNewPasswordRequest() {
+        serverCallFunc(MyUtils.new_pwd);
+        new HttpBodyRequest(){
             @Override
             public void onResponse(String response) {
                 super.onResponse(response);

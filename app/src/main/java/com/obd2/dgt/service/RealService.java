@@ -285,7 +285,8 @@ public class RealService extends Service {
                 {"quick_cnt", String.valueOf(MyUtils.quick_speed_cnt)},
                 {"brake_cnt", String.valueOf(MyUtils.brake_speed_cnt)}
         };
-        WebHttpConnect.onSaveDrivingInfoRequest(params);
+        CommonFunc.sendParamData(params);
+        WebHttpConnect.onSaveDrivingInfoRequest();
         stopParameters();
     }
 

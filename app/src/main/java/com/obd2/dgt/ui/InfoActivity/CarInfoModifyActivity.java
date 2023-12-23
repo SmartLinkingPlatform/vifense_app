@@ -146,7 +146,8 @@ public class CarInfoModifyActivity extends AppBaseActivity {
                     {"car_fuel", mod_fuel_type_spinner.getSelectedItem().toString()},
                     {"car_gas", mod_gas_text.getText().toString()},
             };
-            WebHttpConnect.onCarModifyRequest(params);
+            CommonFunc.sendParamData(params);
+            WebHttpConnect.onCarModifyRequest();
         }
     }
 
@@ -188,7 +189,8 @@ public class CarInfoModifyActivity extends AppBaseActivity {
                     {"number", mod_number_text.getText().toString()},
                     {"user_id", String.valueOf(MyUtils.my_id)}
             };
-            WebHttpConnect.onCarDeleteRequest(params);
+            CommonFunc.sendParamData(params);
+            WebHttpConnect.onCarDeleteRequest();
         }
     }
     public void onSuccessDeleteCar() {

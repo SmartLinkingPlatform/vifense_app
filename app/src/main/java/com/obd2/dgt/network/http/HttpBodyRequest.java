@@ -2,6 +2,8 @@ package com.obd2.dgt.network.http;
 
 import android.os.AsyncTask;
 
+import com.obd2.dgt.utils.MyUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,13 +46,13 @@ public class HttpBodyRequest extends AsyncTask<HttpCall, String, String> {
             urlConnection.setRequestMethod(method);
             urlConnection.setRequestProperty("Content-Type", "application/json; charset=utf-8");
             urlConnection.setRequestProperty("Accept", "application/json;");
-            //String Authorization = "Bearer " + MyUtils.ACCESS_TOKEN;
-            //urlConnection.setRequestProperty("Authorization", Authorization);
+            String Authorization = "Bearer " + MyUtils.ACCESS_TOKEN;
+            urlConnection.setRequestProperty("Authorization", Authorization);
             urlConnection.setReadTimeout(60000); //milliseconds
             urlConnection.setConnectTimeout(60000); //milliseconds
             if(httpCall.getMethodtype() != HttpCall.GET){
                 OutputStream os = urlConnection.getOutputStream();
-                //os.write(SendDataPacket.sendMqttDataPackage().getBytes(StandardCharsets.UTF_8));
+                os.write(MyUtils.sendRequestData.getBytes(StandardCharsets.UTF_8));
                 os.close();
             }
             int responseCode = urlConnection.getResponseCode();
@@ -61,6 +63,7 @@ public class HttpBodyRequest extends AsyncTask<HttpCall, String, String> {
                     response.append(line);
                 }
             }
+            return response.toString();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {

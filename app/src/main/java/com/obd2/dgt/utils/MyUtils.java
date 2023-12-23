@@ -21,8 +21,9 @@ public class MyUtils {
     public static String signup_url = "https://dgt.vifense.com/mok/auth_signup.html";
     public static String find_url = "https://dgt.vifense.com/mok/auth_findpwd.html";
     public static String call_company = "/mobile.companyInfo";
-    public static String user_signup = "/mobile.userSignup";
-    public static String user_login = "/mobile.userLogin";
+    public static String user_signup = "/mobile.register";
+    public static String auth_token = "/mobile.login";
+    public static String user_login = "/mobile.get_user";
     public static String user_modify = "/mobile.userInfoModify";
     public static String reg_car = "/mobile.regCarInfo";
     public static String list_car = "/mobile.listCarInfo";
@@ -34,6 +35,8 @@ public class MyUtils {
     public static String driving_ranking = "/mobile.drivingRanking";
     public static String mgs_list = "/mobile.messageList";
     public static String new_pwd = "/mobile.newpassword";
+    public static String ACCESS_TOKEN = "";
+    public static String sendRequestData = "";
     public static AppBaseActivity appBase = null;
     public static String StorageFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
     public static Class<?> currentActivity = null;

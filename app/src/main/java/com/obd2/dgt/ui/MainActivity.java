@@ -77,7 +77,7 @@ public class MainActivity extends AppBaseActivity {
             SystemClock.sleep(1000);
             if (MyUtils.con_OBD) {
                 if (MyUtils.con_ECU) {
-                    link_index = 22;
+                    link_index = 10;
                     showConnectingLink(link_index);
                 }
                 /*else {
@@ -101,7 +101,8 @@ public class MainActivity extends AppBaseActivity {
                     {"user_id", String.valueOf(MyUtils.my_id)},
                     {"driving_date", driving_date}
             };
-            WebHttpConnect.onRankingRequest(params);
+            CommonFunc.sendParamData(params);
+            WebHttpConnect.onRankingRequest();
         }
     }
     public void setRankingValues(String[] values) {
@@ -114,7 +115,8 @@ public class MainActivity extends AppBaseActivity {
                 {"msg_id", String.valueOf(MyUtils.lastMsgID)},
                 {"user_phone", MyUtils.my_phone}
         };
-        WebHttpConnect.onMessageInfoRequest(msgparams);
+        CommonFunc.sendParamData(msgparams);
+        WebHttpConnect.onMessageInfoRequest();
     }
 
     public void setMessageStatus() {
@@ -269,75 +271,27 @@ public class MainActivity extends AppBaseActivity {
             dot_img_2.setBackgroundResource(R.drawable.dot_on);
             dot_img_3.setBackgroundResource(R.drawable.dot_on);
         } else if (index == 5) {
-            dot_img_1.setBackgroundResource(R.drawable.dot_off);
-            dot_img_2.setBackgroundResource(R.drawable.dot_off);
-            dot_img_3.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 6) {
-            dot_img_1.setBackgroundResource(R.drawable.dot_on);
-            dot_img_2.setBackgroundResource(R.drawable.dot_off);
-            dot_img_3.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 7) {
-            dot_img_1.setBackgroundResource(R.drawable.dot_on);
-            dot_img_2.setBackgroundResource(R.drawable.dot_on);
-            dot_img_3.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 8) {
-            dot_img_1.setBackgroundResource(R.drawable.dot_on);
-            dot_img_2.setBackgroundResource(R.drawable.dot_on);
-            dot_img_3.setBackgroundResource(R.drawable.dot_on);
-        } else if (index == 9) {
             dot_img_1.setBackgroundResource(R.drawable.dot_on);
             dot_img_2.setBackgroundResource(R.drawable.dot_on);
             dot_img_3.setBackgroundResource(R.drawable.dot_on);
             con_img_2.setBackgroundResource(R.drawable.bluetooth_on);
+        } else if (index == 6) {
+            dot_img_4.setBackgroundResource(R.drawable.dot_off);
+            dot_img_5.setBackgroundResource(R.drawable.dot_off);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
+        } else if (index == 7) {
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_off);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
+        } else if (index == 8) {
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_on);
+            dot_img_6.setBackgroundResource(R.drawable.dot_off);
+        } else if (index == 9) {
+            dot_img_4.setBackgroundResource(R.drawable.dot_on);
+            dot_img_5.setBackgroundResource(R.drawable.dot_on);
+            dot_img_6.setBackgroundResource(R.drawable.dot_on);
         } else if (index == 10) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_off);
-            dot_img_5.setBackgroundResource(R.drawable.dot_off);
-            dot_img_6.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 11) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_on);
-            dot_img_5.setBackgroundResource(R.drawable.dot_off);
-            dot_img_6.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 12) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_on);
-            dot_img_5.setBackgroundResource(R.drawable.dot_on);
-            dot_img_6.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 13) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_on);
-            dot_img_5.setBackgroundResource(R.drawable.dot_on);
-            dot_img_6.setBackgroundResource(R.drawable.dot_on);
-        } else if (index == 14) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_off);
-            dot_img_5.setBackgroundResource(R.drawable.dot_off);
-            dot_img_6.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 15) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_on);
-            dot_img_5.setBackgroundResource(R.drawable.dot_off);
-            dot_img_6.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 16) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_on);
-            dot_img_5.setBackgroundResource(R.drawable.dot_on);
-            dot_img_6.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 17) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_on);
-            dot_img_5.setBackgroundResource(R.drawable.dot_on);
-            dot_img_6.setBackgroundResource(R.drawable.dot_on);
-        } else if (index == 18) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_off);
-            dot_img_5.setBackgroundResource(R.drawable.dot_off);
-            dot_img_6.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 19) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_on);
-            dot_img_5.setBackgroundResource(R.drawable.dot_off);
-            dot_img_6.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 20) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_on);
-            dot_img_5.setBackgroundResource(R.drawable.dot_on);
-            dot_img_6.setBackgroundResource(R.drawable.dot_off);
-        } else if (index == 21) {
-            dot_img_4.setBackgroundResource(R.drawable.dot_on);
-            dot_img_5.setBackgroundResource(R.drawable.dot_on);
-            dot_img_6.setBackgroundResource(R.drawable.dot_on);
-        } else if (index == 22) {
             dot_img_1.setBackgroundResource(R.drawable.dot_on);
             dot_img_2.setBackgroundResource(R.drawable.dot_on);
             dot_img_3.setBackgroundResource(R.drawable.dot_on);
@@ -372,7 +326,7 @@ public class MainActivity extends AppBaseActivity {
                         connect_device_text.setText(R.string.connecting_obd2_text);
                         isConClick = false;
                         if (!MyUtils.con_OBD) {
-                            if (link_index > 8) {
+                            if (link_index > 4) {
                                 link_index = 1;
                                 if (!obdlink) {
                                     obdlink = true;
@@ -385,8 +339,8 @@ public class MainActivity extends AppBaseActivity {
                                 delay++;
                             }
                         } else {
-                            if (link_index > 21) {
-                                link_index = 10;
+                            if (link_index > 9) {
+                                link_index = 6;
                                 if (!getECULinkStatus()) {
                                     MyUtils.obdConnect.setConnectingECU();
                                 }
@@ -397,7 +351,7 @@ public class MainActivity extends AppBaseActivity {
                         link_index++;
                     } else {
                         delay = 0;
-                        link_index = 22;
+                        link_index = 10;
                         showConnectingLink(link_index);
                         isConnecting = false;
                         isConClick = true;
@@ -434,7 +388,7 @@ public class MainActivity extends AppBaseActivity {
 
     public void showDisconnectedStatus(int idx) {
         isConnecting = true;
-        link_index = 1;
+        link_index = 0;
         showConnectingLink(link_index);
         if (idx == 0)
             connect_device_text.setText("");

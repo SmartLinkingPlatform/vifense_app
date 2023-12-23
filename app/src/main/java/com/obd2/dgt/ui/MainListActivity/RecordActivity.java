@@ -68,7 +68,8 @@ public class RecordActivity extends AppBaseActivity {
                     {"user_id", String.valueOf(MyUtils.my_id)},
                     {"driving_date", driving_date}
             };
-            WebHttpConnect.onReadDrivingInfoRequest(params);
+            CommonFunc.sendParamData(params);
+            WebHttpConnect.onReadDrivingInfoRequest();
         }
     }
 

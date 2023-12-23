@@ -345,7 +345,6 @@ public class DashboardActivity extends AppBaseActivity {
     }
     //page refresh
     private void RefreshGaugeLayout() {
-        addItems = new ArrayList<>();
         clearAllGaugeLayout();
         int gauge_cnt = GaugeInfoTable.getGaugeEnableCount();
         if (gauge_cnt >= 6) {
@@ -546,6 +545,8 @@ public class DashboardActivity extends AppBaseActivity {
     }
     //계기 추가 Dialog
     public void showAddGaugeDialog() {
+        addItems = new ArrayList<>();
+
         addDialog.setContentView(R.layout.dlg_add_gauge);
         addDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 

@@ -148,7 +148,8 @@ public class FindPwdActivity extends AppBaseActivity {
                         {"user_pwd", encode_pwd},
                         {"update_date", update_date}
                 };
-                WebHttpConnect.onNewPasswordRequest(params);
+                CommonFunc.sendParamData(params);
+                WebHttpConnect.onNewPasswordRequest();
             }
         } else {
             showConfirmDialog();
