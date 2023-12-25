@@ -162,47 +162,10 @@ public class MyUtils {
     public static String safety_score = "0";
 
     public static int[] company_names = {
-            R.string.car_name_1, R.string.car_name_2, R.string.car_name_3, R.string.car_name_4,
-            R.string.car_name_5, R.string.car_name_6, R.string.car_name_7, R.string.car_name_8,
-            R.string.car_name_9, R.string.car_name_10, R.string.car_name_11, R.string.car_name_12,
-            R.string.car_name_13, R.string.car_name_14, R.string.car_name_15, R.string.car_name_16,
-            R.string.car_name_17, R.string.car_name_18, R.string.car_name_19, R.string.car_name_20,
-            R.string.car_name_21, R.string.car_name_22, R.string.car_name_23, R.string.car_name_24,
-            R.string.car_name_25, R.string.car_name_26, R.string.car_name_27, R.string.car_name_28,
-            R.string.car_name_29, R.string.car_name_30, R.string.car_name_31, R.string.car_name_31,
-            R.string.car_name_33, R.string.car_name_34, R.string.car_name_35, R.string.car_name_36,
-            R.string.car_name_37, R.string.car_name_38, R.string.car_name_39, R.string.car_name_40,
-            R.string.car_name_41, R.string.car_name_42, R.string.car_name_43, R.string.car_name_44,
-            R.string.car_name_45, R.string.car_name_46, R.string.car_name_47, R.string.car_name_48,
-            R.string.car_name_49, R.string.car_name_50, R.string.car_name_51, R.string.car_name_52,
-            R.string.car_name_53, R.string.car_name_54, R.string.car_name_55, R.string.car_name_56,
-            R.string.car_name_57, R.string.car_name_58, R.string.car_name_59, R.string.car_name_60,
-            R.string.car_name_61, R.string.car_name_62, R.string.car_name_63, R.string.car_name_64,
-            R.string.car_name_65, R.string.car_name_66, R.string.car_name_67, R.string.car_name_68,
-            R.string.car_name_69, R.string.car_name_70, R.string.car_name_71, R.string.car_name_72,
-            R.string.car_name_73, R.string.car_name_74, R.string.car_name_75, R.string.car_name_76,
-            R.string.car_name_77, R.string.car_name_78, R.string.car_name_79, R.string.car_name_80,
-            R.string.car_name_81, R.string.car_name_82, R.string.car_name_83, R.string.car_name_84,
-            R.string.car_name_85, R.string.car_name_86, R.string.car_name_87, R.string.car_name_88,
-            R.string.car_name_89, R.string.car_name_90, R.string.car_name_91, R.string.car_name_92,
-            R.string.car_name_93, R.string.car_name_94, R.string.car_name_95, R.string.car_name_96,
-            R.string.car_name_97, R.string.car_name_98
+            R.string.car_name_1, R.string.car_name_5
     };
     public static int[] model_names = {
-            R.string.model_name_1, R.string.model_name_2, R.string.model_name_3, R.string.model_name_4,
-            R.string.model_name_5, R.string.model_name_6, R.string.model_name_7, R.string.model_name_8,
-            R.string.model_name_9, R.string.model_name_10, R.string.model_name_11, R.string.model_name_12,
-            R.string.model_name_13, R.string.model_name_14, R.string.model_name_15, R.string.model_name_16,
-            R.string.model_name_17, R.string.model_name_18, R.string.model_name_19, R.string.model_name_20,
-            R.string.model_name_21, R.string.model_name_22, R.string.model_name_23, R.string.model_name_24,
-            R.string.model_name_25, R.string.model_name_26, R.string.model_name_27, R.string.model_name_28,
-            R.string.model_name_29, R.string.model_name_30, R.string.model_name_31, R.string.model_name_31,
-            R.string.model_name_33, R.string.model_name_34, R.string.model_name_35, R.string.model_name_36,
-            R.string.model_name_37, R.string.model_name_38, R.string.model_name_39, R.string.model_name_40,
-            R.string.model_name_41, R.string.model_name_42, R.string.model_name_43, R.string.model_name_44,
-            R.string.model_name_45, R.string.model_name_46, R.string.model_name_47, R.string.model_name_48,
-            R.string.model_name_49, R.string.model_name_50, R.string.model_name_51, R.string.model_name_52,
-            R.string.model_name_53, R.string.model_name_54, R.string.model_name_55, R.string.model_name_56
+            R.string.model_name_0, R.string.model_name_26
     };
 
     public static ArrayList<String> create_years = new ArrayList<>();

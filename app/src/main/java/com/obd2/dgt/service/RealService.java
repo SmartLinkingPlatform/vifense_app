@@ -61,9 +61,11 @@ public class RealService extends Service {
                             showWarningDialog();
                         }
 
-                        if (!MyUtils.con_ECU || !MyUtils.loaded_data ||
+                        if (Float.parseFloat(MyUtils.ecu_vehicle_speed) == 0 &&
+                                (!MyUtils.con_ECU || !MyUtils.loaded_data ||
                                 Float.parseFloat(MyUtils.ecu_engine_load) == 0 ||
-                                Float.parseFloat(MyUtils.ecu_engine_rpm) == 0) {
+                                Float.parseFloat(MyUtils.ecu_engine_rpm) == 0))
+                        {
                             if (time > 0 && Float.parseFloat(MyUtils.ecu_mileage) > 0.1) {
                                 stopEngineStatus();
                             }

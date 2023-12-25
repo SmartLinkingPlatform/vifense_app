@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.SystemClock;
-import android.util.Log;
 
 import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.utils.CommonFunc;
@@ -13,8 +12,6 @@ import com.obd2.dgt.utils.MyUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 
 public class OBDConnect {
     private BluetoothSocket socket = null;
@@ -54,17 +51,18 @@ public class OBDConnect {
                 outputStream = socket.getOutputStream();
                 inputStream = socket.getInputStream();
                 MyUtils.btSocket = socket;
-
                 OBDProtocol protocol = new OBDProtocol(inputStream, outputStream);
-                if (protocol.autoSelectProtocol()) {
+
+                if (protocol.setComProtocol()) {
                     MainActivity.getInstance().setECULinkStatus(true);
                     // 데이터 수신 함수 호출
                     SystemClock.sleep(1000);
+                    sendCommand(Protocol.DISABLE_DISPLAY_HEADERS);
                     getDataOBDtoECU();
-                } else {
+                }/* else {
                     MainActivity.getInstance().setECULinkStatus(false);
                     CommonFunc.showToastOnUIThread("현재 차량의 ELM327 통신 프로토콜 검색중...");
-                }
+                }*/
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -81,7 +79,7 @@ public class OBDConnect {
         }
     }
 
-    private void readResponse() throws IOException {
+    private boolean readResponse() throws IOException {
         byte[] buffer = new byte[1024];
         int bytesRead = inputStream.read(buffer);
         final String rawResponse = new String(buffer, 0, bytesRead);
@@ -90,11 +88,14 @@ public class OBDConnect {
         CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
 
         String response = getResponse(rawResponse);
-        if (response.length() <= 2) {
-            return;
+        if (response.equals("")) {
+            return true;
+        }
+        if (response.equals("no")) {
+            return false;
         }
 
-        ResponseCalculator.ResponseCalculator(response);
+        OBDResponse.ResponseCalculator(response);
 
         if (Float.parseFloat(MyUtils.ecu_vehicle_speed) > 0 ||
                 Float.parseFloat(MyUtils.ecu_engine_load) > 0 ||
@@ -103,6 +104,7 @@ public class OBDConnect {
             MyUtils.con_ECU = true;
             MyUtils.loaded_data = true;
         }
+        return true;
     }
 
     private String getResponse(String rawResponse) {
@@ -110,15 +112,22 @@ public class OBDConnect {
         res = res.replace("SEARCHING...>", "").replace("NODATA", "");
         res = res.replace("SEARCHING...", "").replace("NODATA", "");
         res = res.replaceAll(">", "");
-
-        String[] values = res.split(" ");
-        StringBuilder sub_str = new StringBuilder();
-        for (int i = 0; i < values.length; i++) {
-            if (i > 0) {
-                sub_str.append(values[i]);
-            }
+        if (res.startsWith(MOD_PREFIX)) {
+            res = res.replace(MOD_PREFIX, "");
         }
-        res = sub_str.toString();
+        if (res.contains(" ")) {
+            String[] values = res.split(" ");
+            StringBuilder sub_str = new StringBuilder();
+            for (int i = 0; i < values.length; i++) {
+                if (i > 0) {
+                    sub_str.append(values[i]);
+                }
+            }
+            res = sub_str.toString();
+        }
+        if (res.contains("ERROR") || res.contains("NODATA")) {
+            res = "no";
+        }
         return res;
     }
     private void getDataOBDtoECU() {
@@ -131,7 +140,14 @@ public class OBDConnect {
                     for (String[] info : MyUtils.enum_info) {
                         String msg = "01" + info[1];
                         sendCommand(msg);
-                        readResponse();
+                        boolean is_res = readResponse();
+                        if (!is_res) {
+                            running = false;
+                            workerThread.interrupt();
+                            workerThread = null;
+                            setConnectingECU();
+                            break;
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
