@@ -28,6 +28,7 @@ import com.github.pires.obd.commands.protocol.ObdResetCommand;
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
 import com.github.pires.obd.enums.ObdProtocols;
 import com.obd2.dgt.R;
+import com.obd2.dgt.btManage.Trouble;
 import com.obd2.dgt.dbManage.TableInfo.TroubleTable;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.TroubleLis.CTroubleAdapter;
@@ -122,10 +123,12 @@ public class DiagnosisActivity extends AppBaseActivity {
         for (int i = 0; i < codes.length; i++) {
             item = new CTroubleItem(TroubleTable.max_cid, codes[i], "");
             cTroubleItems.add(item);
+            String tDesc = "";
+            tDesc = Trouble.TCodes.get(codes[i]);
 
             String[][] fields = new String[][]{
                     {"code", codes[i]},
-                    {"description", ""}
+                    {"description", tDesc}
             };
             TroubleTable.insertTroubleTable(fields);
         }
@@ -145,7 +148,6 @@ public class DiagnosisActivity extends AppBaseActivity {
         }
     };
     private void onDiagnosisClick() {
-        //MyUtils.btService.getFaultCodes();
         isTest = true;
         diagnosis_btn.setBackgroundResource(R.drawable.button4_prog);
         progressBar.setVisibility(View.VISIBLE);
@@ -153,21 +155,6 @@ public class DiagnosisActivity extends AppBaseActivity {
 
         TroubleTable.getTroubleCodeTable();
     }
-/*
-    private void onCurrentTroubleSearchClick() {
-        String codes = current_trouble_content.getText().toString();
-        if (!codes.isEmpty()) {
-            String url = "https://m.search.naver.com/search.naver?query=";
-            url += codes;
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            startActivity(i);
-        }
-    }
-    private void onPastTroubleSearchClick() {
-
-    }
-*/
 
     private void onPrevActivityClick() {
         onLRChangeLayount(DiagnosisActivity.this, MainActivity.class);

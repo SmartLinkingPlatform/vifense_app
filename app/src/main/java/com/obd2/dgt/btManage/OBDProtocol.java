@@ -70,6 +70,7 @@ public class OBDProtocol {
 
         String response = "";
         boolean isProtocol = false;
+
         String auto = Protocol.PROTOCOL_AUTOMATIC.replace(" ", "");
         try {
             sendCommand(auto);
@@ -96,7 +97,7 @@ public class OBDProtocol {
                     e.printStackTrace();
                 }
             }
-        }
+       }
 
         return isProtocol;
     }

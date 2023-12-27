@@ -156,8 +156,7 @@ public class LinkInfoActivity extends AppBaseActivity {
                     MyUtils.obd2_address = pairedItems.get(i).device.getAddress();
                     if (!MyUtils.con_ECU) {
                         pairedItems.get(i).selected = true;
-                        //MyUtils.con_OBD = true;
-                        CommonFunc.setUnPairedDevice();
+                        //CommonFunc.setUnPairedDevice();
                         showDialog();
                     } else {
                         //OBD2 연결 끊기
