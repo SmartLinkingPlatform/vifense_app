@@ -1,6 +1,10 @@
 package com.obd2.dgt.btManage;
 
+import android.os.SystemClock;
 import android.util.Log;
+
+import com.obd2.dgt.utils.CommonFunc;
+import com.obd2.dgt.utils.MyUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,89 +19,47 @@ public class OBDProtocol {
     public OBDProtocol(InputStream inputStream, OutputStream outputStream) {
         this.inputStream = inputStream;
         this.outputStream = outputStream;
-        custom_protocol = new ArrayList<>();
+        /*custom_protocol = new ArrayList<>();
         for (int i = 2; i <= 6; i++) {
             custom_protocol.add(Protocol.PROTOCOL_CUSTOM[i]);
-        }
+        }*/
     }
 
     public boolean setComProtocol() {
         String response = "";
         boolean isProtocol = false;
-        String auto = Protocol.PROTOCOL_AUTOMATIC;
-        try {
-            sendCommand("AT");
-            Log.d("OBD-II", "Selected AT: " + readResponse());
 
-            sendCommand(auto);
+        try {
+            //ATZ reset all
+            //ATDP Describe the current Protocol
+            //ATAT0-1-2 Adaptive Timing Off - adaptive Timing Auto1 - adaptive Timing Auto2
+            //ATE0-1 Echo Off - Echo On
+            //ATSP0 Set Protocol to Auto and save it
+            //ATMA Monitor All
+            //ATL1-0 Linefeeds On - Linefeeds Off
+            //ATH1-0 Headers On - Headers Off
+            //ATI Device infomation
+            //ATS1-0 printing of Spaces On - printing of Spaces Off
+            //ATAL Allow Long (>7 byte) messages
+            //ATRD Read the stored data
+            //ATSTFF Set time out to maximum
+            //ATSTHH Set timeout to 4ms
+
+            String[] initializeCommands = new String[]{"ATZ", "ATL0", "ATE1", "ATH1", "ATAT1", "ATSTFF", "ATI", "ATDP"};
+            for (String command : initializeCommands) {
+                sendCommand(command);
+                readResponse();
+            }
+            SystemClock.sleep(100);
+            sendCommand(MyUtils.SEL_PROTOCOL);
             response = readResponse();
+            SystemClock.sleep(100);
             if (response.contains("OK")) {
                 isProtocol = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        if (!isProtocol) {
-            for (String p : custom_protocol) {
-                try {
-                    sendCommand(p);
-                    response = readResponse();
-                    if (response.contains("OK")) {
-                        Log.d("OBD-II", "Selected protocol: " + p);
-                        isProtocol = true;
-                        break;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        if (!isProtocol) {
-            isProtocol = resetComProtocol();
-        }
-
-        return isProtocol;
-    }
-
-    public boolean resetComProtocol() {
-        try {
-            sendCommand(Protocol.ENABLE_DISPLAY_HEADERS);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String response = "";
-        boolean isProtocol = false;
-
-        String auto = Protocol.PROTOCOL_AUTOMATIC.replace(" ", "");
-        try {
-            sendCommand(auto);
-            response = readResponse();
-            if (response.contains("OK")) {
-                isProtocol = true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (!isProtocol) {
-            for (String p : custom_protocol) {
-                try {
-                    p = p.replace(" ", "");
-                    sendCommand(p);
-                    response = readResponse();
-                    if (response.contains("OK")) {
-                        Log.d("OBD-II", "Selected protocol: " + p);
-                        isProtocol = true;
-                        break;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-       }
 
         return isProtocol;
     }

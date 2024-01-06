@@ -3,6 +3,8 @@ package com.obd2.dgt.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.obd2.dgt.dbManage.DBConnect;
@@ -13,6 +15,7 @@ import com.obd2.dgt.utils.MyUtils;
 
 public class SplashActivity extends AppBaseActivity {
     private static SplashActivity instance;
+    FrameLayout splash_progress_layout;
     public static SplashActivity getInstance() {
         return instance;
     }
@@ -41,16 +44,23 @@ public class SplashActivity extends AppBaseActivity {
             throw new RuntimeException(e);
         }
 
+        splash_progress_layout = findViewById(R.id.splash_progress_layout);
+
         String msg = getString(R.string.check_network_error);
         String btnText = getString(R.string.confirm_text);
         boolean isNetwork = CommonFunc.checkNetworkStatus(SplashActivity.this, msg, btnText);
         if (isNetwork) {
+            splash_progress_layout.setVisibility(View.VISIBLE);
             //서버 에서 회사 자료 받기
             WebHttpConnect.onCompanyInfoRequest();
+        } else {
+            splash_progress_layout.setVisibility(View.GONE);
         }
     }
 
     public void gotoSuccess() {
+        splash_progress_layout.setVisibility(View.GONE);
+        Toast.makeText(getApplicationContext(), R.string.connected_server, Toast.LENGTH_SHORT).show();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -60,10 +70,11 @@ public class SplashActivity extends AppBaseActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 1000);
+        }, 500);
     }
 
     public void gotoFail() {
+        splash_progress_layout.setVisibility(View.GONE);
         Toast.makeText(getApplicationContext(), R.string.check_network_error, Toast.LENGTH_LONG).show();
     }
 

@@ -9,22 +9,16 @@ import android.bluetooth.BluetoothDevice;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.obd2.dgt.R;
-import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
@@ -40,7 +34,6 @@ import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 public class MainActivity extends AppBaseActivity {
     ImageView user_img_btn, con_img_1, con_img_2, con_img_3;
@@ -347,7 +340,7 @@ public class MainActivity extends AppBaseActivity {
                             }
                         }
                         showConnectingLink(link_index);
-                        Thread.sleep(400);
+                        SystemClock.sleep(400);
                         link_index++;
                     } else {
                         delay = 0;

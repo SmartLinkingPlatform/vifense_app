@@ -57,7 +57,6 @@ public class OBDConnect {
                     MainActivity.getInstance().setECULinkStatus(true);
                     // 데이터 수신 함수 호출
                     SystemClock.sleep(1000);
-                    sendCommand(Protocol.DISABLE_DISPLAY_HEADERS);
                     getDataOBDtoECU();
                 }/* else {
                     MainActivity.getInstance().setECULinkStatus(false);
@@ -72,6 +71,8 @@ public class OBDConnect {
     private void sendCommand(String command) throws IOException {
         // Send command to OBD-II adapter
         try {
+            String content = CommonFunc.getDateTime() + " --- ECU to ODB SendCommand --- " + command + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
             outputStream.write((command + "\r").getBytes());
             outputStream.flush();
         } catch (Exception e) {
@@ -79,21 +80,14 @@ public class OBDConnect {
         }
     }
 
-    private boolean readResponse() throws IOException {
+    private void readResponse() throws IOException {
         byte[] buffer = new byte[1024];
         int bytesRead = inputStream.read(buffer);
         final String rawResponse = new String(buffer, 0, bytesRead);
 
-        String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + rawResponse + "\r\n";
-        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
-
         String response = getResponse(rawResponse);
-        if (response.equals("")) {
-            return true;
-        }
-        if (response.equals("no")) {
-            return false;
-        }
+        String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + response + "\r\n";
+        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
 
         OBDResponse.ResponseCalculator(response);
 
@@ -104,17 +98,19 @@ public class OBDConnect {
             MyUtils.con_ECU = true;
             MyUtils.loaded_data = true;
         }
-        return true;
     }
 
     private String getResponse(String rawResponse) {
         String res = rawResponse.replaceAll("(\r\n|\r|\n|\n\r)", "");
-        res = res.replace("SEARCHING...>", "").replace("NODATA", "");
-        res = res.replace("SEARCHING...", "").replace("NODATA", "");
+        res = res.replace("null", "");
+        res = res.replaceAll("\\s", "");
         res = res.replaceAll(">", "");
-        if (res.startsWith(MOD_PREFIX)) {
-            res = res.replace(MOD_PREFIX, "");
+        res = res.replaceAll("SEARCHING...", "");
+        if (res.contains(MOD_PREFIX)) {
+            int index = res.indexOf(MOD_PREFIX);
+            res = res.substring(index, res.length());
         }
+
         if (res.contains(" ")) {
             String[] values = res.split(" ");
             StringBuilder sub_str = new StringBuilder();
@@ -140,19 +136,12 @@ public class OBDConnect {
                     for (String[] info : MyUtils.enum_info) {
                         String msg = "01" + info[1];
                         sendCommand(msg);
-                        boolean is_res = readResponse();
-                        if (!is_res) {
-                            running = false;
-                            workerThread.interrupt();
-                            workerThread = null;
-                            setConnectingECU();
-                            break;
-                        }
+                        readResponse();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                SystemClock.sleep(200);
+                //SystemClock.sleep(100);
             }
         });
         workerThread.start();

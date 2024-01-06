@@ -161,11 +161,46 @@ public class MyUtils {
     public static String mileage_score = "0";
     public static String safety_score = "0";
 
-    public static int[] company_names = {
-            R.string.car_name_1, R.string.car_name_5
+    public static int[] manufacturer_names = {
+            R.string.car_name_1,
+            R.string.car_name_2,
+            R.string.car_name_3,
+            R.string.car_name_4,
+            R.string.car_name_5
     };
-    public static int[] model_names = {
-            R.string.model_name_0, R.string.model_name_26
+    public static int[][] model_names = {
+            {R.string.model_name_0, 0},
+            {R.string.model_name_1, 0},
+            {R.string.model_name_2, 0},
+            {R.string.model_name_3, 0},
+            {R.string.model_name_4, 0},
+            {R.string.model_name_5, 1},
+            {R.string.model_name_6, 1},
+            {R.string.model_name_7, 1},
+            {R.string.model_name_8, 1},
+            {R.string.model_name_9, 1},
+            {R.string.model_name_10, 2},
+            {R.string.model_name_11, 2},
+            {R.string.model_name_12, 2},
+            {R.string.model_name_13, 2},
+            {R.string.model_name_14, 0},
+            {R.string.model_name_15, 0},
+            {R.string.model_name_16, 0},
+            {R.string.model_name_17, 0},
+            {R.string.model_name_18, 0},
+            {R.string.model_name_19, 3},
+            {R.string.model_name_20, 0},
+            {R.string.model_name_21, 2},
+            {R.string.model_name_22, 2},
+            {R.string.model_name_23, 2},
+            {R.string.model_name_24, 0},
+            {R.string.model_name_25, 2},
+            {R.string.model_name_26, 2},
+            {R.string.model_name_27, 2},
+            {R.string.model_name_28, 3},
+            {R.string.model_name_29, 0},
+            {R.string.model_name_30, 2},
+            {R.string.model_name_31, 4}
     };
 
     public static ArrayList<String> create_years = new ArrayList<>();
@@ -176,6 +211,16 @@ public class MyUtils {
             R.string.fuel_type_9, R.string.fuel_type_10, R.string.fuel_type_11, R.string.fuel_type_12,
             R.string.fuel_type_13, R.string.fuel_type_14, R.string.fuel_type_15, R.string.fuel_type_16,
             R.string.fuel_type_17, R.string.fuel_type_18, R.string.fuel_type_19, R.string.fuel_type_20
+    };
+
+    public static String SEL_PROTOCOL = "AT SP0";
+    public static String[][] PROTOCOL_CUSTOM = {
+            {"AT SP0", "AUTO"},
+            {"AT SP3", "ISO 9141-2(5 baud)"},
+            {"AT SP4", "ISO 14230-4 KWP(5 baud)"},
+            {"AT SP5", "ISO 14230-4 KWP(fast)"},
+            {"AT SP6", "ISO 15765-4 CAN(11 bit)"},
+            {"AT SP7", "ISO 15765-4 CAN(29 bit)"}
     };
 
 

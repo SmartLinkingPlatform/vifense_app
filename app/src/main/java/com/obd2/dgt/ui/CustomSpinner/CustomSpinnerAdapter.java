@@ -56,7 +56,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
 
         // 선택된 항목의 글자 색상 변경
         if (position == selectedPosition) {
-            textView.setTextColor(Color.WHITE); // 원하는 색상으로 변경
+            textView.setTextColor(Color.LTGRAY); // 원하는 색상으로 변경
         } else {
             textView.setTextColor(Color.BLACK); // 선택되지 않은 항목의 색상
             textView.setAlpha((float) 0.5);

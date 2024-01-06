@@ -80,14 +80,12 @@ public class WebHttpConnect {
                             info[1] = object.getString("admin_id"); //company id
                             info[2] = object.getString("company_name"); //company name
                             MyUtils.companyInfo.add(info);
-
-                            SplashActivity.getInstance().gotoSuccess();
-                            //CompanyTable.insertCompanyInfoTable(fields);
                         } catch (Exception e) {
                             e.printStackTrace();
                             SplashActivity.getInstance().gotoFail();
                         }
                     }
+                    SplashActivity.getInstance().gotoSuccess();
                     //CompanyTable.getCompanyInfoTable();
                 } else {
                     SplashActivity.getInstance().gotoFail();

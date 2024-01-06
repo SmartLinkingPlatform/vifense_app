@@ -9,6 +9,7 @@ import android.os.SystemClock;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -18,11 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.btManage.Protocol;
 import com.obd2.dgt.dbManage.TableInfo.CarInfoTable;
+import com.obd2.dgt.dbManage.TableInfo.ProtocolTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
+
+import java.util.ArrayList;
 
 
 public class CarInfoActivity extends AppBaseActivity {
@@ -35,6 +40,7 @@ public class CarInfoActivity extends AppBaseActivity {
     ImageView register_car_btn;
     ImageView reg_car_prev_btn;
     FrameLayout car_progress_layout;
+    Spinner car_protocol_spinner;
 
     int manufacturer_idx = 0;
     int model_idx = 0;
@@ -42,6 +48,7 @@ public class CarInfoActivity extends AppBaseActivity {
     int fuel_idx = 0;
     boolean isMode = false;
     Dialog dialog;
+    ArrayList<String> md_names = new ArrayList<>();
 
     private static CarInfoActivity instance;
     public static CarInfoActivity getInstance() {
@@ -53,31 +60,47 @@ public class CarInfoActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info);
         instance = this;
+        md_names = new ArrayList<>();
         initLayout();
     }
 
+    private void setCarModelList(int index) {
+        ArrayAdapter<String> md_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, md_names);
+        car_model_spinner.setAdapter(md_adapter);
+        car_model_spinner.setSelection(index);
+    }
     private void initLayout() {
         reg_car_number_text = findViewById(R.id.reg_car_number_text);
 
         reg_car_gas_text = findViewById(R.id.reg_car_gas_text);
 
+        car_model_spinner = findViewById(R.id.car_model_spinner);
+        //setCarModelList(model_idx);
+
         car_manufacturer_spinner = findViewById(R.id.car_manufacturer_spinner);
-        String[] mf_names = new String[MyUtils.company_names.length];
-        for (int i = 0; i < MyUtils.company_names.length; i++) {
-            mf_names[i] = getString(MyUtils.company_names[i]);
+        String[] mf_names = new String[MyUtils.manufacturer_names.length];
+        for (int i = 0; i < MyUtils.manufacturer_names.length; i++) {
+            mf_names[i] = getString(MyUtils.manufacturer_names[i]);
         }
         ArrayAdapter<String> mf_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, mf_names);
         car_manufacturer_spinner.setAdapter(mf_adapter);
         car_manufacturer_spinner.setSelection(manufacturer_idx);
+        car_manufacturer_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                md_names = new ArrayList<>();
+                for (int n = 0; n < MyUtils.model_names.length; n++) {
+                    if (car_manufacturer_spinner.getSelectedItemPosition() == MyUtils.model_names[n][1]) {
+                        md_names.add(getString(MyUtils.model_names[n][0]));
+                    }
+                }
+                setCarModelList(model_idx);
+            }
 
-        car_model_spinner = findViewById(R.id.car_model_spinner);
-        String[] md_names = new String[MyUtils.model_names.length];
-        for (int i = 0; i < MyUtils.model_names.length; i++) {
-            md_names[i] = getString(MyUtils.model_names[i]);
-        }
-        ArrayAdapter<String> md_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, md_names);
-        car_model_spinner.setAdapter(md_adapter);
-        car_model_spinner.setSelection(model_idx);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         reg_car_date_spinner = findViewById(R.id.reg_car_date_spinner);
         ArrayAdapter<String> dt_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, MyUtils.create_years);
@@ -101,6 +124,18 @@ public class CarInfoActivity extends AppBaseActivity {
 
         car_progress_layout = findViewById(R.id.car_progress_layout);
         car_progress_layout.setVisibility(View.GONE);
+
+        car_protocol_spinner = findViewById(R.id.car_protocol_spinner);
+        String[] protocol_types = new String[6];
+        protocol_types[0] = MyUtils.PROTOCOL_CUSTOM[0][1];
+        protocol_types[1] = MyUtils.PROTOCOL_CUSTOM[1][1];
+        protocol_types[2] = MyUtils.PROTOCOL_CUSTOM[2][1];
+        protocol_types[3] = MyUtils.PROTOCOL_CUSTOM[3][1];
+        protocol_types[4] = MyUtils.PROTOCOL_CUSTOM[4][1];
+        protocol_types[5] = MyUtils.PROTOCOL_CUSTOM[5][1];
+        ArrayAdapter<String> protocol_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, protocol_types);
+        car_protocol_spinner.setAdapter(protocol_adapter);
+        car_protocol_spinner.setSelection(0);
     }
 
     private void onRegisterCarClick() {
@@ -123,6 +158,7 @@ public class CarInfoActivity extends AppBaseActivity {
             };
             CommonFunc.sendParamData(params);
             WebHttpConnect.onCarRegisterRequest();
+            MyUtils.SEL_PROTOCOL = MyUtils.PROTOCOL_CUSTOM[car_protocol_spinner.getSelectedItemPosition()][0];
         }
 
     }
@@ -139,6 +175,14 @@ public class CarInfoActivity extends AppBaseActivity {
         };
         CarInfoTable.insertCarInfoTable(fields);
         SystemClock.sleep(100);
+
+        String[][] p_field = new String[][]{
+                {"protocol", MyUtils.PROTOCOL_CUSTOM[car_protocol_spinner.getSelectedItemPosition()][0]}
+        };
+        ProtocolTable.updateMyInfoTable(p_field);
+        SystemClock.sleep(100);
+        ProtocolTable.getProtocolTable();
+
         isMode = false;
         car_progress_layout.setVisibility(View.GONE);
 

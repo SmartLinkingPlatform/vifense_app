@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
+import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
@@ -33,12 +34,10 @@ public class BluetoothManager {
                 sockFallback.connect();
                 sock = sockFallback;
             } catch (Exception e2) {
-                String content = CommonFunc.getDateTime() + " --- Couldn't fallback while establishing Bluetooth connection. --- " + e2.getMessage() + "\r\n";
-                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+                MyUtils.obdConnect.closeSocket();
+                MainActivity.getInstance().showDisconnectedStatus(0);
                 throw new IOException(e2.getMessage());
             }
-            String content = CommonFunc.getDateTime() + " --- ODB Connect Error --- " + e1.getMessage() + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
         }
         return sock;
     }

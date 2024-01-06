@@ -64,20 +64,20 @@ public class RankingInfoActivity extends AppBaseActivity {
         instance = this;
 
         initLayout();
-        requestDrivingRankingInfo();
+        //String driving_date = CommonFunc.getDate();
+        //requestDrivingRankingInfo(driving_date);
     }
 
-    private void requestDrivingRankingInfo() {
+    private void requestDrivingRankingInfo(String date) {
         String msg = getString(R.string.check_network_error);
         String btnText = getString(R.string.confirm_text);
         boolean isNetwork = CommonFunc.checkNetworkStatus(RankingInfoActivity.this, msg, btnText);
         if (isNetwork) {
-            String driving_date = CommonFunc.getDate();
             //서버에 등록
             String[][] params = new String[][]{
                     {"car_id", String.valueOf(MyUtils.car_id)},
                     {"user_id", String.valueOf(MyUtils.my_id)},
-                    {"driving_date", driving_date}
+                    {"driving_date", date}
             };
             CommonFunc.sendParamData(params);
             WebHttpConnect.onDrivingRankingRequest();
@@ -120,13 +120,23 @@ public class RankingInfoActivity extends AppBaseActivity {
             month = now.getMonthValue();
         }
         ArrayList<String> selDates = new ArrayList<>();
-        for (int i = 1; i <= 12; i++) {
-            String nowDate = year + getString(R.string.unit_year) + " " + i + getString(R.string.unit_month);
-            selDates.add(nowDate);
-            if (i == month) {
-                sel_date = i - 1;
+        for (int i = month; i > 0; i--) {
+            String dateList = year + getString(R.string.unit_year) + " " + i + getString(R.string.unit_month);
+            selDates.add(dateList);
+        }
+
+        if (selDates.size() < 12) {
+            int preYear = year - 1;
+            for (int i = 12; i > 0; i--) {
+                String dateList = preYear + getString(R.string.unit_year) + " " + i + getString(R.string.unit_month);
+                selDates.add(dateList);
+                if (selDates.size() == 12) {
+                    break;
+                }
             }
         }
+
+        sel_date = month - 1;
         ranking_date_spinner = findViewById(R.id.ranking_date_spinner);
         CustomSpinnerAdapter dt_adapter = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, selDates);
         ranking_date_spinner.setAdapter(dt_adapter);
@@ -135,6 +145,18 @@ public class RankingInfoActivity extends AppBaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 dt_adapter.setSelectedPosition(position);
+                String date = ranking_date_spinner.getSelectedItem().toString();
+                date = date.replace(getString(R.string.unit_year), "").replace(getString(R.string.unit_month), "");
+                String[] dates = date.split(" ");
+                String driving_date = dates[0];
+                if (dates.length > 1) {
+                    String mon = dates[1];
+                    if (Integer.parseInt(dates[1]) < 10) {
+                        mon = "0" + dates[1];
+                    }
+                    driving_date += mon;
+                }
+                requestDrivingRankingInfo(driving_date);
             }
 
             @Override

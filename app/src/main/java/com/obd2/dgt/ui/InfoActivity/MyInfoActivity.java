@@ -88,8 +88,19 @@ public class MyInfoActivity extends AppBaseActivity {
             for (int i = 0; i < MyUtils.carInfo.size(); i++) {
                 String id = MyUtils.carInfo.get(i)[0];
                 String c_num = MyUtils.carInfo.get(i)[1];
-                String manufacturer = getString(MyUtils.company_names[Integer.parseInt(MyUtils.carInfo.get(i)[2])]);
-                String model = getString(MyUtils.model_names[Integer.parseInt(MyUtils.carInfo.get(i)[3])]);
+                String manufacturer = getString(MyUtils.manufacturer_names[Integer.parseInt(MyUtils.carInfo.get(i)[2])]);
+                String model = "";
+                int m_idx = 0;
+
+                for (int n = 0; n < MyUtils.model_names.length; n++) {
+                    if (Integer.parseInt(MyUtils.carInfo.get(i)[2]) == MyUtils.model_names[n][1]) {
+                        if (m_idx == Integer.parseInt(MyUtils.carInfo.get(i)[3])) {
+                            model = getString(MyUtils.model_names[n][0]);
+                        }
+                        m_idx++;
+                    }
+                }
+
                 String number = MyUtils.carInfo.get(i)[5];
                 String year = MyUtils.create_years.get(Integer.parseInt(MyUtils.carInfo.get(i)[4])) + getString(R.string.year_unit);
                 String fuel = getString(MyUtils.fuel_types[Integer.parseInt(MyUtils.carInfo.get(i)[6])]);

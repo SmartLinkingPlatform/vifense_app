@@ -7,12 +7,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.View;
 import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.network.NetworkStatus;
-import com.obd2.dgt.ui.LoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +20,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -235,24 +232,29 @@ public class CommonFunc {
         }, 1000);
     }
 
+    static int m_idx = 0;
     public static String findManufacturer(String val) {
         String index = "0";
-        for (int i = 0; i < MyUtils.company_names.length; i++) {
-            if (val.equals(MyUtils.mContext.getString(MyUtils.company_names[i]))) {
+        for (int i = 0; i < MyUtils.manufacturer_names.length; i++) {
+            if (val.equals(MyUtils.mContext.getString(MyUtils.manufacturer_names[i]))) {
                 index = String.valueOf(i);
             }
         }
+        m_idx = Integer.parseInt(index);
         return index;
     }
 
     public static String findModel(String val) {
-        String index = "0";
+        int index = 0;
         for (int i = 0; i < MyUtils.model_names.length; i++) {
-            if (val.equals(MyUtils.mContext.getString(MyUtils.model_names[i]))) {
-                index = String.valueOf(i);
+            if (m_idx == MyUtils.model_names[i][1]) {
+                if (val.equals(MyUtils.mContext.getString(MyUtils.model_names[i][0]))) {
+                    break;
+                }
+                index++;
             }
         }
-        return index;
+        return String.valueOf(index);
     }
     public static String findCreateYear(String val) {
         String index = "0";

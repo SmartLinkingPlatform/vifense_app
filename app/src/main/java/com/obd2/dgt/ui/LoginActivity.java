@@ -32,6 +32,7 @@ import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
 import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
+import com.obd2.dgt.dbManage.TableInfo.ProtocolTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.Crypt;
@@ -232,6 +233,9 @@ public class LoginActivity extends AppBaseActivity {
         if (MyUtils.carInfo.size() == 0) {
             CarInfoTable.insertCarInfoTable(params);
             CarInfoTable.getCarInfoTable();
+        } else {
+            CarInfoTable.updateCarInfoTable(Integer.parseInt(car_info.get(0)), params);
+            CarInfoTable.getCarInfoTable();
         }
         gotoMainPage();
     }
@@ -251,6 +255,7 @@ public class LoginActivity extends AppBaseActivity {
     private void getDatabaseInfo() {
         //CompanyTable.deleteAllCompanyInfoTable();
         MyInfoTable.getMyInfoTable();
+        ProtocolTable.getProtocolTable();
         MessageInfoTable.getMessageInfoTable();
     }
     @Override

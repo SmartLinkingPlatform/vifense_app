@@ -3,6 +3,7 @@ package com.obd2.dgt.ui.InfoActivity;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -11,7 +12,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.btManage.Protocol;
 import com.obd2.dgt.dbManage.TableInfo.CarInfoTable;
+import com.obd2.dgt.dbManage.TableInfo.ProtocolTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.utils.CommonFunc;
@@ -31,6 +34,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     ImageView del_car_btn;
     ImageView mod_car_prev_btn;
     FrameLayout car_mod_progress_layout;
+    Spinner mod_protocol_spinner;
     int manufacturer_idx = 0;
     int model_idx = 0;
     int year_idx = 0;
@@ -39,6 +43,8 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     String car_number = "";
     String car_gas = "";
     boolean isMode = false;
+    int protocol_idx = 0;
+    ArrayList<String> md_names = new ArrayList<>();
     private static CarInfoModifyActivity instance;
     public static CarInfoModifyActivity getInstance() {
         return instance;
@@ -49,10 +55,16 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info_modify);
         instance = this;
+        md_names = new ArrayList<>();
         getSelectedCarInfo();
         initLayout();
     }
 
+    private void setCarModelList(int index) {
+        ArrayAdapter<String> md_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, md_names);
+        mod_model_spinner.setAdapter(md_adapter);
+        mod_model_spinner.setSelection(index);
+    }
     private void initLayout() {
         mod_number_text = findViewById(R.id.mod_number_text);
         mod_number_text.setText(car_number);
@@ -61,22 +73,40 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         mod_gas_text.setText(car_gas);
 
         mod_manufacturer_spinner = findViewById(R.id.mod_manufacturer_spinner);
-        String[] mf_names = new String[MyUtils.company_names.length];
-        for (int i = 0; i < MyUtils.company_names.length; i++) {
-            mf_names[i] = getString(MyUtils.company_names[i]);
+        String[] mf_names = new String[MyUtils.manufacturer_names.length];
+        for (int i = 0; i < MyUtils.manufacturer_names.length; i++) {
+            mf_names[i] = getString(MyUtils.manufacturer_names[i]);
         }
+
+        mod_model_spinner = findViewById(R.id.mod_model_spinner);
+        //setCarModelList(model_idx);
+
         ArrayAdapter<String> mf_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, mf_names);
         mod_manufacturer_spinner.setAdapter(mf_adapter);
         mod_manufacturer_spinner.setSelection(manufacturer_idx);
+        mod_manufacturer_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                md_names = new ArrayList<>();
+                for (int n = 0; n < MyUtils.model_names.length; n++) {
+                    if (mod_manufacturer_spinner.getSelectedItemPosition() == MyUtils.model_names[n][1]) {
+                        md_names.add(getString(MyUtils.model_names[n][0]));
+                    }
+                }
+                if (mod_manufacturer_spinner.getSelectedItemPosition() == manufacturer_idx) {
+                    if (model_idx >= md_names.size()) {
+                        model_idx = 0;
+                    }
+                    setCarModelList(model_idx);
+                } else {
+                    setCarModelList(0);
+                }
+            }
 
-        mod_model_spinner = findViewById(R.id.mod_model_spinner);
-        String[] md_names = new String[MyUtils.model_names.length];
-        for (int i = 0; i < MyUtils.model_names.length; i++) {
-            md_names[i] = getString(MyUtils.model_names[i]);
-        }
-        ArrayAdapter<String> md_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, md_names);
-        mod_model_spinner.setAdapter(md_adapter);
-        mod_model_spinner.setSelection(model_idx);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         LocalDate now = null;
         int year = 0;
@@ -113,6 +143,18 @@ public class CarInfoModifyActivity extends AppBaseActivity {
 
         car_mod_progress_layout = findViewById(R.id.car_mod_progress_layout);
         car_mod_progress_layout.setVisibility(View.GONE);
+
+        mod_protocol_spinner = findViewById(R.id.mod_protocol_spinner);
+        String[] protocol_types = new String[6];
+        protocol_types[0] = MyUtils.PROTOCOL_CUSTOM[0][1];
+        protocol_types[1] = MyUtils.PROTOCOL_CUSTOM[1][1];
+        protocol_types[2] = MyUtils.PROTOCOL_CUSTOM[2][1];
+        protocol_types[3] = MyUtils.PROTOCOL_CUSTOM[3][1];
+        protocol_types[4] = MyUtils.PROTOCOL_CUSTOM[4][1];
+        protocol_types[5] = MyUtils.PROTOCOL_CUSTOM[5][1];
+        ArrayAdapter<String> protocol_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, protocol_types);
+        mod_protocol_spinner.setAdapter(protocol_adapter);
+        mod_protocol_spinner.setSelection(protocol_idx);
     }
 
     private void getSelectedCarInfo() {
@@ -125,7 +167,19 @@ public class CarInfoModifyActivity extends AppBaseActivity {
                 car_number = infos[5];
                 fuel_idx = Integer.parseInt(infos[6]);
                 car_gas = infos[7];
+                for (int n = 0; n < MyUtils.model_names.length; n++) {
+                    if (manufacturer_idx == MyUtils.model_names[n][1]) {
+                        md_names.add(getString(MyUtils.model_names[n][0]));
+                    }
+                }
             }
+        }
+
+        for (String[] protocol : MyUtils.PROTOCOL_CUSTOM) {
+            if (protocol[0].equals(MyUtils.SEL_PROTOCOL)) {
+                break;
+            }
+            protocol_idx ++;
         }
     }
 
@@ -148,6 +202,8 @@ public class CarInfoModifyActivity extends AppBaseActivity {
             };
             CommonFunc.sendParamData(params);
             WebHttpConnect.onCarModifyRequest();
+
+            MyUtils.SEL_PROTOCOL = MyUtils.PROTOCOL_CUSTOM[mod_protocol_spinner.getSelectedItemPosition()][0];
         }
     }
 
@@ -165,6 +221,14 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         CarInfoTable.updateCarInfoTable(Integer.parseInt(car_id), fields);
         SystemClock.sleep(100);
         CarInfoTable.getCarInfoTable();
+
+        String[][] p_field = new String[][]{
+                {"protocol", MyUtils.PROTOCOL_CUSTOM[mod_protocol_spinner.getSelectedItemPosition()][0]}
+        };
+        ProtocolTable.updateMyInfoTable(p_field);
+        SystemClock.sleep(100);
+        ProtocolTable.getProtocolTable();
+
         car_mod_progress_layout.setVisibility(View.GONE);
         onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
         finish();
