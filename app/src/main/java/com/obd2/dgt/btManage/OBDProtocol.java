@@ -50,10 +50,10 @@ public class OBDProtocol {
                 sendCommand(command);
                 readResponse();
             }
-            SystemClock.sleep(100);
+            Thread.sleep(100);
             sendCommand(MyUtils.SEL_PROTOCOL);
             response = readResponse();
-            SystemClock.sleep(100);
+            Thread.sleep(100);
             if (response.contains("OK")) {
                 isProtocol = true;
             }

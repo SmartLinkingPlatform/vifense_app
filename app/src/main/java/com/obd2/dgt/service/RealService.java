@@ -21,6 +21,8 @@ import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
+import java.io.IOException;
+
 
 public class RealService extends Service {
     private static Thread mainThread;
@@ -50,33 +52,36 @@ public class RealService extends Service {
     private void onMainThread() {
         mainThread = new Thread(() -> {
             while (running) {
-                if (!mainThread.isInterrupted()) {
-                    if (MyUtils.obdConnect == null) {
-                        MyUtils.obdConnect = new OBDConnect();
-                    } else {
-                        if (mainThread != null && MyUtils.con_ECU) {
-                            err_cnt = 0;
-                            getDrivingStatus();
-                            getFuelConsumption();
-                            showWarningDialog();
-                        }
+                try {
+                    if (!mainThread.isInterrupted()) {
+                        if (MyUtils.obdConnect == null) {
+                            MyUtils.obdConnect = new OBDConnect();
+                        } else {
+                            if (mainThread != null && MyUtils.con_ECU) {
+                                err_cnt = 0;
+                                getDrivingStatus();
+                                getFuelConsumption();
+                                showWarningDialog();
+                            }
 
-                        if (Float.parseFloat(MyUtils.ecu_vehicle_speed) == 0 &&
-                                (!MyUtils.con_ECU || !MyUtils.loaded_data ||
-                                Float.parseFloat(MyUtils.ecu_engine_load) == 0 ||
-                                Float.parseFloat(MyUtils.ecu_engine_rpm) == 0))
-                        {
-                            if (time > 0 && Float.parseFloat(MyUtils.ecu_mileage) > 0.1) {
-                                stopEngineStatus();
+                            if (Float.parseFloat(MyUtils.ecu_vehicle_speed) == 0 &&
+                                    (!MyUtils.con_ECU || !MyUtils.loaded_data ||
+                                            Float.parseFloat(MyUtils.ecu_engine_load) == 0 ||
+                                            Float.parseFloat(MyUtils.ecu_engine_rpm) == 0)) {
+                                if (time > 0 && Float.parseFloat(MyUtils.ecu_mileage) > 0.1) {
+                                    stopEngineStatus();
+                                }
                             }
                         }
+                        Thread.sleep(1000);
+                    } else {
+                        boolean interrupted = Thread.interrupted();
+                        if (interrupted) {
+                            running = false;
+                        }
                     }
-                    SystemClock.sleep(1000);
-                } else {
-                    boolean interrupted = Thread.interrupted();
-                    if (interrupted) {
-                        running = false;
-                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });

@@ -56,13 +56,13 @@ public class OBDConnect {
                 if (protocol.setComProtocol()) {
                     MainActivity.getInstance().setECULinkStatus(true);
                     // 데이터 수신 함수 호출
-                    SystemClock.sleep(1000);
+                    Thread.sleep(500);
                     getDataOBDtoECU();
                 }/* else {
                     MainActivity.getInstance().setECULinkStatus(false);
                     CommonFunc.showToastOnUIThread("현재 차량의 ELM327 통신 프로토콜 검색중...");
                 }*/
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -138,10 +138,10 @@ public class OBDConnect {
                         sendCommand(msg);
                         readResponse();
                     }
+                    //Thread.sleep(50);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                //SystemClock.sleep(100);
             }
         });
         workerThread.start();
