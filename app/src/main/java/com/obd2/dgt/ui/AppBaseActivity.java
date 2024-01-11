@@ -44,7 +44,7 @@ public class AppBaseActivity extends AppCompatActivity {
         }
     }
 
-    public void onRLChangeLayount(Context currentLayout, Class<?> changeLayout) {
+    public void onRLChangeLayout(Context currentLayout, Class<?> changeLayout) {
         MyUtils.currentActivity = changeLayout;
         Intent intent = new Intent(currentLayout, changeLayout);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -52,7 +52,7 @@ public class AppBaseActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
     }
 
-    public void onLRChangeLayount(Context currentLayout, Class<?> changeLayout) {
+    public void onLRChangeLayout(Context currentLayout, Class<?> changeLayout) {
         MyUtils.currentActivity = changeLayout;
         Intent intent = new Intent(currentLayout, changeLayout);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -242,7 +242,7 @@ public class AppBaseActivity extends AppCompatActivity {
     }
 
     public void gotoDashboard() {
-        onRLChangeLayount(MyUtils.appBase, DashboardActivity.class);
+        onRLChangeLayout(MyUtils.appBase, DashboardActivity.class);
         finish();
     }
     int width = 1080;

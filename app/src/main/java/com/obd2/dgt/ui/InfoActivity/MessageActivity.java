@@ -94,7 +94,7 @@ public class MessageActivity extends AppBaseActivity {
             dialog = new Dialog(MessageActivity.this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setCancelable(false);
-            dialog.setContentView(R.layout.dlg_two_button);
+            dialog.setContentView(R.layout.dlg_finish);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -149,7 +149,7 @@ public class MessageActivity extends AppBaseActivity {
 
     private void onMessagePrevClick(){
         MainActivity.getInstance().showMessageIcon();
-        onLRChangeLayount(MessageActivity.this, MainActivity.class);
+        onLRChangeLayout(MessageActivity.this, MainActivity.class);
         finish();
     }
 
@@ -157,7 +157,7 @@ public class MessageActivity extends AppBaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         MainActivity.getInstance().showMessageIcon();
-        onLRChangeLayount(MessageActivity.this, MainActivity.class);
+        onLRChangeLayout(MessageActivity.this, MainActivity.class);
         finish();
     }
 

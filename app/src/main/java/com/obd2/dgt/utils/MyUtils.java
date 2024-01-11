@@ -3,6 +3,7 @@ package com.obd2.dgt.utils;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PointF;
 import android.os.Environment;
 import android.util.DisplayMetrics;
@@ -126,6 +127,7 @@ public class MyUtils {
     public static boolean is_error_dlg = false;
     public static int err_idx = 0;
     public static boolean new_login = false;
+    public static boolean is_driving = false;
 
     public static String[] link_methods = {
             "Bluetooth",
@@ -154,7 +156,7 @@ public class MyUtils {
     public static boolean show_dash_dialog = false;
     public static boolean savedSocketStatus = false;
 
-    public static String con_method = "";
+    public static int con_method = 0;
 
     public static int sel_car_id = 0;
     public static boolean showGauge = false;
@@ -220,8 +222,10 @@ public class MyUtils {
             {"AT SP4", "ISO 14230-4 KWP(5 baud)"},
             {"AT SP5", "ISO 14230-4 KWP(fast)"},
             {"AT SP6", "ISO 15765-4 CAN(11 bit)"},
-            {"AT SP7", "ISO 15765-4 CAN(29 bit)"}
+            {"AT SP7", "ISO 15765-4 CAN(29 bit)"},
+            {"AT SPA", "SAE J1939 (CAN 29/250)"}
     };
 
+    public static SharedPreferences sharedPreferences;
 
 }

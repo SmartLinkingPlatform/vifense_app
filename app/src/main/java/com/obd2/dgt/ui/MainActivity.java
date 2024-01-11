@@ -17,8 +17,10 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
@@ -49,6 +51,9 @@ public class MainActivity extends AppBaseActivity {
     int link_index = 0;
     public boolean isConnecting = false;
     Dialog dialog;
+    Dialog closeDialog;
+    FrameLayout progress_layout;
+    public boolean isFinish = false;
     private static MainActivity instance;
     public static MainActivity getInstance() {
         return instance;
@@ -168,12 +173,17 @@ public class MainActivity extends AppBaseActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        progress_layout = findViewById(R.id.finish_progress_layout);
+        progress_layout.setVisibility(View.GONE);
     }
 
     private MainListAdapter.ItemClickListener mainListListener = new MainListAdapter.ItemClickListener() {
         @SuppressLint({"ResourceAsColor", "NotifyDataSetChanged"})
         @Override
         public void onItemClick(View v, int position) {
+            if (isFinish)
+                return;
             for (int i = 0; i < mainListItems.size(); i++) {
                 if (position == i) {
                     mainListItems.get(i).selected = true;
@@ -184,30 +194,34 @@ public class MainActivity extends AppBaseActivity {
             mainListAdapter.notifyDataSetChanged();
 
             if (position == 0) {
-                onRLChangeLayount(MainActivity.this, DashboardActivity.class);
+                onRLChangeLayout(MainActivity.this, DashboardActivity.class);
             } else if (position == 1) {
-                onRLChangeLayount(MainActivity.this, DiagnosisActivity.class);
+                onRLChangeLayout(MainActivity.this, DiagnosisActivity.class);
             } else if (position == 2) {
-                onRLChangeLayount(MainActivity.this, RecordActivity.class);
+                onRLChangeLayout(MainActivity.this, RecordActivity.class);
             } else if (position == 3) {
-                //onRLChangeLayount(MainActivity.this, UserSettingCommunication.class);
+                //onRLChangeLayout(MainActivity.this, UserSettingCommunication.class);
             }
         }
     };
 
     private void onUserClick() {
-        onRLChangeLayount(MainActivity.this, MyInfoActivity.class);
+        if (isFinish)
+            return;
+        onRLChangeLayout(MainActivity.this, MyInfoActivity.class);
     }
 
     boolean isConClick = true;
     private void onConnectDeviceClick() {
+        if (isFinish)
+            return;
         if(isConClick) {
             if (MyUtils.carInfo.size() == 0) {
                 showAddCarDialog();
                 return;
             }
             link_index = 0;
-            onRLChangeLayount(MainActivity.this, LinkInfoActivity.class);
+            onRLChangeLayout(MainActivity.this, LinkInfoActivity.class);
         }
     }
     private void showAddCarDialog() {
@@ -221,18 +235,22 @@ public class MainActivity extends AppBaseActivity {
                 ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
                 dialog_normal_btn.setOnClickListener(view -> {
                     dialog.dismiss();
-                    onRLChangeLayount(MainActivity.this, CarInfoActivity.class);
+                    onRLChangeLayout(MainActivity.this, CarInfoActivity.class);
                 });
                 dialog.show();
             }
         });
     }
     private void onShowMailClick() {
-        onRLChangeLayount(MainActivity.this, MessageActivity.class);
+        if (isFinish)
+            return;
+        onRLChangeLayout(MainActivity.this, MessageActivity.class);
     }
 
     private void onShowRankingClick() {
-        onRLChangeLayount(MainActivity.this, RankingInfoActivity.class);
+        if (isFinish)
+            return;
+        onRLChangeLayout(MainActivity.this, RankingInfoActivity.class);
     }
 
     private void showConnectingLink(int index) {
@@ -348,6 +366,7 @@ public class MainActivity extends AppBaseActivity {
                         showConnectingLink(link_index);
                         isConnecting = false;
                         isConClick = true;
+                        MyUtils.is_driving = true;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -409,10 +428,42 @@ public class MainActivity extends AppBaseActivity {
         super.onResume();
         MyUtils.run_main = false;
     }
-    long waitTime = 0;
 
     @Override
     public void onBackPressed() {
+        if (isFinish)
+            return;
+        closeDialog = new Dialog(MainActivity.this);
+        closeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        closeDialog.setCancelable(false);
+        closeDialog.setContentView(R.layout.dlg_finish);
+        closeDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        closeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView dialog_two_title_text = closeDialog.findViewById(R.id.dialog_two_title_text);
+        dialog_two_title_text.setText(R.string.finish_app_title);
+        TextView dialog_two_button_text = closeDialog.findViewById(R.id.dialog_two_content_text);
+        dialog_two_button_text.setText(R.string.finish_app_content);
+        ImageView dialog_two_no_btn = closeDialog.findViewById(R.id.dialog_two_no_btn);
+        dialog_two_no_btn.setOnClickListener(view -> {
+            isFinish = false;
+            closeDialog.dismiss();
+        });
+        ImageView dialog_two_ok_btn = closeDialog.findViewById(R.id.dialog_two_ok_btn);
+        dialog_two_ok_btn.setOnClickListener(view -> {
+            isFinish = true;
+            if (!MyUtils.con_ECU || !MyUtils.loaded_data || Float.parseFloat(MyUtils.ecu_mileage) == 0)
+                FinishApp();
+            else {
+                MyUtils.obdConnect.closeSocket();
+                MainActivity.getInstance().showDisconnectedStatus(0);
+                DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
+                progress_layout.setVisibility(View.VISIBLE);
+                closeDialog.dismiss();
+            }
+        });
+
+        closeDialog.show();
         //super.onBackPressed();
     }
 
@@ -420,6 +471,21 @@ public class MainActivity extends AppBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         releaseWakeLock();
+    }
+
+    public void FinishApp() {
+        isFinish = false;
+        progress_layout.setVisibility(View.GONE);
+        //CommonFunc.setInformationToSystem("isRun", "0");
+        try {
+            moveTaskToBack(true);
+            finish();
+            finishAffinity();
+            overridePendingTransition(0, 0);
+            android.os.Process.killProcess(android.os.Process.myPid());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

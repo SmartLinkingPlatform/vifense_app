@@ -168,7 +168,7 @@ public class MyInfoModifyActivity extends AppBaseActivity {
         ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
         dialog_normal_btn.setOnClickListener(view -> {
             if (b_mod) {
-                onLRChangeLayount(MyInfoModifyActivity.this, MyInfoActivity.class);
+                onLRChangeLayout(MyInfoModifyActivity.this, MyInfoActivity.class);
                 finish();
             }
             dialog.dismiss();
@@ -178,7 +178,7 @@ public class MyInfoModifyActivity extends AppBaseActivity {
 
     private void onMyInfoModPrevClick() {
         if (!isMode) {
-            onLRChangeLayount(MyInfoModifyActivity.this, MyInfoActivity.class);
+            onLRChangeLayout(MyInfoModifyActivity.this, MyInfoActivity.class);
             finish();
         }
     }
@@ -186,7 +186,7 @@ public class MyInfoModifyActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         if (!isMode) {
-            onLRChangeLayount(MyInfoModifyActivity.this, MyInfoActivity.class);
+            onLRChangeLayout(MyInfoModifyActivity.this, MyInfoActivity.class);
             finish();
         } else {
             return;

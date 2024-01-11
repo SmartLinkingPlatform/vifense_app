@@ -124,35 +124,35 @@ public class MyInfoActivity extends AppBaseActivity {
     };
 
     private void onMyInfoPrevClick(){
-        onLRChangeLayount(MyInfoActivity.this, MainActivity.class);
+        onLRChangeLayout(MyInfoActivity.this, MainActivity.class);
         finish();
     }
     //내 정보 수정
     private void onMyInfoModifyClick(){
-        onRLChangeLayount(MyInfoActivity.this, MyInfoModifyActivity.class);
+        onRLChangeLayout(MyInfoActivity.this, MyInfoModifyActivity.class);
         finish();
     }
     //차량등록하기
     private void onMyInfoRegisterCarClick(){
-        onRLChangeLayount(MyInfoActivity.this, CarInfoActivity.class);
+        onRLChangeLayout(MyInfoActivity.this, CarInfoActivity.class);
         finish();
     }
     //차량 추가
     private void onMyInfoAddCarClick(){
-        onRLChangeLayount(MyInfoActivity.this, CarInfoActivity.class);
+        onRLChangeLayout(MyInfoActivity.this, CarInfoActivity.class);
         finish();
     }
     //차량 정보 수정
     public void onCarModifyClick(int id){
         MyUtils.sel_car_id = id;
-        onRLChangeLayount(MyInfoActivity.this, CarInfoModifyActivity.class);
+        onRLChangeLayout(MyInfoActivity.this, CarInfoModifyActivity.class);
         finish();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onLRChangeLayount(MyInfoActivity.this, MainActivity.class);
+        onLRChangeLayout(MyInfoActivity.this, MainActivity.class);
         finish();
     }
 

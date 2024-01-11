@@ -84,7 +84,7 @@ public class LinkInfoActivity extends AppBaseActivity {
         MethodItem item;
         for (int i = 0; i < MyUtils.link_methods.length; i++) {
             boolean isCheck = false;
-            if (i == Integer.parseInt(MyUtils.con_method)) {
+            if (i == MyUtils.con_method) {
                 isCheck = true;
             }
             item = new MethodItem(isCheck, MyUtils.link_methods[i]);
@@ -136,10 +136,10 @@ public class LinkInfoActivity extends AppBaseActivity {
             for (int i = 0; i < methodItems.size(); i++) {
                 if (position == i) {
                     methodItems.get(i).selected = true;
+                    MyUtils.con_method = position;
                 } else {
                     methodItems.get(i).selected = false;
                 }
-                MyUtils.con_method = String.valueOf(i);
             }
             methodAdapter.notifyDataSetChanged();
         }
@@ -157,15 +157,10 @@ public class LinkInfoActivity extends AppBaseActivity {
                     if (!MyUtils.con_ECU) {
                         pairedItems.get(i).selected = true;
                         //CommonFunc.setUnPairedDevice();
-                        showDialog();
+                        showConnectDialog();
                     } else {
                         //OBD2 연결 끊기
-                        pairedItems.get(i).selected = false;
-                        MyUtils.obdConnect.closeSocket();
-                        MainActivity.getInstance().showDisconnectedStatus(0);
-                        //DB 저장
-                        DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
-                        finish();
+                        showDisconnectDialog();
                     }
                 } else {
                     pairedItems.get(i).selected = false;
@@ -305,11 +300,11 @@ public class LinkInfoActivity extends AppBaseActivity {
     }
 
     private void onLinkInfoPrevClick() {
-        onLRChangeLayount(LinkInfoActivity.this, MainActivity.class);
+        onLRChangeLayout(LinkInfoActivity.this, MainActivity.class);
         finish();
     }
 
-    private void showDialog() {
+    private void showConnectDialog() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -345,6 +340,42 @@ public class LinkInfoActivity extends AppBaseActivity {
             }
         });
     }
+
+    private void showDisconnectDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog = new Dialog(LinkInfoActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.dlg_finish);
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                TextView dialog_two_title_text = dialog.findViewById(R.id.dialog_two_title_text);
+                dialog_two_title_text.setText(R.string.bt_unlink_title);
+                TextView dialog_two_button_text = dialog.findViewById(R.id.dialog_two_content_text);
+                dialog_two_button_text.setText(R.string.bt_unlink_question);
+                ImageView dialog_two_no_btn = dialog.findViewById(R.id.dialog_two_no_btn);
+                dialog_two_no_btn.setOnClickListener(view -> {
+                    dialog.dismiss();
+                });
+                ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);
+                dialog_two_ok_btn.setOnClickListener(view -> {
+                    pairedItems.get(select_item).selected = false;
+                    pairedAdapter.setData(pairedItems);
+                    MyUtils.obdConnect.closeSocket();
+                    MainActivity.getInstance().showDisconnectedStatus(0);
+                    //DB 저장
+                    DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
+                    finish();
+                    dialog.dismiss();
+                });
+
+                dialog.show();
+            }
+        });
+    }
     public void onStartSearch() {
         enableDevices.clear();
         setDeviceList();
@@ -361,7 +392,7 @@ public class LinkInfoActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onLRChangeLayount(LinkInfoActivity.this, MainActivity.class);
+        onLRChangeLayout(LinkInfoActivity.this, MainActivity.class);
         finish();
     }
 

@@ -605,7 +605,7 @@ public class DashboardActivity extends AppBaseActivity {
     private void onPrevActivityClick() {
         isShow = false;
         MyUtils.showGauge = false;
-        onLRChangeLayount(DashboardActivity.this, MainActivity.class);
+        onLRChangeLayout(DashboardActivity.this, MainActivity.class);
         finish();
     }
 
@@ -614,7 +614,7 @@ public class DashboardActivity extends AppBaseActivity {
         super.onBackPressed();
         isShow = false;
         MyUtils.showGauge = false;
-        onLRChangeLayount(DashboardActivity.this, MainActivity.class);
+        onLRChangeLayout(DashboardActivity.this, MainActivity.class);
         finish();
     }
 
@@ -640,12 +640,12 @@ public class DashboardActivity extends AppBaseActivity {
     }
 
     public void startDashboardGauge() {
-        if (Integer.parseInt(MyUtils.ecu_engine_load) > 0 || Integer.parseInt(MyUtils.ecu_engine_rpm) > 10) {
+        //if (Integer.parseInt(MyUtils.ecu_engine_load) > 0 || Integer.parseInt(MyUtils.ecu_engine_rpm) > 0) {
             if (!isShow) {
                 isShow = true;
                 runOnUiThread(() -> new GaugeAsyncTask().execute("GaugeInfo"));
             }
-        }
+        //}
     }
     public void stopDashboardGauge() {
         gauge_speed_text.setText("0");
@@ -750,12 +750,12 @@ public class DashboardActivity extends AppBaseActivity {
                         dlg_error_text.setText(R.string.show_error_consume);
                         MyUtils.ecu_consume_warning = "";
                     }
+                    MyUtils.err_idx = 0;
 
                     Handler handler = new Handler();
                     handler.postDelayed(() -> {
                         errDialog.dismiss();
                         MyUtils.is_error_dlg = false;
-                        MyUtils.err_idx = 0;
                     }, 2000);
 
                     errDialog.show();

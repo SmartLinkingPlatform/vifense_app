@@ -165,7 +165,7 @@ public class RecordActivity extends AppBaseActivity {
     }
 
     private void onRecordPrevClick(){
-        onLRChangeLayount(RecordActivity.this, MainActivity.class);
+        onLRChangeLayout(RecordActivity.this, MainActivity.class);
         finish();
     }
 
@@ -178,7 +178,7 @@ public class RecordActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onLRChangeLayount(RecordActivity.this, MainActivity.class);
+        onLRChangeLayout(RecordActivity.this, MainActivity.class);
         finish();
     }
 }

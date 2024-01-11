@@ -230,7 +230,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         ProtocolTable.getProtocolTable();
 
         car_mod_progress_layout.setVisibility(View.GONE);
-        onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
+        onLRChangeLayout(CarInfoModifyActivity.this, MyInfoActivity.class);
         finish();
     }
 
@@ -263,7 +263,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         CarInfoTable.deleteCarInfoTable(MyUtils.sel_car_id);
         CarInfoTable.getCarInfoTable();
 
-        onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
+        onLRChangeLayout(CarInfoModifyActivity.this, MyInfoActivity.class);
         finish();
     }
     public void onFailedDeleteCar() {
@@ -274,7 +274,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
 
     private void onModCarInfoPrevClick(){
         if (!isMode) {
-            onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
+            onLRChangeLayout(CarInfoModifyActivity.this, MyInfoActivity.class);
             finish();
         }
     }
@@ -282,7 +282,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         if (!isMode) {
-            onLRChangeLayount(CarInfoModifyActivity.this, MyInfoActivity.class);
+            onLRChangeLayout(CarInfoModifyActivity.this, MyInfoActivity.class);
             finish();
         } else {
             return;

@@ -157,7 +157,7 @@ public class DiagnosisActivity extends AppBaseActivity {
     }
 
     private void onPrevActivityClick() {
-        onLRChangeLayount(DiagnosisActivity.this, MainActivity.class);
+        onLRChangeLayout(DiagnosisActivity.this, MainActivity.class);
         finish();
     }
 
@@ -281,7 +281,7 @@ public class DiagnosisActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onLRChangeLayount(DiagnosisActivity.this, MainActivity.class);
+        onLRChangeLayout(DiagnosisActivity.this, MainActivity.class);
         finish();
     }
 

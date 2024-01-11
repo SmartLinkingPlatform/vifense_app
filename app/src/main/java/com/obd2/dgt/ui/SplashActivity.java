@@ -60,7 +60,7 @@ public class SplashActivity extends AppBaseActivity {
 
     public void gotoSuccess() {
         splash_progress_layout.setVisibility(View.GONE);
-        Toast.makeText(getApplicationContext(), R.string.connected_server, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MyUtils.mContext, R.string.connected_server, Toast.LENGTH_SHORT).show();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -75,7 +75,11 @@ public class SplashActivity extends AppBaseActivity {
 
     public void gotoFail() {
         splash_progress_layout.setVisibility(View.GONE);
-        Toast.makeText(getApplicationContext(), R.string.check_network_error, Toast.LENGTH_LONG).show();
+        Toast.makeText(MyUtils.mContext, R.string.check_network_error, Toast.LENGTH_LONG).show();
+    }
+    public void noCompanyList() {
+        splash_progress_layout.setVisibility(View.GONE);
+        Toast.makeText(MyUtils.mContext, R.string.company_list_error, Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -23,7 +23,7 @@ public class DeviceInfoTable {
                 if (cursor.getString(3).equals("1")) {
                     MyUtils.savedSocketStatus = true;
                 }
-                MyUtils.con_method = cursor.getString(4); //Bluetooth 연결 방식
+                MyUtils.con_method = cursor.getInt(4); //Bluetooth 연결 방식
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,7 +36,7 @@ public class DeviceInfoTable {
                     {"mac_address", d_mac},
                     {"paired_status", paired},
                     {"socket_status", socketed},
-                    {"connected_method", MyUtils.con_method}
+                    {"connected_method", String.valueOf(MyUtils.con_method)}
             };
             MyUtils.db_connect.sqlUpdate(table_name, fields, "");
         } catch (Exception e) {

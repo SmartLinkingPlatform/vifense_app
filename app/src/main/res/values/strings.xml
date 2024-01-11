@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vifense</string>
-    <string name="app_version">Ver.0.240109.1</string>
+    <string name="app_version">Ver.0.240112.1</string>
     <string name="app_running">Vifense 앱이 실행 중 입니다.</string>
     <string name="user_id">아이디</string>
     <string name="user_pwd">비밀번호</string>
@@ -82,7 +82,7 @@
     <string name="error_login_pwd">비밀번호를 입력하십시오</string>
     <string name="error_sel_company">소속사 정보가 없습니다.</string>
     <string name="loading_obd_data">데이터를 읽어 들이는 중입니다.</string>
-    <string name="send_driving_data">주행 정보를 서버로 전송 하였습니다.</string>
+    <string name="send_driving_data">주행이 종료 되었습니다.</string>
 
     <string name="mileage_month">월 주행 거리</string>
     <string name="mileage_today">오늘 주행 거리</string>
@@ -160,9 +160,14 @@
     <string name="bt_link_title">블루투스 연결</string>
     <string name="bt_link_content">시동이 걸린 상태에서 정상적인 서비스가 가능 합니다. 기능이 제대로 작동하지 않을 경우 우선 시동이 제대로 걸려 있는지 확인 하시기 바랍니다.</string>
     <string name="bt_link_question">OBD를 연결 하시겠습니까?</string>
+    <string name="bt_unlink_title">OBD 연결 해제</string>
+    <string name="bt_unlink_content">확인을 클릭하시면 현재 연결증인 OBD를 해제 하고 차량의 주행정보를 서버로 전송하게 됩니다.</string>
+    <string name="bt_unlink_question">연결중인 OBD를 해제 하시겠습니까?</string>
     <string name="connecting_server">서버 연결 시도 중...</string>
     <string name="check_network_error">서버 연결에 실패 하였습니다.</string>
+    <string name="company_list_error">회사 리스트 정보를 얻지 못하였습니다.</string>
     <string name="connected_server">서버에 연결 되었습니다.</string>
+    <string name="finishing_app">앱 종료 중...</string>
 
     <string name="week_1">일</string>
     <string name="week_2">월</string>
@@ -180,7 +185,8 @@
     <string name="safe_driving_scoring3">급가속, 급제동(1초에 15Km이상) 30회당 : -1점, 1일 최대 -2점</string>
     <string name="safe_driving_scoring4">기본 100점에서 차감 제도로 운영</string>
 
-    <string name="finish_app">\'뒤로\' 버튼을 한번 더 누르면 종료 됩니다.</string>
+    <string name="finish_app_title">앱을 종료</string>
+    <string name="finish_app_content">앱을 종료 하시겠습니까?</string>
     <string name="permission_failue">저장소 권한이 거부 되었습니다. 앱을 다시 실행 하여 저장소 권한을 허용해주세요.</string>
     <string name="permission_failue1">저장소 권한이 거부되었습니다.</string>
     <string name="permission_storage_title">저장소 권한 설정</string>

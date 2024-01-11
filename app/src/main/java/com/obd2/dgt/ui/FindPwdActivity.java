@@ -182,7 +182,7 @@ public class FindPwdActivity extends AppBaseActivity {
         };
         MyInfoTable.updateMyInfoTable(fields);
 
-        onLRChangeLayount(FindPwdActivity.this, LoginActivity.class);
+        onLRChangeLayout(FindPwdActivity.this, LoginActivity.class);
         finish();
     }
 
@@ -193,7 +193,7 @@ public class FindPwdActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onLRChangeLayount(FindPwdActivity.this, LoginActivity.class);
+        onLRChangeLayout(FindPwdActivity.this, LoginActivity.class);
         finish();
     }
 

@@ -212,7 +212,7 @@ public class CarInfoActivity extends AppBaseActivity {
         dialog_normal_text.setText(R.string.confirm_reg_message);
         ImageView dialog_normal_btn = dialog.findViewById(R.id.dialog_normal_btn);
         dialog_normal_btn.setOnClickListener(view -> {
-            onLRChangeLayount(CarInfoActivity.this, MyInfoActivity.class);
+            onLRChangeLayout(CarInfoActivity.this, MyInfoActivity.class);
             finish();
             dialog.dismiss();
         });
@@ -220,7 +220,7 @@ public class CarInfoActivity extends AppBaseActivity {
     }
     private void onCarInfoPrevClick(){
         if (!isMode) {
-            onLRChangeLayount(CarInfoActivity.this, MyInfoActivity.class);
+            onLRChangeLayout(CarInfoActivity.this, MyInfoActivity.class);
             finish();
         }
     }
@@ -228,7 +228,7 @@ public class CarInfoActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         if (!isMode) {
-            onLRChangeLayount(CarInfoActivity.this, MyInfoActivity.class);
+            onLRChangeLayout(CarInfoActivity.this, MyInfoActivity.class);
             finish();
         } else {
             return;

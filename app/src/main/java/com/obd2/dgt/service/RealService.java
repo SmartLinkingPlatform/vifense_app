@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -43,8 +45,7 @@ public class RealService extends Service {
             return START_STICKY;
         }
         serviceIntent = intent;
-        createNotification();
-
+        //createNotification();
         onMainThread();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -64,12 +65,10 @@ public class RealService extends Service {
                                 showWarningDialog();
                             }
 
-                            if (Float.parseFloat(MyUtils.ecu_vehicle_speed) == 0 &&
-                                    (!MyUtils.con_ECU || !MyUtils.loaded_data ||
-                                            Float.parseFloat(MyUtils.ecu_engine_load) == 0 ||
-                                            Float.parseFloat(MyUtils.ecu_engine_rpm) == 0)) {
-                                if (time > 0 && Float.parseFloat(MyUtils.ecu_mileage) > 0.1) {
+                            if (!MyUtils.con_ECU || !MyUtils.loaded_data) {
+                                if (time > 0 && Float.parseFloat(MyUtils.ecu_mileage) > 0) {
                                     stopEngineStatus();
+                                    time = 0;
                                 }
                             }
                         }
@@ -177,7 +176,7 @@ public class RealService extends Service {
     @SuppressLint({"LaunchActivityFromNotification", "MissingPermission"})
     private void createNotification() {
         String CHANNEL_ID = "com.obd2.dgt";
-        createNotificationChannel();
+        createNotificationChannel(CHANNEL_ID);
 
         Intent notificationIntent = new Intent(MyUtils.mContext, MainActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -189,17 +188,18 @@ public class RealService extends Service {
                 .setContentIntent(pendingIntent)
                 .setFullScreenIntent(pendingIntent, false)
                 .setAutoCancel(true)
+                .setPriority (Notification.PRIORITY_DEFAULT)
+                .setOngoing(true) //알림 삭제 방지
                 .build();
 
         startForeground(101, notification);
     }
 
-    private void createNotificationChannel() {
-        String CHANNEL_ID = "com.obd2.dgt";
+    private void createNotificationChannel(String CHANNEL_ID) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.app_name);
             String description = getString(R.string.app_running);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
@@ -298,7 +298,6 @@ public class RealService extends Service {
     }
 
     private void stopParameters() {
-        time = 0;
         prev_speed = 0;
         fuel_consumption = 0;
         idling_time = 0;
@@ -309,8 +308,6 @@ public class RealService extends Service {
         down_score_brake = 0;
         start_time = "";
         end_time = "";
-        MyUtils.obdConnect.closeSocket();
-        MainActivity.getInstance().showDisconnectedStatus(0);
         if (MyUtils.showGauge) {
             DashboardActivity.getInstance().stopDashboardGauge();
         }

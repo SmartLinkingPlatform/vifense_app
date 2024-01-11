@@ -65,15 +65,19 @@ public class WebHttpConnect {
                 if (!response.isEmpty()) {
                     JSONArray data = CommonFunc.AnalysisResponse(response);
                     MyUtils.companyInfo.clear();
+                    if (data.length() == 0) {
+                        SplashActivity.getInstance().noCompanyList();
+                        return;
+                    }
                     for (int i = 0; i < data.length(); i++) {
                         int index = i + 1;
                         try {
                             JSONObject object = data.getJSONObject(i);
-                            String[][] fields = new String[][]{
+                            /*String[][] fields = new String[][]{
                                     {"id", String.valueOf(index)},
                                     {"cid", object.getString("admin_id")},
                                     {"name", object.getString("company_name")}
-                            };
+                            };*/
 
                             String[] info = new String[3];
                             info[0] = String.valueOf(index); //ID
@@ -373,6 +377,10 @@ public class WebHttpConnect {
                             MyUtils.brake_speed_cnt = 0;
                             MyUtils.idling_time = 0;
                             //MyUtils.ecu_driving_time = "00:00";
+                            MyUtils.is_driving = false;
+                            if (MainActivity.getInstance().isFinish) {
+                                MainActivity.getInstance().FinishApp();
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -4,6 +4,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -64,6 +65,9 @@ public class LoginActivity extends AppBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         instance = this;
+
+        //MyUtils.sharedPreferences = MyUtils.mContext.getSharedPreferences("info", Context.MODE_PRIVATE);
+        //CommonFunc.setInformationToSystem("isRun", "1");
 
         permissionCheck();
         resetPhoneSetting();
@@ -133,11 +137,11 @@ public class LoginActivity extends AppBaseActivity {
         progress_layout.setVisibility(View.GONE);
     }
     private void gotoFindPwdActivity(){
-        onRLChangeLayount(LoginActivity.this, FindPwdActivity.class);
+        onRLChangeLayout(LoginActivity.this, FindPwdActivity.class);
         finish();
     }
     private void gotoSignupActivity(){
-        onRLChangeLayount(LoginActivity.this, SignupActivity.class);
+        onRLChangeLayout(LoginActivity.this, SignupActivity.class);
         finish();
     }
     private void getAuthToken() {
@@ -247,7 +251,7 @@ public class LoginActivity extends AppBaseActivity {
     private void gotoMainPage() {
         ServiceStart();
         progress_layout.setVisibility(View.GONE);
-        onRLChangeLayount(LoginActivity.this, MainActivity.class);
+        onRLChangeLayout(LoginActivity.this, MainActivity.class);
         finish();
     }
 

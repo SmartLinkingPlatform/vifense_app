@@ -74,7 +74,7 @@ public class RestartService extends Service {
                 .build();
 
 
-        startForeground(1, notification);
+        startForeground(101, notification);
     }
 
     @Nullable

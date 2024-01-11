@@ -194,7 +194,7 @@ public class RankingInfoActivity extends AppBaseActivity {
 
     private void onRankingPrevClick(){
         MainActivity.getInstance().showRankingInfo();
-        onLRChangeLayount(RankingInfoActivity.this, MainActivity.class);
+        onLRChangeLayout(RankingInfoActivity.this, MainActivity.class);
         finish();
     }
 
@@ -202,7 +202,7 @@ public class RankingInfoActivity extends AppBaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         MainActivity.getInstance().showRankingInfo();
-        onLRChangeLayount(RankingInfoActivity.this, MainActivity.class);
+        onLRChangeLayout(RankingInfoActivity.this, MainActivity.class);
         finish();
     }
 }

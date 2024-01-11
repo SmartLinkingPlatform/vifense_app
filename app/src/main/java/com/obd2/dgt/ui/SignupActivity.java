@@ -128,7 +128,7 @@ public class SignupActivity extends AppBaseActivity {
                 ImageView dialog_confirm_btn = success_dialog.findViewById(R.id.dialog_confirm_btn);
                 dialog_confirm_btn.setOnClickListener(view -> {
                     success_dialog.dismiss();
-                    onLRChangeLayount(SignupActivity.this, LoginActivity.class);
+                    onLRChangeLayout(SignupActivity.this, LoginActivity.class);
                     finish();
                 });
                 success_dialog.show();
@@ -284,7 +284,7 @@ public class SignupActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onLRChangeLayount(SignupActivity.this, LoginActivity.class);
+        onLRChangeLayout(SignupActivity.this, LoginActivity.class);
         finish();
     }
 

@@ -101,9 +101,9 @@ public class AuthActivity extends AppBaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         if (dataKey.equals("sign")) {
-            onLRChangeLayount(AuthActivity.this, SignupActivity.class);
+            onLRChangeLayout(AuthActivity.this, SignupActivity.class);
         } else if (dataKey.equals("find")) {
-            onLRChangeLayount(AuthActivity.this, FindPwdActivity.class);
+            onLRChangeLayout(AuthActivity.this, FindPwdActivity.class);
         }
         finish();
     }
