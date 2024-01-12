@@ -36,6 +36,8 @@ import com.obd2.dgt.utils.GaugeViewInfo;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DashboardActivity extends AppBaseActivity {
     ImageView dash_prev_btn, dash_page_navigation_btn;
@@ -568,27 +570,33 @@ public class DashboardActivity extends AppBaseActivity {
         add_gauge_btn = addDialog.findViewById(R.id.add_gauge_btn);
         add_gauge_btn.setOnClickListener(view -> {
             addDialog.dismiss();
-            if(addItemIndex != 0) {
-                GaugeInfoTable.updateGaugeTable(addItemIndex, 1);
+            if(addGaugeList.size() > 0) {
+                for (Map.Entry<Integer, Integer> gauge : addGaugeList.entrySet()) {
+                    GaugeInfoTable.updateGaugeTable(gauge.getValue(), 1);
+                }
                 hiddenCloseButton();
                 RefreshGaugeLayout();
-                addItemIndex = 0;
+                addGaugeList.clear();
             }
         });
 
         addDialog.show();
     }
-    int addItemIndex = 0;
+    Map<Integer, Integer> addGaugeList = new HashMap<>();
     private GaugeAdapter.ItemClickListener addGaugeListListener = new GaugeAdapter.ItemClickListener() {
         @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemClick(View v, int position) {
             for (int i = 0; i < addItems.size(); i++) {
                 if(position == i) {
-                    addItems.get(i).selected = true;
-                    addItemIndex = Integer.parseInt(addItems.get(i).id);
-                } else {
-                    addItems.get(i).selected = false;
+                    if (addItems.get(i).selected) {
+                        addItems.get(i).selected = false;
+                        addGaugeList.remove(position);
+                    }
+                    else {
+                        addItems.get(i).selected = true;
+                        addGaugeList.put(position, Integer.parseInt(addItems.get(i).id));
+                    }
                 }
             }
             gaugeAdapter.notifyDataSetChanged();

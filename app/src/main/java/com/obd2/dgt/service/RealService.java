@@ -27,7 +27,7 @@ import java.io.IOException;
 
 
 public class RealService extends Service {
-    private static Thread mainThread;
+    public static Thread mainThread;
     public static Intent serviceIntent = null;
 
     static int idling_time = 0; //공회전 시간
@@ -35,17 +35,24 @@ public class RealService extends Service {
     boolean speed_quick = false;
     boolean speed_brake = false;
     float prev_speed = 0;
-    static boolean running = true;
+    public static boolean running = true;
     float fuel_consumption = 0;
     int err_cnt = 0;
 
+    private static RealService instance = null;
+
+    public static RealService getInstance() {
+        return instance;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        instance = this;
         if(intent == null){
             return START_STICKY;
         }
         serviceIntent = intent;
-        //createNotification();
+        createNotification();
         onMainThread();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -195,6 +202,7 @@ public class RealService extends Service {
         startForeground(101, notification);
     }
 
+    NotificationManager notificationManager;
     private void createNotificationChannel(String CHANNEL_ID) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.app_name);
@@ -203,7 +211,7 @@ public class RealService extends Service {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }
@@ -266,7 +274,9 @@ public class RealService extends Service {
             mainThread.interrupt();
             mainThread = null;
         }
-        MyUtils.obdConnect.closeSocket();
+        if (MyUtils.obdConnect != null) {
+            MyUtils.obdConnect.closeSocket();
+        }
         Thread.currentThread().interrupt();
     }
 

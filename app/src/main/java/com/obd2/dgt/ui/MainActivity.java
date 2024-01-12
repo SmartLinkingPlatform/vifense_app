@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.network.WebHttpConnect;
+import com.obd2.dgt.service.RealService;
 import com.obd2.dgt.ui.InfoActivity.CarInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
 import com.obd2.dgt.ui.InfoActivity.MessageActivity;
@@ -478,6 +479,7 @@ public class MainActivity extends AppBaseActivity {
         progress_layout.setVisibility(View.GONE);
         //CommonFunc.setInformationToSystem("isRun", "0");
         try {
+            RealService.getInstance().onTaskRemoved(RealService.serviceIntent);
             moveTaskToBack(true);
             finish();
             finishAffinity();

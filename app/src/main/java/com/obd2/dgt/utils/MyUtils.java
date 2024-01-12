@@ -222,10 +222,10 @@ public class MyUtils {
             {"AT SP4", "ISO 14230-4 KWP(5 baud)"},
             {"AT SP5", "ISO 14230-4 KWP(fast)"},
             {"AT SP6", "ISO 15765-4 CAN(11 bit)"},
-            {"AT SP7", "ISO 15765-4 CAN(29 bit)"},
-            {"AT SPA", "SAE J1939 (CAN 29/250)"}
+            {"AT SP7", "ISO 15765-4 CAN(29 bit)"}
     };
 
     public static SharedPreferences sharedPreferences;
+    public static boolean stopService = false;
 
 }

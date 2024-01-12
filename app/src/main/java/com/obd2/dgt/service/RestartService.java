@@ -53,7 +53,7 @@ public class RestartService extends Service {
     private void createNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel =
-                    new NotificationChannel(channelID, "알림 설정 모드 타이틀", NotificationManager.IMPORTANCE_DEFAULT);
+                    new NotificationChannel(channelID, getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
             assert manager != null;
             manager.createNotificationChannel(serviceChannel);
@@ -68,7 +68,7 @@ public class RestartService extends Service {
         }
         Notification notification = new NotificationCompat.Builder(this, channelID)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText(getString(R.string.app_running))
+                .setContentText(getString(R.string.app_restarting))
                 .setSmallIcon(R.drawable.app_icon)
                 .setContentIntent(pendingIntent)
                 .build();

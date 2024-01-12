@@ -27,7 +27,7 @@ public class SplashActivity extends AppBaseActivity {
         instance = this;
 
         //read db - AppStatus table
-        DBConnect m_DBCon = new DBConnect(this.getContext());
+        DBConnect m_DBCon = new DBConnect(MyUtils.mContext);
         int is_db = m_DBCon.createDatabase();
         Toast.makeText(getApplicationContext(), R.string.app_version, Toast.LENGTH_SHORT).show();
         /*if (is_db == 1) {

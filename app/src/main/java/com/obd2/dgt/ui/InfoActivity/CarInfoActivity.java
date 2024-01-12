@@ -164,32 +164,38 @@ public class CarInfoActivity extends AppBaseActivity {
     }
 
     public void onSuccessRegisterCar(String car_id) {
-        String[][] fields = new String[][]{
-                {"car_id", car_id},
-                {"manufacturer", String.valueOf(car_manufacturer_spinner.getSelectedItemPosition())},
-                {"model", String.valueOf(car_model_spinner.getSelectedItemPosition())},
-                {"create_date", String.valueOf(reg_car_date_spinner.getSelectedItemPosition())},
-                {"number", reg_car_number_text.getText().toString()},
-                {"fuel_type", String.valueOf(car_fuel_type_spinner.getSelectedItemPosition())},
-                {"gas", reg_car_gas_text.getText().toString()}
-        };
-        CarInfoTable.insertCarInfoTable(fields);
-        SystemClock.sleep(100);
+        try {
+            String[][] fields = new String[][]{
+                    {"car_id", car_id},
+                    {"manufacturer", String.valueOf(car_manufacturer_spinner.getSelectedItemPosition())},
+                    {"model", String.valueOf(car_model_spinner.getSelectedItemPosition())},
+                    {"create_date", String.valueOf(reg_car_date_spinner.getSelectedItemPosition())},
+                    {"number", reg_car_number_text.getText().toString()},
+                    {"fuel_type", String.valueOf(car_fuel_type_spinner.getSelectedItemPosition())},
+                    {"gas", reg_car_gas_text.getText().toString()}
+            };
+            CarInfoTable.insertCarInfoTable(fields);
+            SystemClock.sleep(100);
 
-        String[][] p_field = new String[][]{
-                {"protocol", MyUtils.PROTOCOL_CUSTOM[car_protocol_spinner.getSelectedItemPosition()][0]}
-        };
-        ProtocolTable.updateMyInfoTable(p_field);
-        SystemClock.sleep(100);
-        ProtocolTable.getProtocolTable();
+            String[][] p_field = new String[][]{
+                    {"protocol", MyUtils.PROTOCOL_CUSTOM[car_protocol_spinner.getSelectedItemPosition()][0]}
+            };
+            ProtocolTable.updateMyInfoTable(p_field);
+            SystemClock.sleep(100);
+            ProtocolTable.getProtocolTable();
 
-        isMode = false;
-        car_progress_layout.setVisibility(View.GONE);
+            isMode = false;
+            car_progress_layout.setVisibility(View.GONE);
 
-        dialog = new Dialog(CarInfoActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
-        showConfirmDialog();
+            dialog = new Dialog(CarInfoActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            showConfirmDialog();
+        } catch (Exception e) {
+            String content = CommonFunc.getDateTime() + " --- Car Register Error --- " + e.getMessage() + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+            e.printStackTrace();
+        }
     }
     public void onDuplicationRegisterCar() {
         isMode = false;

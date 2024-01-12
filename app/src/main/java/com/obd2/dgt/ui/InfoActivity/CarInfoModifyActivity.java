@@ -56,6 +56,7 @@ public class CarInfoModifyActivity extends AppBaseActivity {
         setContentView(R.layout.activity_car_info_modify);
         instance = this;
         md_names = new ArrayList<>();
+        protocol_idx = 0;
         getSelectedCarInfo();
         initLayout();
     }
@@ -208,30 +209,36 @@ public class CarInfoModifyActivity extends AppBaseActivity {
     }
 
     public void onSuccessModifyCar() {
-        isMode = false;
-        String[][] fields = new String[][]{
-                {"manufacturer", String.valueOf(mod_manufacturer_spinner.getSelectedItemPosition())},
-                {"model", String.valueOf(mod_model_spinner.getSelectedItemPosition())},
-                {"create_date", String.valueOf(mod_date_spinner.getSelectedItemPosition())},
-                {"number", mod_number_text.getText().toString()},
-                {"fuel_type", String.valueOf(mod_fuel_type_spinner.getSelectedItemPosition())},
-                {"gas", mod_gas_text.getText().toString()}
-        };
+        try {
+            isMode = false;
+            String[][] fields = new String[][]{
+                    {"manufacturer", String.valueOf(mod_manufacturer_spinner.getSelectedItemPosition())},
+                    {"model", String.valueOf(mod_model_spinner.getSelectedItemPosition())},
+                    {"create_date", String.valueOf(mod_date_spinner.getSelectedItemPosition())},
+                    {"number", mod_number_text.getText().toString()},
+                    {"fuel_type", String.valueOf(mod_fuel_type_spinner.getSelectedItemPosition())},
+                    {"gas", mod_gas_text.getText().toString()}
+            };
 
-        CarInfoTable.updateCarInfoTable(Integer.parseInt(car_id), fields);
-        SystemClock.sleep(100);
-        CarInfoTable.getCarInfoTable();
+            CarInfoTable.updateCarInfoTable(Integer.parseInt(car_id), fields);
+            SystemClock.sleep(100);
+            CarInfoTable.getCarInfoTable();
 
-        String[][] p_field = new String[][]{
-                {"protocol", MyUtils.PROTOCOL_CUSTOM[mod_protocol_spinner.getSelectedItemPosition()][0]}
-        };
-        ProtocolTable.updateMyInfoTable(p_field);
-        SystemClock.sleep(100);
-        ProtocolTable.getProtocolTable();
+            String[][] p_field = new String[][]{
+                    {"protocol", MyUtils.PROTOCOL_CUSTOM[mod_protocol_spinner.getSelectedItemPosition()][0]}
+            };
+            ProtocolTable.updateMyInfoTable(p_field);
+            SystemClock.sleep(100);
+            ProtocolTable.getProtocolTable();
 
-        car_mod_progress_layout.setVisibility(View.GONE);
-        onLRChangeLayout(CarInfoModifyActivity.this, MyInfoActivity.class);
-        finish();
+            car_mod_progress_layout.setVisibility(View.GONE);
+            onLRChangeLayout(CarInfoModifyActivity.this, MyInfoActivity.class);
+            finish();
+        } catch (Exception e) {
+            String content = CommonFunc.getDateTime() + " --- Car Modify Error --- " + e.getMessage() + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+            e.printStackTrace();
+        }
     }
 
     public void onFailedModifyCar() {
