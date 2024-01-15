@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vifense</string>
-    <string name="app_version">Ver.0.240112.5</string>
+    <string name="app_version">Ver.0.240115.5</string>
     <string name="app_running">Vifense 앱이 실행 중 입니다.</string>
     <string name="app_restarting">Vifense 앱이 재실행 되었습니다.</string>
     <string name="user_id">아이디</string>
@@ -21,6 +21,7 @@
     <string name="connected_obd2_text">ECU 연결됨</string>
     <string name="connecting_error_text">장치 연결에 실패하였습니다.</string>
     <string name="non_connecting_text">장치 연결 되여있지 않습니다.</string>
+    <string name="fail_select_method">ODB 연결 해제 후 다시 시도해 주세요.</string>
     <string name="vehicle_diagnosis">차량진단</string>
     <string name="driving_record">주행기록</string>
     <string name="vehicle_management">차량관리</string>
@@ -70,6 +71,7 @@
     <string name="error_reg_car_fail">차량 등록에 실패 하였습니다.</string>
     <string name="error_mod_car_fail">차량 정보 수정에 실패 하였습니다.</string>
     <string name="error_del_car_fail">차량 정보 삭제에 실패 하였습니다.</string>
+    <string name="error_read_car_fail">차량 정보를 불러오지 못했습니다.</string>
     <string name="error_input_pwd">비밀번호가 일치하지 않습니다.</string>
     <string name="error_view_conditions">이용약관을 확인하십시오.</string>
     <string name="error_input_auth_code">인증번호 확인 시간이 지났습니다.</string>
@@ -145,6 +147,7 @@
     <string name="link_nopaired_text">연결 가능한 디바이스</string>
 
     <string name="bluetooth_permission_nodevice">이 기기에서는 블루투스장치를 지원하지 않습니다.</string>
+    <string name="ble_permission_nodevice">BLE를 지원하지 않는 기기입니다.</string>
     <string name="show_error_idle">장시간 공회전 중 입니다</string>
     <string name="show_error_fast">과속 중 입니다. 속도를 줄이세요.</string>
     <string name="show_error_quick">천천히 가속하세요.</string>
@@ -166,7 +169,7 @@
     <string name="bt_unlink_question">연결중인 OBD를 해제 하시겠습니까?</string>
     <string name="connecting_server">서버 연결 시도 중...</string>
     <string name="check_network_error">서버 연결에 실패 하였습니다.</string>
-    <string name="company_list_error">회사 리스트 정보를 얻지 못하였습니다.</string>
+    <string name="company_list_error">회사 리스트 정보를 얻지 못하였습니다. 서버 연결 상태 혹은 회사 정보를 확인 하세요.</string>
     <string name="connected_server">서버에 연결 되었습니다.</string>
     <string name="finishing_app">앱 종료 중...</string>
 

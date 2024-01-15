@@ -226,6 +226,5 @@ public class MyUtils {
     };
 
     public static SharedPreferences sharedPreferences;
-    public static boolean stopService = false;
 
 }

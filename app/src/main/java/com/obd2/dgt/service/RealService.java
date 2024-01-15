@@ -9,9 +9,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.SystemClock;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -22,8 +19,6 @@ import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
-
-import java.io.IOException;
 
 
 public class RealService extends Service {
@@ -216,21 +211,10 @@ public class RealService extends Service {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        StopService();
-        running = false;
-    }
-
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
-        running = false;
-        stopSelf();
-    }
-
     boolean is_idling = false;
+    int cnt_quick = 0;
+    int cnt_brake = 0;
+
     private void showWarningDialog() {
         if (MyUtils.is_error_dlg) {
             return;
@@ -244,10 +228,18 @@ public class RealService extends Service {
             MyUtils.err_idx = 2;
         }
         if (speed_quick) {
-            MyUtils.err_idx = 3;
+            if (cnt_quick == 1) {
+                MyUtils.err_idx = 3;
+                cnt_quick = 0;
+            }
+            cnt_quick++;
         }
         if (speed_brake) {
-            MyUtils.err_idx = 4;
+            if (cnt_brake == 1) {
+                MyUtils.err_idx = 4;
+                cnt_brake = 0;
+            }
+            cnt_brake++;
         }
         if (!MyUtils.ecu_trouble_code.isEmpty()) {
             MyUtils.is_trouble = true;
@@ -273,9 +265,6 @@ public class RealService extends Service {
         if (mainThread != null) {
             mainThread.interrupt();
             mainThread = null;
-        }
-        if (MyUtils.obdConnect != null) {
-            MyUtils.obdConnect.closeSocket();
         }
         Thread.currentThread().interrupt();
     }
@@ -321,6 +310,20 @@ public class RealService extends Service {
         if (MyUtils.showGauge) {
             DashboardActivity.getInstance().stopDashboardGauge();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        StopService();
+        running = false;
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        running = false;
+        stopSelf();
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.obd2.dgt.ui;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothGatt;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +24,7 @@ import com.obd2.dgt.R;
 import com.obd2.dgt.service.RealService;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
 import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
+import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 import com.obd2.dgt.utils.PermissionSupport;
 
@@ -42,6 +45,8 @@ public class AppBaseActivity extends AppCompatActivity {
         if (MyUtils.mContext == null) {
             MyUtils.mContext = getContext();
         }
+        //화면 꺼짐 방지
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     public void onRLChangeLayout(Context currentLayout, Class<?> changeLayout) {
@@ -79,18 +84,17 @@ public class AppBaseActivity extends AppCompatActivity {
         MyUtils.mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, getString(R.string.app_name));
-        wakeLock.acquire(10*60*1000L);
-
         String packageName = getPackageName();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Intent intent = new Intent();
-            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                intent.setData(Uri.parse("package:" + packageName));
-                startActivity(intent);
-            }
+        Intent intent = new Intent();
+        if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+            intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent.setData(Uri.parse("package:" + packageName));
+            startActivity(intent);
         }
+
+
+        wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, getString(R.string.app_name));
+        wakeLock.acquire();
     }
     public void releaseWakeLock() {
         if (wakeLock != null && wakeLock.isHeld()) {
@@ -168,12 +172,13 @@ public class AppBaseActivity extends AppCompatActivity {
         registerReceiver(mBluetoothStateReceiver, stateFilter);
     }
 
-    BroadcastReceiver mBluetoothStateReceiver = new BroadcastReceiver() {
+    public BroadcastReceiver mBluetoothStateReceiver = new BroadcastReceiver() {
         @SuppressLint("MissingPermission")
         @Override
         public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();   //입력된 action
         final BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
         //입력된 action에 따라서 함수를 처리한다
         switch (action) {
             case BluetoothAdapter.ACTION_STATE_CHANGED: //블루투스의 연결 상태 변경
@@ -201,10 +206,11 @@ public class AppBaseActivity extends AppCompatActivity {
             case BluetoothDevice.ACTION_BOND_STATE_CHANGED:
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
-                MyUtils.obdConnect.closeSocket();
-                MainActivity.getInstance().showDisconnectedStatus(0);
+                if (device.getAddress().equals(MyUtils.obd2_address)) {
+                    MyUtils.obdConnect.finishSocket();
+                    MainActivity.getInstance().showDisconnectedStatus(0);
+                }
                 break;
-
             case BluetoothAdapter.ACTION_DISCOVERY_STARTED: //블루투스 기기 검색 시작
                 break;
             case BluetoothDevice.ACTION_FOUND:  //블루투스 기기 검색 됨, 블루투스 기기가 근처에서 검색될 때마다 수행됨
@@ -225,7 +231,7 @@ public class AppBaseActivity extends AppCompatActivity {
         }
     };
 
-    public void ServiceStart() {
+    public void BluetoothServiceStart() {
         try {
             //Start Service
             if (RealService.serviceIntent == null) {

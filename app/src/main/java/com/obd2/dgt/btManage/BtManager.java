@@ -9,20 +9,23 @@ import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 
-public class BluetoothManager {
-    private static final String TAG = BluetoothManager.class.getName();
+public class BtManager {
+    private static final String TAG = BtManager.class.getName();
 
     @SuppressLint("MissingPermission")
-    public static BluetoothSocket connect(BluetoothDevice dev) throws IOException {
+    public static BluetoothSocket connect(BluetoothDevice dev, boolean secure) {
         BluetoothSocket sock = null;
         BluetoothSocket sockFallback = null;
 
         Log.d(TAG, "Starting Bluetooth connection..");
         try {
-            sock = dev.createRfcommSocketToServiceRecord(MyUtils.uuid);
+            if (secure) {
+                sock = dev.createRfcommSocketToServiceRecord(MyUtils.uuid);
+            } else {
+                sock = dev.createInsecureRfcommSocketToServiceRecord(MyUtils.uuid);
+            }
             sock.connect();
         } catch (Exception e1) {
             Class<?> clazz = sock.getRemoteDevice().getClass();
@@ -34,9 +37,8 @@ public class BluetoothManager {
                 sockFallback.connect();
                 sock = sockFallback;
             } catch (Exception e2) {
-                MyUtils.obdConnect.closeSocket();
+                MyUtils.obdConnect.finishSocket();
                 MainActivity.getInstance().showDisconnectedStatus(0);
-                throw new IOException(e2.getMessage());
             }
         }
         return sock;

@@ -192,8 +192,6 @@ public class CarInfoActivity extends AppBaseActivity {
             dialog.setCancelable(false);
             showConfirmDialog();
         } catch (Exception e) {
-            String content = CommonFunc.getDateTime() + " --- Car Register Error --- " + e.getMessage() + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
             e.printStackTrace();
         }
     }

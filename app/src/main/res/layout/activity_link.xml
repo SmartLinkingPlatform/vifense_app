@@ -13,8 +13,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="70dp"
             android:padding="10dp">
 
             <TextView
@@ -41,6 +40,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginRight="10dp"
                 app:srcCompat="@drawable/refresh" />
+
             <ProgressBar
                 android:id="@+id/refresh_cycle"
                 style="?android:attr/progressBarStyleLarge"
@@ -57,11 +57,10 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="150dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
-            android:layout_weight="0.9"
             android:background="@drawable/table_bg">
 
             <LinearLayout
@@ -98,6 +97,7 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/paired_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
@@ -117,7 +117,7 @@
                     android:background="@color/bg_color">
 
                     <TextView
-                        android:id="@+id/textView41"
+                        android:id="@+id/paired_device_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center_vertical"
@@ -140,6 +140,7 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/enabled_frame_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"

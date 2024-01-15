@@ -31,7 +31,7 @@ public class OBDConnect {
         try {
             this.obdDevice = obdDevice;
             MyUtils.mBluetoothAdapter.cancelDiscovery();
-            socket = BluetoothManager.connect(obdDevice);
+            socket = BtManager.connect(obdDevice, true);
             if (socket.isConnected()) {
                 MyUtils.con_OBD = true;
                 running = true;
@@ -39,7 +39,7 @@ public class OBDConnect {
                 MyUtils.con_OBD = false;
             }
         } catch (Exception e) {
-            closeSocket();
+            closeedSocket();
             e.printStackTrace();
         }
     }
@@ -68,28 +68,48 @@ public class OBDConnect {
         }
     }
 
-    private void sendCommand(String command) throws IOException {
+    private void sendCommand(String command) {
         // Send command to OBD-II adapter
         try {
-            String content = CommonFunc.getDateTime() + " --- ECU to ODB SendCommand --- " + command + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
-            outputStream.write((command + "\r").getBytes());
+            /*String content = CommonFunc.getDateTime() + " --- ECU to ODB sendCommand --- " + command + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
+
+            outputStream.write((command).getBytes());
             outputStream.flush();
+            Thread.sleep(10);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void readResponse() throws IOException {
-        byte[] buffer = new byte[1024];
-        int bytesRead = inputStream.read(buffer);
-        final String rawResponse = new String(buffer, 0, bytesRead);
+    private void readResponse(String command) {
+        try {
+            boolean is_read = true;
+            //int bytesRead = inputStream.read(buffer);
+            //final String rawResponse = new String(buffer, 0, bytesRead);
+            while (is_read) {
+                int byteCount = inputStream.available();
+                if (byteCount == 0) {
+                    SystemClock.sleep(1);
+                } else {
+                    byte[] rawBytes = new byte[byteCount];
+                    inputStream.read(rawBytes);
+                    final String rawResponse = new String(rawBytes, "UTF-8");
 
-        String response = getResponse(rawResponse);
-        String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + response + "\r\n";
-        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
-
-        OBDResponse.ResponseCalculator(response);
+                    String response = getResponse(rawResponse);
+                    if (response.equals(command) || response.isEmpty()) {
+                        SystemClock.sleep(1);
+                    } else {
+                        /*String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + response + "\r\n";
+                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
+                        OBDResponse.ResponseCalculator(response);
+                        is_read = false;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (Float.parseFloat(MyUtils.ecu_vehicle_speed) > 0 ||
                 Float.parseFloat(MyUtils.ecu_engine_load) > 0 ||
@@ -132,22 +152,45 @@ public class OBDConnect {
                 if (Thread.currentThread().isInterrupted()) {
                     break;
                 }
-                try {
-                    for (String[] info : MyUtils.enum_info) {
-                        String msg = "01" + info[1];
+                for (String[] info : MyUtils.enum_info) {
+                    String msg = "01" + info[1];
+                    if (outputStream != null)
                         sendCommand(msg);
-                        readResponse();
-                    }
-                    //Thread.sleep(50);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if (inputStream != null)
+                        readResponse(msg);
                 }
             }
         });
         workerThread.start();
     }
 
-    public void closeSocket(){
+    public void closeedSocket(){
+        try {
+            running = false;
+            if (socket != null && socket.isConnected()) {
+                socket.close();
+                if (workerThread != null) {
+                    workerThread.interrupt();
+                    workerThread = null;
+                }
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (MyUtils.btSocket != null) {
+                MyUtils.btSocket.close();
+            }
+            outputStream = null;
+            inputStream = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void finishSocket(){
         try {
             running = false;
             if (socket != null && socket.isConnected()) {

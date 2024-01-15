@@ -402,6 +402,7 @@ public class MainActivity extends AppBaseActivity {
     public void showDisconnectedStatus(int idx) {
         isConnecting = true;
         link_index = 0;
+        isConClick = true;
         showConnectingLink(link_index);
         if (idx == 0)
             connect_device_text.setText("");
@@ -456,7 +457,7 @@ public class MainActivity extends AppBaseActivity {
             if (!MyUtils.con_ECU || !MyUtils.loaded_data || Float.parseFloat(MyUtils.ecu_mileage) == 0)
                 FinishApp();
             else {
-                MyUtils.obdConnect.closeSocket();
+                MyUtils.obdConnect.finishSocket();
                 MainActivity.getInstance().showDisconnectedStatus(0);
                 DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
                 progress_layout.setVisibility(View.VISIBLE);

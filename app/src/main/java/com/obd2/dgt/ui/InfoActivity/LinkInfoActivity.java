@@ -5,17 +5,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
@@ -27,7 +31,6 @@ import com.obd2.dgt.ui.ListAdapter.LinkDevice.PairedItem;
 import com.obd2.dgt.ui.ListAdapter.LinkMethod.MethodAdapter;
 import com.obd2.dgt.ui.ListAdapter.LinkMethod.MethodItem;
 import com.obd2.dgt.ui.MainActivity;
-import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.util.ArrayList;
@@ -39,6 +42,8 @@ public class LinkInfoActivity extends AppBaseActivity {
     RecyclerView link_method_recycle_view;
     RecyclerView link_paired_recycle_view;
     RecyclerView link_enable_recycle_view;
+    TextView paired_device_title;
+    FrameLayout enabled_frame_layout;
     ImageView link_prev_btn;
     ImageView refresh_btn;
     ProgressBar refresh_cycle;
@@ -65,18 +70,24 @@ public class LinkInfoActivity extends AppBaseActivity {
         setContentView(R.layout.activity_link);
         instance = this;
 
-        //페어링 된 장치 검색
-        onSearchPairedBtDevices();
-        //주변 블루투스 장치 검색
-        onSearchEnableBtDevices();
-
+        loadView();
         initLayout();
         setPairedList();
     }
 
+    private void loadView() {
+        if (MyUtils.con_method == 0) {
+            //페어링 된 장치 검색
+            onSearchPairedBtDevices();
+            //주변 블루투스 장치 검색
+            onSearchEnableBtDevices();
+        } else if (MyUtils.con_method == 1) {
+            onSearchBleDevices();
+        }
+    }
+
     @SuppressLint("MissingPermission")
     private void initLayout() {
-        //
         link_method_recycle_view = findViewById(R.id.link_method_recycle_view);
         LinearLayoutManager verticalLayoutManager1
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -94,6 +105,8 @@ public class LinkInfoActivity extends AppBaseActivity {
         link_method_recycle_view.setAdapter(methodAdapter);
 
         //페어링 된 장치 목록
+        paired_device_title = findViewById(R.id.paired_device_title);
+
         link_paired_recycle_view = findViewById(R.id.link_paired_recycle_view);
         LinearLayoutManager verticalLayoutManager2
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -104,6 +117,9 @@ public class LinkInfoActivity extends AppBaseActivity {
         }
         pairedAdapter = new PairedAdapter(getContext(), pairedItems, pairedListListener);
         link_paired_recycle_view.setAdapter(pairedAdapter);
+
+        enabled_frame_layout = findViewById(R.id.enabled_frame_layout);
+        hiddenDeviceList();
 
         //검색된 블루투스 장치 목록
         link_enable_recycle_view = findViewById(R.id.link_enable_recycle_view);
@@ -129,14 +145,31 @@ public class LinkInfoActivity extends AppBaseActivity {
         refresh_cycle.setVisibility(View.VISIBLE);
     }
 
+    private void hiddenDeviceList() {
+        if (MyUtils.con_method == 0) {
+            enabled_frame_layout.setVisibility(View.VISIBLE);
+            paired_device_title.setText(R.string.link_paired_text);
+        } else if (MyUtils.con_method == 1) {
+            enabled_frame_layout.setVisibility(View.GONE);
+            paired_device_title.setText(R.string.link_nopaired_text);
+        }
+    }
+
     private MethodAdapter.ItemClickListener methodListListener = new MethodAdapter.ItemClickListener() {
         @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onItemClick(View v, int position) {
+            if (MyUtils.con_ECU) {
+                Toast.makeText(getApplicationContext(), R.string.fail_select_method, Toast.LENGTH_SHORT).show();
+                return;
+            }
             for (int i = 0; i < methodItems.size(); i++) {
                 if (position == i) {
                     methodItems.get(i).selected = true;
                     MyUtils.con_method = position;
+                    hiddenDeviceList();
+                    onStopSearch();
+                    onStartSearch();
                 } else {
                     methodItems.get(i).selected = false;
                 }
@@ -191,6 +224,44 @@ public class LinkInfoActivity extends AppBaseActivity {
         onBluetoothReceiver();
         MyUtils.mBluetoothAdapter.startDiscovery();
     }
+
+    @SuppressLint("MissingPermission")
+    private void onSearchBleDevices() {
+        if (MyUtils.mBluetoothAdapter != null) {
+            MyUtils.mBluetoothAdapter.stopLeScan(mLeScanCallBack);
+            MyUtils.mBluetoothAdapter.startLeScan(mLeScanCallBack);
+        }
+    }
+    private BluetoothAdapter.LeScanCallback mLeScanCallBack = new BluetoothAdapter.LeScanCallback() {
+        @SuppressLint("MissingPermission")
+        @Override
+        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+            if (device != null && !TextUtils.isEmpty(device.getName())) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean isExist = false;
+                        try {
+                            for (BluetoothDevice paired : pairedDevices) {
+                                if (paired.getName().equals(device.getName())) {
+                                    isExist = true;
+                                    break;
+                                }
+                            }
+                            if (!isExist) {
+                                List<BluetoothDevice> arraylist = new ArrayList<>(pairedDevices);
+                                arraylist.add(device);
+                                pairedDevices = new HashSet<>(arraylist);
+                                setPairedList();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        }
+    };
 
     @SuppressLint("MissingPermission")
     public void onChangedScanningDeviceList(BluetoothDevice device) {
@@ -364,7 +435,7 @@ public class LinkInfoActivity extends AppBaseActivity {
                 dialog_two_ok_btn.setOnClickListener(view -> {
                     pairedItems.get(select_item).selected = false;
                     pairedAdapter.setData(pairedItems);
-                    MyUtils.obdConnect.closeSocket();
+                    MyUtils.obdConnect.finishSocket();
                     MainActivity.getInstance().showDisconnectedStatus(0);
                     //DB 저장
                     DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
@@ -376,17 +447,22 @@ public class LinkInfoActivity extends AppBaseActivity {
             }
         });
     }
-    public void onStartSearch() {
+    private void onStartSearch() {
         enableDevices.clear();
-        setDeviceList();
+        pairedDevices = new HashSet<>();
         refresh_btn.setVisibility(View.GONE);
         refresh_cycle.setVisibility(View.VISIBLE);
-        onSearchEnableBtDevices();
+        loadView();
+        if (MyUtils.con_method == 0) {
+            setPairedList();
+        }
     }
 
+    @SuppressLint("MissingPermission")
     public void onStopSearch() {
         refresh_btn.setVisibility(View.VISIBLE);
         refresh_cycle.setVisibility(View.GONE);
+        MyUtils.mBluetoothAdapter.stopLeScan(mLeScanCallBack);
     }
 
     @Override

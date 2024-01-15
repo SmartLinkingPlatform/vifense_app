@@ -59,6 +59,10 @@ public class SplashActivity extends AppBaseActivity {
     }
 
     public void gotoSuccess() {
+        if (MyUtils.companyInfo.size() == 0) {
+            noCompanyList();
+            return;
+        }
         splash_progress_layout.setVisibility(View.GONE);
         Toast.makeText(MyUtils.mContext, R.string.connected_server, Toast.LENGTH_SHORT).show();
         Handler handler = new Handler();
@@ -70,7 +74,7 @@ public class SplashActivity extends AppBaseActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 500);
+        }, 100);
     }
 
     public void gotoFail() {

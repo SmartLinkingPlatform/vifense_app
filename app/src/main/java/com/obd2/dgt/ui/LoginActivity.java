@@ -245,11 +245,12 @@ public class LoginActivity extends AppBaseActivity {
     }
 
     public void onFailedCarList() {
-        gotoMainPage();
+        progress_layout.setVisibility(View.GONE);
+        Toast.makeText(getApplicationContext(), R.string.error_read_car_fail, Toast.LENGTH_LONG).show();
     }
 
     private void gotoMainPage() {
-        ServiceStart();
+        BluetoothServiceStart();
         progress_layout.setVisibility(View.GONE);
         onRLChangeLayout(LoginActivity.this, MainActivity.class);
         finish();
@@ -260,7 +261,6 @@ public class LoginActivity extends AppBaseActivity {
         //CompanyTable.deleteAllCompanyInfoTable();
         MyInfoTable.getMyInfoTable();
         ProtocolTable.getProtocolTable();
-        MessageInfoTable.getMessageInfoTable();
     }
     @Override
     public void onBackPressed() {

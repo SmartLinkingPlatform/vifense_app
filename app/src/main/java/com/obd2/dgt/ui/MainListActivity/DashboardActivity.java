@@ -657,8 +657,11 @@ public class DashboardActivity extends AppBaseActivity {
     }
     public void stopDashboardGauge() {
         gauge_speed_text.setText("0");
+        gauge_speed_img.setRotation(getRotationValueI(0, 300));
         gauge_engine_text.setText("0");
+        gauge_engine_img.setRotation(getRotationValueI(0, 100));
         gauge_rpm_text.setText("0");
+        gauge_rpm_img.setRotation(getRotationValueI(0, 16400));
         gauge_real_fuel_text.setText("0.0");
         gauge_battery_text.setText("0");
         isShow = false;

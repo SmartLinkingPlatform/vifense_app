@@ -235,8 +235,6 @@ public class CarInfoModifyActivity extends AppBaseActivity {
             onLRChangeLayout(CarInfoModifyActivity.this, MyInfoActivity.class);
             finish();
         } catch (Exception e) {
-            String content = CommonFunc.getDateTime() + " --- Car Modify Error --- " + e.getMessage() + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
             e.printStackTrace();
         }
     }
