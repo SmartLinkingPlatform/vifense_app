@@ -22,6 +22,7 @@ public class MyUtils {
     public static String signup_url = "https://dgt.vifense.com/mok/auth_signup.html";
     public static String find_url = "https://dgt.vifense.com/mok/auth_findpwd.html";
     public static String call_company = "/mobile.companyInfo";
+    public static String terms_url = "/mobile.termsUrl";
     public static String user_signup = "/mobile.register";
     public static String auth_token = "/mobile.login";
     public static String user_login = "/mobile.get_user";
@@ -36,6 +37,8 @@ public class MyUtils {
     public static String driving_ranking = "/mobile.drivingRanking";
     public static String mgs_list = "/mobile.messageList";
     public static String new_pwd = "/mobile.newpassword";
+
+    public static String terms_file_path = "";
     public static String ACCESS_TOKEN = "";
     public static String sendRequestData = "";
     public static AppBaseActivity appBase = null;
@@ -226,5 +229,6 @@ public class MyUtils {
     };
 
     public static SharedPreferences sharedPreferences;
+    public static boolean isDiagnosis = false;
 
 }

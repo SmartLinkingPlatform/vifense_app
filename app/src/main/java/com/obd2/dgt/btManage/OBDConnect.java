@@ -71,8 +71,8 @@ public class OBDConnect {
     private void sendCommand(String command) {
         // Send command to OBD-II adapter
         try {
-            /*String content = CommonFunc.getDateTime() + " --- ECU to ODB sendCommand --- " + command + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
+            String content = CommonFunc.getDateTime() + " --- ECU to ODB sendCommand --- " + command + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
 
             outputStream.write((command).getBytes());
             outputStream.flush();
@@ -88,6 +88,10 @@ public class OBDConnect {
             //int bytesRead = inputStream.read(buffer);
             //final String rawResponse = new String(buffer, 0, bytesRead);
             while (is_read) {
+                if (MyUtils.isDiagnosis) {
+                    continue;
+                }
+
                 int byteCount = inputStream.available();
                 if (byteCount == 0) {
                     SystemClock.sleep(1);
@@ -99,13 +103,15 @@ public class OBDConnect {
                     String response = getResponse(rawResponse);
                     if (response.equals(command) || response.isEmpty()) {
                         SystemClock.sleep(1);
+                        String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + response + "\r\n";
+                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
                     } else {
-                        /*String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + response + "\r\n";
-                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
+                        String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + response + "\r\n";
+                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
                         OBDResponse.ResponseCalculator(response);
-                        is_read = false;
                     }
                 }
+                is_read = false;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,6 +158,10 @@ public class OBDConnect {
                 if (Thread.currentThread().isInterrupted()) {
                     break;
                 }
+                if (MyUtils.isDiagnosis) {
+                    continue;
+                }
+
                 for (String[] info : MyUtils.enum_info) {
                     String msg = "01" + info[1];
                     if (outputStream != null)

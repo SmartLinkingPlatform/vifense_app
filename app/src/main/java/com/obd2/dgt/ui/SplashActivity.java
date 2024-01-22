@@ -79,7 +79,7 @@ public class SplashActivity extends AppBaseActivity {
 
     public void gotoFail() {
         splash_progress_layout.setVisibility(View.GONE);
-        Toast.makeText(MyUtils.mContext, R.string.check_network_error, Toast.LENGTH_LONG).show();
+        Toast.makeText(MyUtils.mContext, R.string.check_server_error, Toast.LENGTH_LONG).show();
     }
     public void noCompanyList() {
         splash_progress_layout.setVisibility(View.GONE);

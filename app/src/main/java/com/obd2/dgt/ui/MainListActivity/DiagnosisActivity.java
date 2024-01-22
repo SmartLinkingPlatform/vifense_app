@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -148,7 +149,13 @@ public class DiagnosisActivity extends AppBaseActivity {
         }
     };
     private void onDiagnosisClick() {
+        if (MyUtils.btSocket == null) {
+            Toast.makeText(MyUtils.mContext, R.string.non_connecting_text, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         isTest = true;
+        MyUtils.isDiagnosis = true;
         diagnosis_btn.setBackgroundResource(R.drawable.button4_prog);
         progressBar.setVisibility(View.VISIBLE);
         new GetTroubleCodesTask().execute("GetTroubleCodes");
@@ -177,7 +184,8 @@ public class DiagnosisActivity extends AppBaseActivity {
                     } else if (prog == 3) {
                         new LineFeedOffCommand().run(MyUtils.btSocket.getInputStream(), MyUtils.btSocket.getOutputStream());
                     } else if (prog == 4) {
-                        new SelectProtocolCommand(ObdProtocols.AUTO).run(MyUtils.btSocket.getInputStream(), MyUtils.btSocket.getOutputStream());
+                        SystemClock.sleep(1000);
+                        //new SelectProtocolCommand(ObdProtocols.AUTO).run(MyUtils.btSocket.getInputStream(), MyUtils.btSocket.getOutputStream());
                     } else if (prog == 5) {
                         ModifiedTroubleCodesObdCommand tcoc = new ModifiedTroubleCodesObdCommand();
                         tcoc.run(MyUtils.btSocket.getInputStream(), MyUtils.btSocket.getOutputStream());
@@ -191,8 +199,9 @@ public class DiagnosisActivity extends AppBaseActivity {
                     e.printStackTrace();
                 }
             }
+            MyUtils.isDiagnosis = false;
 
-            if (result.contains("P")) {
+            if (!result.isEmpty()) {
                 String codes = "";
                 String[] res_codes = result.split("\n");
                 ArrayList<String> arrayList = new ArrayList<>();
@@ -208,7 +217,8 @@ public class DiagnosisActivity extends AppBaseActivity {
                     }
                 }
                 dlg_text = codes;
-                setCurrentTroubleCodeList(codes);
+                if (!codes.isEmpty())
+                    setCurrentTroubleCodeList(codes);
             } else {
                 dlg_text = getString(R.string.non_trouble_codes);
             }
@@ -243,11 +253,14 @@ public class DiagnosisActivity extends AppBaseActivity {
         pTroubleAdapter.setData(pTroubleItems);
     }
 
-    public class ModifiedTroubleCodesObdCommand extends TroubleCodesCommand {
+    public static class ModifiedTroubleCodesObdCommand extends TroubleCodesCommand {
         @Override
         public String getResult() {
             // remove unwanted response from output since this results in erroneous error codes
-            return rawData.replace("SEARCHING...", "").replace("NODATA", "");
+            rawData = rawData.replace("SEARCHING...", "").replace("NODATA", "");
+            if (rawData.length() < 5)
+                rawData = "";
+            return rawData;
         }
     }
 

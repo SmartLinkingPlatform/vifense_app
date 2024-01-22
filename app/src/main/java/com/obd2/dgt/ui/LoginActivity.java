@@ -89,7 +89,7 @@ public class LoginActivity extends AppBaseActivity {
             });
             requestFilePermission();
         }
-
+        getTermsFile();
         getDatabaseInfo();
         getWindowsSize();
 
@@ -245,6 +245,7 @@ public class LoginActivity extends AppBaseActivity {
     }
 
     public void onFailedCarList() {
+        gotoMainPage();
         progress_layout.setVisibility(View.GONE);
         Toast.makeText(getApplicationContext(), R.string.error_read_car_fail, Toast.LENGTH_LONG).show();
     }
@@ -261,6 +262,7 @@ public class LoginActivity extends AppBaseActivity {
         //CompanyTable.deleteAllCompanyInfoTable();
         MyInfoTable.getMyInfoTable();
         ProtocolTable.getProtocolTable();
+        MessageInfoTable.getMessageInfoTable();
     }
     @Override
     public void onBackPressed() {
@@ -310,6 +312,16 @@ public class LoginActivity extends AppBaseActivity {
 
         } else {
             ActivityCompat.requestPermissions(LoginActivity.this, permissions, 30);
+        }
+    }
+
+    private void getTermsFile() {
+        String msg = getString(R.string.check_network_error);
+        String btnText = getString(R.string.confirm_text);
+        boolean isNetwork = CommonFunc.checkNetworkStatus(LoginActivity.this, msg, btnText);
+        if (isNetwork) {
+            //약관 url 받기
+            WebHttpConnect.onTermsUrlRequest();
         }
     }
 }

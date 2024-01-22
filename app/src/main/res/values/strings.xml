@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vifense</string>
-    <string name="app_version">Ver.0.240115.5</string>
+    <string name="app_version">Ver.0.240122.1</string>
     <string name="app_running">Vifense 앱이 실행 중 입니다.</string>
     <string name="app_restarting">Vifense 앱이 재실행 되었습니다.</string>
     <string name="user_id">아이디</string>
@@ -16,6 +16,7 @@
     <string name="register_user">회원가입</string>
     <string name="vehicle_gauge">계기판</string>
     <string name="connect_text">연결</string>
+    <string name="terms_title_text">약관</string>
     <string name="rank_unit_text">위</string>
     <string name="connecting_obd2_text">OBD2 연결 시도 중</string>
     <string name="connected_obd2_text">ECU 연결됨</string>
@@ -168,7 +169,8 @@
     <string name="bt_unlink_content">확인을 클릭하시면 현재 연결증인 OBD를 해제 하고 차량의 주행정보를 서버로 전송하게 됩니다.</string>
     <string name="bt_unlink_question">연결중인 OBD를 해제 하시겠습니까?</string>
     <string name="connecting_server">서버 연결 시도 중...</string>
-    <string name="check_network_error">서버 연결에 실패 하였습니다.</string>
+    <string name="check_network_error">인터넷이 연결 되지 않았습니다.</string>
+    <string name="check_server_error">서버 연결에 실패 하였습니다.</string>
     <string name="company_list_error">회사 리스트 정보를 얻지 못하였습니다. 서버 연결 상태 혹은 회사 정보를 확인 하세요.</string>
     <string name="connected_server">서버에 연결 되었습니다.</string>
     <string name="finishing_app">앱 종료 중...</string>

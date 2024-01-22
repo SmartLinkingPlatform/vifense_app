@@ -99,6 +99,28 @@ public class WebHttpConnect {
         }.execute(httpCallPost);
     }
 
+    //약관 웹파일 경로 요청
+    public static void onTermsUrlRequest() {
+        serverCallHttpFunc(MyUtils.terms_url);
+        new HttpUrlRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (!response.isEmpty()) {
+                    try {
+                        JSONObject res = new JSONObject(response);
+                        String msg = res.getString("msg");
+                        if (msg.equals("ok")) {
+                            MyUtils.terms_file_path = res.getString("path");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute(httpCallPost);
+    }
+
     //서버에 회원 가입 정보 보내기
     public static void onSignUpRequest(String[][] values) {
         serverCallHttpFunc(values, MyUtils.user_signup);

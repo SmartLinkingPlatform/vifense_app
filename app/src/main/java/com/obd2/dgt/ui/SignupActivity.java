@@ -278,7 +278,7 @@ public class SignupActivity extends AppBaseActivity {
     }
     //이용 약관 보기
     private void onViewConditionClick(){
-
+        onRLChangeLayout(SignupActivity.this, TermsActivity.class);
     }
 
     @Override
