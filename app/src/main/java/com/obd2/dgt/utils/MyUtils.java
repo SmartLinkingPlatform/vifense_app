@@ -96,14 +96,14 @@ public class MyUtils {
     };
 
     public static String[][] enum_info = {
-            {"ENGINE_LOAD", "04"},          //엔진 부하
-            {"COOLANT_TEMPERATURE", "05"},  //냉각수 온도
-            {"ENGINE_RPM", "0C"},           //엔진 RPM
-            {"VEHICLE_SPEED", "0D"},        //차량 속도
-            {"MAF_AIR_FLOW", "10"},         //흡입 공기량
-            {"THROTTLE_POSITION", "11"},    //스로틀 위치
-            {"BATTERY_VOLTAGE", "42"},      //배터리 전압
-            {"FUEL_RATE_LPH", "5E"}         //순간 연료 소모량 l/h
+            {"ENGINE_LOAD", "04", "2"},          //엔진 부하
+            {"COOLANT_TEMPERATURE", "05", "2"},  //냉각수 온도
+            {"ENGINE_RPM", "0C", "4"},           //엔진 RPM
+            {"VEHICLE_SPEED", "0D", "2"},        //차량 속도
+            {"MAF_AIR_FLOW", "10", "4"},         //흡입 공기량
+            {"THROTTLE_POSITION", "11", "2"},    //스로틀 위치
+            {"BATTERY_VOLTAGE", "42", "4"},      //배터리 전압
+            {"FUEL_RATE_LPH", "5E", "4"}         //순간 연료 소모량 l/h
     };
     public static String ecu_monitor_status = "off";
     public static String ecu_engine_load = "0";

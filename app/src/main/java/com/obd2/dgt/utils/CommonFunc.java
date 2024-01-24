@@ -324,4 +324,32 @@ public class CommonFunc {
 
         return run;
     }
+
+    public static String checkInputOnlyNumberAndAlphabet(String textInput) {
+        StringBuilder val = new StringBuilder();
+        for (int i = 0; i < textInput.length(); i++) {
+            char chrInput = textInput.charAt(i);
+            if (chrInput >= 0x61 && chrInput <= 0x7A) {
+                val.append(String.valueOf(chrInput));
+            } else if (chrInput >= 0x41 && chrInput <= 0x5A) {
+                val.append(String.valueOf(chrInput));
+            } else if (chrInput >= 0x30 && chrInput <= 0x39) {
+                val.append(String.valueOf(chrInput));
+            }
+        }
+        return val.toString();
+    }
+
+    public static String getResponseValue(String res) {
+        String sub_res = "";
+        String pid = res.substring(2, 4);
+        for (int i = 0; i < MyUtils.enum_info.length; i++) {
+            if (MyUtils.enum_info[i][1].equalsIgnoreCase(pid)) {
+                int digit = Integer.parseInt(MyUtils.enum_info[i][2]) + 4;
+                sub_res = res.substring(0, digit);
+                break;
+            }
+        }
+        return sub_res;
+    }
 }

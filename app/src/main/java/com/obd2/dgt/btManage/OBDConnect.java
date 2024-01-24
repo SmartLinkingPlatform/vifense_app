@@ -17,10 +17,13 @@ public class OBDConnect {
     private BluetoothSocket socket = null;
     private OutputStream outputStream = null; // 블루투스에 데이터를 출력하기 위한 출력 스트림
     private InputStream inputStream = null; // 블루투스에 데이터를 입력하기 위한 입력 스트림
+    private Thread commandThread = null; // 문자열 수신에 사용되는 쓰레드
     private Thread workerThread = null; // 문자열 수신에 사용되는 쓰레드
     private final String MOD_PREFIX = "41";
     private final String MOD_PREFIX2 = "7E8";
     boolean running = false;
+    boolean reading = true;
+
     BluetoothDevice obdDevice;
 
     public OBDConnect() {
@@ -56,13 +59,14 @@ public class OBDConnect {
                 if (protocol.setComProtocol()) {
                     MainActivity.getInstance().setECULinkStatus(true);
                     // 데이터 수신 함수 호출
-                    Thread.sleep(500);
-                    getDataOBDtoECU();
+                    sendDataOBDtoECU();
+                    //Thread.sleep(50);
+                    //getDataECUtoOBD();
                 }/* else {
                     MainActivity.getInstance().setECULinkStatus(false);
                     CommonFunc.showToastOnUIThread("현재 차량의 ELM327 통신 프로토콜 검색중...");
                 }*/
-            } catch (IOException | InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -76,42 +80,29 @@ public class OBDConnect {
 
             outputStream.write((command).getBytes());
             outputStream.flush();
-            Thread.sleep(10);
+            Thread.sleep(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void readResponse(String command) {
+    private void readResponse() {
         try {
-            boolean is_read = true;
-            //int bytesRead = inputStream.read(buffer);
-            //final String rawResponse = new String(buffer, 0, bytesRead);
-            while (is_read) {
-                if (MyUtils.isDiagnosis) {
-                    continue;
-                }
+            byte[] buffer = new byte[1024];
+            int bytesRead = inputStream.read(buffer);
+            final String rawResponse = new String(buffer, 0, bytesRead);
 
-                int byteCount = inputStream.available();
-                if (byteCount == 0) {
-                    SystemClock.sleep(1);
-                } else {
-                    byte[] rawBytes = new byte[byteCount];
-                    inputStream.read(rawBytes);
-                    final String rawResponse = new String(rawBytes, "UTF-8");
+            String cont = CommonFunc.getDateTime() + " --- rawResponse --- " + rawResponse + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", cont);
 
-                    String response = getResponse(rawResponse);
-                    if (response.equals(command) || response.isEmpty()) {
-                        SystemClock.sleep(1);
-                        String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + response + "\r\n";
-                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
-                    } else {
-                        String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + response + "\r\n";
-                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
-                        OBDResponse.ResponseCalculator(response);
-                    }
-                }
-                is_read = false;
+
+            String response = getResponse(rawResponse);
+            String resVal = CommonFunc.checkInputOnlyNumberAndAlphabet(response);
+            if (!resVal.isEmpty()) {
+                String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + resVal + "\r\n";
+                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+
+                OBDResponse.ResponseCalculator(resVal);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,6 +118,7 @@ public class OBDConnect {
     }
 
     private String getResponse(String rawResponse) {
+        String result = "";
         String res = rawResponse.replaceAll("(\r\n|\r|\n|\n\r)", "");
         res = res.replace("null", "");
         res = res.replaceAll("\\s", "");
@@ -135,43 +127,79 @@ public class OBDConnect {
         if (res.contains(MOD_PREFIX)) {
             int index = res.indexOf(MOD_PREFIX);
             res = res.substring(index, res.length());
+            result = CommonFunc.getResponseValue(res);
         }
 
-        if (res.contains(" ")) {
-            String[] values = res.split(" ");
+        if (result.contains(" ")) {
+            String[] values = result.split(" ");
             StringBuilder sub_str = new StringBuilder();
             for (int i = 0; i < values.length; i++) {
                 if (i > 0) {
                     sub_str.append(values[i]);
                 }
             }
-            res = sub_str.toString();
+            result = sub_str.toString();
         }
-        if (res.contains("ERROR") || res.contains("NODATA")) {
-            res = "no";
+        if (result.contains("ERROR") || result.contains("NODATA")) {
+            result = "no";
         }
-        return res;
+        return result;
     }
-    private void getDataOBDtoECU() {
-        workerThread = new Thread(() -> {
-            while (running) {
-                if (Thread.currentThread().isInterrupted()) {
-                    break;
-                }
-                if (MyUtils.isDiagnosis) {
-                    continue;
-                }
 
-                for (String[] info : MyUtils.enum_info) {
-                    String msg = "01" + info[1];
-                    if (outputStream != null)
-                        sendCommand(msg);
-                    if (inputStream != null)
-                        readResponse(msg);
+    /*private void getDataECUtoOBD() {
+        workerThread = new Thread(() -> {
+            while (reading) {
+                try {
+                    if (workerThread != null && !workerThread.isInterrupted()) {
+                        if (MyUtils.isDiagnosis) {
+                            continue;
+                        }
+                        if (inputStream != null)
+                            readResponse();
+                        SystemClock.sleep(10);
+                    } else {
+                        reading = false;
+                        String content = CommonFunc.getDateTime() + " --- Stop workerThread --- " + "\r\n";
+                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         });
+        workerThread.setPriority(Thread.MAX_PRIORITY);
         workerThread.start();
+    }*/
+    private void sendDataOBDtoECU() {
+        commandThread = new Thread(() -> {
+            while (running) {
+                try {
+                    if (commandThread != null && !commandThread.isInterrupted()) {
+                        if (MyUtils.isDiagnosis) {
+                            continue;
+                        }
+
+                        for (String[] info : MyUtils.enum_info) {
+                            String msg = "01" + info[1];
+                            String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
+                            if (outputStream != null)
+                                sendCommand(command);
+                            if (inputStream != null)
+                                readResponse();
+                            SystemClock.sleep(1);
+                        }
+                    } else {
+                        running = false;
+                        String content = CommonFunc.getDateTime() + " --- Stop commandThread --- " + "\r\n";
+                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        commandThread.setPriority(Thread.MAX_PRIORITY);
+        commandThread.start();
     }
 
     public void closeedSocket(){
@@ -179,10 +207,14 @@ public class OBDConnect {
             running = false;
             if (socket != null && socket.isConnected()) {
                 socket.close();
-                if (workerThread != null) {
+                if (commandThread != null) {
+                    commandThread.interrupt();
+                    commandThread = null;
+                }
+                /*if (workerThread != null) {
                     workerThread.interrupt();
                     workerThread = null;
-                }
+                }*/
             }
             if (outputStream != null) {
                 outputStream.close();
@@ -205,10 +237,14 @@ public class OBDConnect {
             running = false;
             if (socket != null && socket.isConnected()) {
                 socket.close();
-                if (workerThread != null) {
+                if (commandThread != null) {
+                    commandThread.interrupt();
+                    commandThread = null;
+                }
+                /*if (workerThread != null) {
                     workerThread.interrupt();
                     workerThread = null;
-                }
+                }*/
             }
             if (outputStream != null) {
                 outputStream.close();

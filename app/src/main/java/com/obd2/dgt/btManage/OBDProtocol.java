@@ -45,7 +45,7 @@ public class OBDProtocol {
             //ATSTFF Set time out to maximum
             //ATSTHH Set timeout to 4ms
 
-            String[] initializeCommands = new String[]{"ATZ", "ATL0", "ATE1", "ATH1", "ATAT1", "ATSTFF", "ATI", "ATDP"};
+            String[] initializeCommands = new String[]{"ATZ", "ATL0", "ATE1", "ATH1", "ATAT0", "ATSTFF", "ATI", "ATDP"};
             for (String command : initializeCommands) {
                 sendCommand(command);
                 readResponse();
