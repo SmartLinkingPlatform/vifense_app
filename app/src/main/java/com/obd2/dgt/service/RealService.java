@@ -52,6 +52,7 @@ public class RealService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    int threadCnt = 0;
     private void onMainThread() {
         mainThread = new Thread(() -> {
             while (running) {
@@ -75,6 +76,11 @@ public class RealService extends Service {
                             }
                         }
                         Thread.sleep(1000);
+                        if (threadCnt == 5) {
+                            MyUtils.isEnumInfo = true;
+                            threadCnt = 0;
+                        }
+                        threadCnt++;
                     } else {
                         boolean interrupted = Thread.interrupted();
                         if (interrupted) {
@@ -173,6 +179,13 @@ public class RealService extends Service {
     }
     private void getFuelConsumption() {
         if (Integer.parseInt(MyUtils.ecu_vehicle_speed) > 0) {
+            //순간 연료소모량
+            float rpm = Float.parseFloat(MyUtils.ecu_engine_rpm);
+            float speed = Float.parseFloat(MyUtils.ecu_vehicle_speed);
+            double fuel_rate = (rpm / 1000) * speed / 20;
+            MyUtils.ecu_fuel_rate = String.valueOf(Math.round(fuel_rate * 10) / (float) 10);
+
+            //연료 소모량
             fuel_consumption += Double.parseDouble(MyUtils.ecu_fuel_rate) / 3600;
             MyUtils.ecu_fuel_consume = String.valueOf(Math.round(fuel_consumption * 10) / (float) 10.0);
         }

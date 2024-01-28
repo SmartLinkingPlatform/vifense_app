@@ -92,10 +92,6 @@ public class OBDConnect {
             int bytesRead = inputStream.read(buffer);
             final String rawResponse = new String(buffer, 0, bytesRead);
 
-            String cont = CommonFunc.getDateTime() + " --- rawResponse --- " + rawResponse + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", cont);
-
-
             String response = getResponse(rawResponse);
             String resVal = CommonFunc.checkInputOnlyNumberAndAlphabet(response);
             if (!resVal.isEmpty()) {
@@ -129,7 +125,6 @@ public class OBDConnect {
             res = res.substring(index, res.length());
             result = CommonFunc.getResponseValue(res);
         }
-
         if (result.contains(" ")) {
             String[] values = result.split(" ");
             StringBuilder sub_str = new StringBuilder();
@@ -179,7 +174,7 @@ public class OBDConnect {
                             continue;
                         }
 
-                        for (String[] info : MyUtils.enum_info) {
+                        for (String[] info :MyUtils.enum_base) {
                             String msg = "01" + info[1];
                             String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
                             if (outputStream != null)
@@ -187,6 +182,18 @@ public class OBDConnect {
                             if (inputStream != null)
                                 readResponse();
                             SystemClock.sleep(1);
+                        }
+                        if (MyUtils.isEnumInfo) {
+                            for (String[] info : MyUtils.enum_info) {
+                                String msg = "01" + info[1];
+                                String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
+                                if (outputStream != null)
+                                    sendCommand(command);
+                                if (inputStream != null)
+                                    readResponse();
+                                SystemClock.sleep(1);
+                            }
+                            MyUtils.isEnumInfo = false;
                         }
                     } else {
                         running = false;

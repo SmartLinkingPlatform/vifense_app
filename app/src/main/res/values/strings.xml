@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vifense</string>
-    <string name="app_version">Ver.0.240124.2</string>
+    <string name="app_version">Ver.0.240127.1</string>
     <string name="app_running">Vifense 앱이 실행 중 입니다.</string>
     <string name="app_restarting">Vifense 앱이 재실행 되었습니다.</string>
     <string name="user_id">아이디</string>

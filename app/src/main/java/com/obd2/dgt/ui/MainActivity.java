@@ -121,6 +121,8 @@ public class MainActivity extends AppBaseActivity {
     public void setMessageStatus() {
         if (MyUtils.msg_show) {
             message_btn.setBackgroundResource(R.drawable.mail_btn_state);
+        } else {
+            message_btn.setBackgroundResource(R.drawable.mail_off);
         }
     }
 
@@ -408,14 +410,6 @@ public class MainActivity extends AppBaseActivity {
             connect_device_text.setText("");
         else
             connect_device_text.setText(R.string.connecting_error_text);
-    }
-
-    public void showMessageIcon() {
-        if (MyUtils.msg_show) {
-            message_btn.setBackgroundResource(R.drawable.mail_btn_state);
-        } else {
-            message_btn.setBackgroundResource(R.drawable.mail_off);
-        }
     }
 
     public void showRankingInfo() {

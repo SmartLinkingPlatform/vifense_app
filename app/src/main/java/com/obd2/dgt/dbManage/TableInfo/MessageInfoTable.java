@@ -10,6 +10,19 @@ import java.util.ArrayList;
 public class MessageInfoTable {
     static String table_name = "tb_message";
 
+    public static void getMessageLastID() {
+        try {
+            String where = " 1 ORDER BY id DESC";
+            Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "*", where);
+            if (cursor != null && cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                MyUtils.lastMsgID = cursor.getInt(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void getMessageInfoTable() {
         try {
             MyUtils.msg_show = false;
@@ -32,7 +45,7 @@ public class MessageInfoTable {
                     info[5] = cursor.getString(5); //msg active
                     info[6] = cursor.getString(6); //msg show
                     MyUtils.messageInfo.add(info);
-                    if (cursor.getInt(6) == 0) {
+                    if (cursor.getInt(5) == 1 && cursor.getInt(6) == 1) {
                         MyUtils.msg_show = true;
                     }
                     if (i == 0) {

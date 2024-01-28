@@ -343,11 +343,20 @@ public class CommonFunc {
     public static String getResponseValue(String res) {
         String sub_res = "";
         String pid = res.substring(2, 4);
-        for (int i = 0; i < MyUtils.enum_info.length; i++) {
-            if (MyUtils.enum_info[i][1].equalsIgnoreCase(pid)) {
-                int digit = Integer.parseInt(MyUtils.enum_info[i][2]) + 4;
+        for (int i = 0; i < MyUtils.enum_base.length; i++) {
+            if (MyUtils.enum_base[i][1].equalsIgnoreCase(pid)) {
+                int digit = Integer.parseInt(MyUtils.enum_base[i][2]) + 4;
                 sub_res = res.substring(0, digit);
                 break;
+            }
+        }
+        if (MyUtils.isEnumInfo) {
+            for (int i = 0; i < MyUtils.enum_info.length; i++) {
+                if (MyUtils.enum_info[i][1].equalsIgnoreCase(pid)) {
+                    int digit = Integer.parseInt(MyUtils.enum_info[i][2]) + 4;
+                    sub_res = res.substring(0, digit);
+                    break;
+                }
             }
         }
         return sub_res;

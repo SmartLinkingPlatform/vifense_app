@@ -692,9 +692,9 @@ public class DashboardActivity extends AppBaseActivity {
                                 gauge_mileage_text.setText(MyUtils.ecu_mileage);
                                 //순간 연료 소모량
                                 //순간 연료 소모량이 0이면 "PID 0110 - 스로틀 위치" 와 "PID 010D - 연료 압력"으로 계산한다.
+                                /*
                                 double consumptionRate = 0;
                                 if (Float.parseFloat(MyUtils.ecu_fuel_rate) == 0) {
-                                    /*
                                     double mafLPH = Double.parseDouble(MyUtils.ecu_maf);
                                     // Air-Fuel Ratio (가정값, 실제 값으로 대체 가능)
                                     float airFuelRatio = 14.7f;
@@ -702,13 +702,8 @@ public class DashboardActivity extends AppBaseActivity {
                                     float fuelDensity = 0.74f;  // kg/L
                                     consumptionRate = (mafLPH - Double.parseDouble(MyUtils.ecu_throttle_position)) * fuelDensity / airFuelRatio;
                                     MyUtils.ecu_fuel_rate = String.valueOf(Math.round(consumptionRate * 10) / (float) 10);
-                                    */
-
-                                    float rpm = Float.parseFloat(MyUtils.ecu_engine_rpm);
-                                    float speed = Float.parseFloat(MyUtils.ecu_vehicle_speed);
-                                    double fuel_rate = (rpm / 1000) * speed / 20;
-                                    MyUtils.ecu_fuel_rate = String.valueOf(Math.round(fuel_rate * 10) / (float) 10);
                                 }
+                                */
                                 gauge_real_fuel_text.setText(MyUtils.ecu_fuel_rate);
                                 //연료 소모량
                                 gauge_fuel_text.setText(MyUtils.ecu_fuel_consume);

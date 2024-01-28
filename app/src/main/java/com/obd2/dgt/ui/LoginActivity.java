@@ -262,6 +262,7 @@ public class LoginActivity extends AppBaseActivity {
         //CompanyTable.deleteAllCompanyInfoTable();
         MyInfoTable.getMyInfoTable();
         ProtocolTable.getProtocolTable();
+        MessageInfoTable.getMessageLastID();
         MessageInfoTable.getMessageInfoTable();
     }
     @Override

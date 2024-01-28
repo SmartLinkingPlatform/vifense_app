@@ -77,7 +77,7 @@ public class MessageActivity extends AppBaseActivity {
                     } else {
                         messageItems.get(i).selected = true;
                     }
-                    MessageInfoTable.updateMessageTable("show", "1", messageItems.get(i).id);
+                    MessageInfoTable.updateMessageTable("show", "0", messageItems.get(i).id);
                 } else {
                     messageItems.get(i).selected = false;
                 }
@@ -127,7 +127,7 @@ public class MessageActivity extends AppBaseActivity {
     }
 
     public void onMessageShow(String id) {
-        MessageInfoTable.updateMessageTable("show", "1", id);
+        MessageInfoTable.updateMessageTable("show", "0", id);
         SystemClock.sleep(100);
         MessageInfoTable.getMessageInfoTable();
     }
@@ -148,7 +148,7 @@ public class MessageActivity extends AppBaseActivity {
     }
 
     private void onMessagePrevClick(){
-        MainActivity.getInstance().showMessageIcon();
+        MainActivity.getInstance().setMessageStatus();
         onLRChangeLayout(MessageActivity.this, MainActivity.class);
         finish();
     }
@@ -156,7 +156,7 @@ public class MessageActivity extends AppBaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        MainActivity.getInstance().showMessageIcon();
+        MainActivity.getInstance().setMessageStatus();
         onLRChangeLayout(MessageActivity.this, MainActivity.class);
         finish();
     }

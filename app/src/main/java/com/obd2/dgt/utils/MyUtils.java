@@ -95,11 +95,14 @@ public class MyUtils {
             new PointF(542, 2213)   // 9
     };
 
+    public static boolean isEnumInfo = false;
+    public static String[][] enum_base = {
+            {"ENGINE_RPM", "0C", "4"},           //엔진 RPM
+            {"VEHICLE_SPEED", "0D", "2"}         //차량 속도
+    };
     public static String[][] enum_info = {
             {"ENGINE_LOAD", "04", "2"},          //엔진 부하
             {"COOLANT_TEMPERATURE", "05", "2"},  //냉각수 온도
-            {"ENGINE_RPM", "0C", "4"},           //엔진 RPM
-            {"VEHICLE_SPEED", "0D", "2"},        //차량 속도
             {"MAF_AIR_FLOW", "10", "4"},         //흡입 공기량
             {"THROTTLE_POSITION", "11", "2"},    //스로틀 위치
             {"BATTERY_VOLTAGE", "42", "4"},      //배터리 전압
