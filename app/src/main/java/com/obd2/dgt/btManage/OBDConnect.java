@@ -75,8 +75,8 @@ public class OBDConnect {
     private void sendCommand(String command) {
         // Send command to OBD-II adapter
         try {
-            String content = CommonFunc.getDateTime() + " --- ECU to ODB sendCommand --- " + command + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+            /*String content = CommonFunc.getDateTime() + " --- ECU to ODB sendCommand --- " + command + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
 
             outputStream.write((command).getBytes());
             outputStream.flush();
@@ -95,8 +95,8 @@ public class OBDConnect {
             String response = getResponse(rawResponse);
             String resVal = CommonFunc.checkInputOnlyNumberAndAlphabet(response);
             if (!resVal.isEmpty()) {
-                String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + resVal + "\r\n";
-                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+               /* String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + resVal + "\r\n";
+                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
 
                 OBDResponse.ResponseCalculator(resVal);
             }
@@ -174,17 +174,31 @@ public class OBDConnect {
                             continue;
                         }
 
-                        for (String[] info :MyUtils.enum_base) {
-                            String msg = "01" + info[1];
-                            String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
-                            if (outputStream != null)
-                                sendCommand(command);
-                            if (inputStream != null)
-                                readResponse();
-                            SystemClock.sleep(1);
+                        if (MyUtils.isEnumReal) {
+                            for (String[] info : MyUtils.pid_speed) {
+                                String msg = "01" + info[1];
+                                String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
+                                if (outputStream != null)
+                                    sendCommand(command);
+                                if (inputStream != null)
+                                    readResponse();
+                            }
+                            MyUtils.isEnumReal = false;
+                        }
+                        if (MyUtils.isEnumSec) {
+                            for (String[] info : MyUtils.pid_second) {
+                                String msg = "01" + info[1];
+                                String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
+                                if (outputStream != null)
+                                    sendCommand(command);
+                                if (inputStream != null)
+                                    readResponse();
+                                SystemClock.sleep(1);
+                            }
+                            MyUtils.isEnumSec = false;
                         }
                         if (MyUtils.isEnumInfo) {
-                            for (String[] info : MyUtils.enum_info) {
+                            for (String[] info : MyUtils.pid_info) {
                                 String msg = "01" + info[1];
                                 String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
                                 if (outputStream != null)

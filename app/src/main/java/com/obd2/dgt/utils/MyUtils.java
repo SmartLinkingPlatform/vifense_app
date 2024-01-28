@@ -96,12 +96,16 @@ public class MyUtils {
     };
 
     public static boolean isEnumInfo = false;
-    public static String[][] enum_base = {
-            {"ENGINE_RPM", "0C", "4"},           //엔진 RPM
+    public static boolean isEnumSec = false;
+    public static boolean isEnumReal = false;
+    public static String[][] pid_second = {
+            {"ENGINE_LOAD", "04", "2"},         //엔진 부하
+            {"ENGINE_RPM", "0C", "4"}           //엔진 RPM
+    };
+    public static String[][] pid_speed = {
             {"VEHICLE_SPEED", "0D", "2"}         //차량 속도
     };
-    public static String[][] enum_info = {
-            {"ENGINE_LOAD", "04", "2"},          //엔진 부하
+    public static String[][] pid_info = {
             {"COOLANT_TEMPERATURE", "05", "2"},  //냉각수 온도
             {"MAF_AIR_FLOW", "10", "4"},         //흡입 공기량
             {"THROTTLE_POSITION", "11", "2"},    //스로틀 위치

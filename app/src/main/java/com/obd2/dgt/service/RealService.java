@@ -53,33 +53,45 @@ public class RealService extends Service {
     }
 
     int threadCnt = 0;
+    int secCnt = 0;
+    int pidCnt = 0;
     private void onMainThread() {
         mainThread = new Thread(() -> {
             while (running) {
                 try {
                     if (!mainThread.isInterrupted()) {
-                        if (MyUtils.obdConnect == null) {
-                            MyUtils.obdConnect = new OBDConnect();
-                        } else {
-                            if (mainThread != null && MyUtils.con_ECU) {
-                                err_cnt = 0;
-                                getDrivingStatus();
-                                getFuelConsumption();
-                                showWarningDialog();
-                            }
+                        if (threadCnt == 100) { //1초 간격
+                            if (MyUtils.obdConnect == null) {
+                                MyUtils.obdConnect = new OBDConnect();
+                            } else {
+                                if (mainThread != null && MyUtils.con_ECU) {
+                                    err_cnt = 0;
+                                    getDrivingStatus();
+                                    getFuelConsumption();
+                                    showWarningDialog();
+                                }
 
-                            if (!MyUtils.con_ECU || !MyUtils.loaded_data) {
-                                if (time > 0 && Float.parseFloat(MyUtils.ecu_mileage) > 0) {
-                                    stopEngineStatus();
-                                    time = 0;
+                                if (!MyUtils.con_ECU || !MyUtils.loaded_data) {
+                                    if (time > 0 && Float.parseFloat(MyUtils.ecu_mileage) > 0) {
+                                        stopEngineStatus();
+                                        time = 0;
+                                    }
                                 }
                             }
-                        }
-                        Thread.sleep(1000);
-                        if (threadCnt == 5) {
-                            MyUtils.isEnumInfo = true;
                             threadCnt = 0;
                         }
+                        MyUtils.isEnumReal = true;
+                        Thread.sleep(10); //10ms 주기
+                        if (secCnt == 20) { //200ms 간격
+                            MyUtils.isEnumSec = true;
+                            secCnt = 0;
+                        }
+                        if (pidCnt == 200) { //2초 간격
+                            MyUtils.isEnumInfo = true;
+                            pidCnt = 0;
+                        }
+                        secCnt++;
+                        pidCnt++;
                         threadCnt++;
                     } else {
                         boolean interrupted = Thread.interrupted();
@@ -246,14 +258,12 @@ public class RealService extends Service {
         if (speed_quick) {
             if (cnt_quick == 1) {
                 MyUtils.err_idx = 3;
-                cnt_quick = 0;
             }
             cnt_quick++;
         }
         if (speed_brake) {
             if (cnt_brake == 1) {
                 MyUtils.err_idx = 4;
-                cnt_brake = 0;
             }
             cnt_brake++;
         }
@@ -271,6 +281,8 @@ public class RealService extends Service {
         }
 
         if (MyUtils.err_idx > 0) {
+            cnt_brake = 0;
+            cnt_quick = 0;
             MyUtils.appBase.gotoDashboard();
         }
     }
