@@ -108,7 +108,7 @@ public class MyInfoModifyActivity extends AppBaseActivity {
     private void onMyInfoModifyClick() {
         String pwd = myinfo_mod_pwd.getText().toString();
         String pwd_conf = myinfo_mod_confirm_pwd.getText().toString();
-        if (pwd.equals(pwd_conf)) {
+        if (!pwd.isEmpty() && pwd.equals(pwd_conf)) {
             //인터넷 상태 확인
             String msg = getString(R.string.check_network_error);
             String btnText = getString(R.string.confirm_text);

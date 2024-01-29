@@ -60,7 +60,7 @@ public class RealService extends Service {
             while (running) {
                 try {
                     if (!mainThread.isInterrupted()) {
-                        if (threadCnt == 100) { //1초 간격
+                        if (threadCnt == 10) { //1초 간격
                             if (MyUtils.obdConnect == null) {
                                 MyUtils.obdConnect = new OBDConnect();
                             } else {
@@ -80,18 +80,19 @@ public class RealService extends Service {
                             }
                             threadCnt = 0;
                         }
-                        MyUtils.isEnumReal = true;
-                        Thread.sleep(10); //10ms 주기
-                        if (secCnt == 20) { //200ms 간격
-                            MyUtils.isEnumSec = true;
-                            secCnt = 0;
+                        Thread.sleep(100); //10ms 주기
+                        if (MyUtils.con_OBD) {
+                            if (secCnt == 2) { //200ms 간격
+                                MyUtils.isEnumSec = true;
+                                secCnt = 0;
+                            }
+                            if (pidCnt == 20) { //2초 간격
+                                MyUtils.isEnumInfo = true;
+                                pidCnt = 0;
+                            }
+                            secCnt++;
+                            pidCnt++;
                         }
-                        if (pidCnt == 200) { //2초 간격
-                            MyUtils.isEnumInfo = true;
-                            pidCnt = 0;
-                        }
-                        secCnt++;
-                        pidCnt++;
                         threadCnt++;
                     } else {
                         boolean interrupted = Thread.interrupted();
@@ -106,7 +107,7 @@ public class RealService extends Service {
                 }
             }
         });
-        mainThread.setPriority(Thread.MAX_PRIORITY);
+        mainThread.setPriority(Thread.NORM_PRIORITY);
         mainThread.start();
     }
 
@@ -118,9 +119,6 @@ public class RealService extends Service {
     static int down_score_fast = 0;
     static int down_score_quick = 0;
     static int down_score_brake = 0;
-    static int fast_time_cnt = 0;
-    static int quick_time_cnt = 0;
-    static int break_time_cnt = 0;
 
     //차량의 움직임 상태
     private void getDrivingStatus() {
@@ -335,6 +333,11 @@ public class RealService extends Service {
         down_score_brake = 0;
         start_time = "";
         end_time = "";
+        MyUtils.isEnumSec = false;
+        MyUtils.isEnumInfo = false;
+        secCnt = 0;
+        pidCnt = 0;
+        threadCnt = 0;
         if (MyUtils.showGauge) {
             DashboardActivity.getInstance().stopDashboardGauge();
         }

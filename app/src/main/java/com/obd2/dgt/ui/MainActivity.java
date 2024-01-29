@@ -429,37 +429,43 @@ public class MainActivity extends AppBaseActivity {
     public void onBackPressed() {
         if (isFinish)
             return;
-        closeDialog = new Dialog(MainActivity.this);
-        closeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        closeDialog.setCancelable(false);
-        closeDialog.setContentView(R.layout.dlg_finish);
-        closeDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        closeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        TextView dialog_two_title_text = closeDialog.findViewById(R.id.dialog_two_title_text);
-        dialog_two_title_text.setText(R.string.finish_app_title);
-        TextView dialog_two_button_text = closeDialog.findViewById(R.id.dialog_two_content_text);
-        dialog_two_button_text.setText(R.string.finish_app_content);
-        ImageView dialog_two_no_btn = closeDialog.findViewById(R.id.dialog_two_no_btn);
-        dialog_two_no_btn.setOnClickListener(view -> {
-            isFinish = false;
-            closeDialog.dismiss();
-        });
-        ImageView dialog_two_ok_btn = closeDialog.findViewById(R.id.dialog_two_ok_btn);
-        dialog_two_ok_btn.setOnClickListener(view -> {
-            isFinish = true;
-            if (!MyUtils.con_ECU || !MyUtils.loaded_data || Float.parseFloat(MyUtils.ecu_mileage) == 0)
-                FinishApp();
-            else {
-                MyUtils.obdConnect.finishSocket();
-                MainActivity.getInstance().showDisconnectedStatus(0);
-                DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
-                progress_layout.setVisibility(View.VISIBLE);
+        String msg = getString(R.string.finish_network_error);
+        String btnText = getString(R.string.confirm_text);
+        boolean isNetwork = CommonFunc.checkNetworkStatus(MainActivity.this, msg, btnText);
+        if (isNetwork) {
+            closeDialog = new Dialog(MainActivity.this);
+            closeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            closeDialog.setCancelable(false);
+            closeDialog.setContentView(R.layout.dlg_finish);
+            closeDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            closeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            TextView dialog_two_title_text = closeDialog.findViewById(R.id.dialog_two_title_text);
+            dialog_two_title_text.setText(R.string.finish_app_title);
+            TextView dialog_two_button_text = closeDialog.findViewById(R.id.dialog_two_content_text);
+            dialog_two_button_text.setText(R.string.finish_app_content);
+            ImageView dialog_two_no_btn = closeDialog.findViewById(R.id.dialog_two_no_btn);
+            dialog_two_no_btn.setOnClickListener(view -> {
+                isFinish = false;
                 closeDialog.dismiss();
-            }
-        });
+            });
+            ImageView dialog_two_ok_btn = closeDialog.findViewById(R.id.dialog_two_ok_btn);
+            dialog_two_ok_btn.setOnClickListener(view -> {
+                isFinish = true;
+                if (!MyUtils.con_ECU || !MyUtils.loaded_data || Float.parseFloat(MyUtils.ecu_mileage) == 0)
+                    FinishApp();
+                else {
+                    MyUtils.obdConnect.finishSocket();
+                    MainActivity.getInstance().showDisconnectedStatus(0);
+                    DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "0");
+                    progress_layout.setVisibility(View.VISIBLE);
+                    closeDialog.dismiss();
+                }
+            });
 
-        closeDialog.show();
+            closeDialog.show();
+        }
         //super.onBackPressed();
     }
 

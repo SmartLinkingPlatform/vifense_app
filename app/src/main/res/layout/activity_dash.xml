@@ -131,22 +131,14 @@
                                                 android:layout_weight="0.8">
 
                                                 <TextView
-                                                    android:id="@+id/textView31"
-                                                    android:layout_width="103dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:fontFamily="@font/digital_bold"
-                                                    android:gravity="right"
-                                                    android:textColor="@color/disable_color"
-                                                    android:textSize="48sp" />
-
-                                                <TextView
                                                     android:id="@+id/gauge_speed_text"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="48sp" />
+                                                    android:textSize="42sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -253,21 +245,14 @@
                                                 android:layout_weight="0.8">
 
                                                 <TextView
-                                                    android:id="@+id/engine_bg_text"
-                                                    android:layout_width="93dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:fontFamily="@font/digital_bold"
-                                                    android:textColor="@color/disable_color"
-                                                    android:textSize="48sp" />
-
-                                                <TextView
                                                     android:id="@+id/gauge_engine_text"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="48sp" />
+                                                    android:textSize="42sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -374,22 +359,14 @@
                                                 android:layout_weight="0.8">
 
                                                 <TextView
-                                                    android:id="@+id/rpm_bg_text"
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:fontFamily="@font/digital_bold"
-                                                    android:gravity="right"
-                                                    android:textColor="@color/disable_color"
-                                                    android:textSize="48sp" />
-
-                                                <TextView
                                                     android:id="@+id/gauge_rpm_text"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="48sp" />
+                                                    android:textSize="42sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -501,22 +478,14 @@
                                                 android:layout_weight="1">
 
                                                 <TextView
-                                                    android:id="@+id/mileage_bg_text"
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:fontFamily="@font/digital_bold"
-                                                    android:gravity="right"
-                                                    android:textColor="@color/disable_color"
-                                                    android:textSize="48sp" />
-
-                                                <TextView
                                                     android:id="@+id/gauge_mileage_text"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="48sp" />
+                                                    android:textSize="42sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -624,22 +593,14 @@
                                                 android:layout_weight="1">
 
                                                 <TextView
-                                                    android:id="@+id/real_fuel_bg_text"
-                                                    android:layout_width="103dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:fontFamily="@font/digital_bold"
-                                                    android:gravity="right"
-                                                    android:textColor="@color/disable_color"
-                                                    android:textSize="48sp" />
-
-                                                <TextView
                                                     android:id="@+id/gauge_real_fuel_text"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="48sp" />
+                                                    android:textSize="42sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -747,22 +708,14 @@
                                                 android:layout_weight="1">
 
                                                 <TextView
-                                                    android:id="@+id/fuel_bg_text"
-                                                    android:layout_width="103dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:fontFamily="@font/digital_bold"
-                                                    android:gravity="right"
-                                                    android:textColor="@color/disable_color"
-                                                    android:textSize="48sp" />
-
-                                                <TextView
                                                     android:id="@+id/gauge_fuel_text"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="48sp" />
+                                                    android:textSize="42sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -870,22 +823,14 @@
                                                 android:layout_weight="1">
 
                                                 <TextView
-                                                    android:id="@+id/temp_bg_text"
-                                                    android:layout_width="113dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:fontFamily="@font/digital_bold"
-                                                    android:gravity="right"
-                                                    android:textColor="@color/disable_color"
-                                                    android:textSize="48sp" />
-
-                                                <TextView
                                                     android:id="@+id/gauge_temp_text"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="48sp" />
+                                                    android:textSize="42sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -993,22 +938,14 @@
                                                 android:layout_weight="1">
 
                                                 <TextView
-                                                    android:id="@+id/battery_bg_text"
-                                                    android:layout_width="103dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:fontFamily="@font/digital_bold"
-                                                    android:gravity="right"
-                                                    android:textColor="@color/disable_color"
-                                                    android:textSize="48sp" />
-
-                                                <TextView
                                                     android:id="@+id/gauge_battery_text"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="48sp" />
+                                                    android:textSize="42sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -1116,22 +1053,14 @@
                                                 android:layout_weight="1">
 
                                                 <TextView
-                                                    android:id="@+id/dtime_bg_text"
-                                                    android:layout_width="133dp"
-                                                    android:layout_height="wrap_content"
-                                                    android:fontFamily="@font/digital_bold"
-                                                    android:gravity="right"
-                                                    android:textColor="@color/disable_color"
-                                                    android:textSize="48sp" />
-
-                                                <TextView
                                                     android:id="@+id/gauge_dtime_text"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_gravity="center"
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="48sp" />
+                                                    android:textSize="42sp" />
                                             </FrameLayout>
 
                                             <FrameLayout

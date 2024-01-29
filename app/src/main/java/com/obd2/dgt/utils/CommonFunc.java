@@ -148,6 +148,12 @@ public class CommonFunc {
         return formatter.format(currentMillis);
     }
 
+    public static String getDateTimeMilliseconds() {
+        long currentMillis = new Date().getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault());
+        return formatter.format(currentMillis);
+    }
+
     public static String getTime() {
         long currentMillis = new Date().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());

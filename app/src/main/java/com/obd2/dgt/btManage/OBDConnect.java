@@ -18,11 +18,9 @@ public class OBDConnect {
     private OutputStream outputStream = null; // 블루투스에 데이터를 출력하기 위한 출력 스트림
     private InputStream inputStream = null; // 블루투스에 데이터를 입력하기 위한 입력 스트림
     private Thread commandThread = null; // 문자열 수신에 사용되는 쓰레드
-    private Thread workerThread = null; // 문자열 수신에 사용되는 쓰레드
     private final String MOD_PREFIX = "41";
     private final String MOD_PREFIX2 = "7E8";
     boolean running = false;
-    boolean reading = true;
 
     BluetoothDevice obdDevice;
 
@@ -42,7 +40,7 @@ public class OBDConnect {
                 MyUtils.con_OBD = false;
             }
         } catch (Exception e) {
-            closeedSocket();
+            finishSocket();
             e.printStackTrace();
         }
     }
@@ -60,12 +58,7 @@ public class OBDConnect {
                     MainActivity.getInstance().setECULinkStatus(true);
                     // 데이터 수신 함수 호출
                     sendDataOBDtoECU();
-                    //Thread.sleep(50);
-                    //getDataECUtoOBD();
-                }/* else {
-                    MainActivity.getInstance().setECULinkStatus(false);
-                    CommonFunc.showToastOnUIThread("현재 차량의 ELM327 통신 프로토콜 검색중...");
-                }*/
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -75,11 +68,9 @@ public class OBDConnect {
     private void sendCommand(String command) {
         // Send command to OBD-II adapter
         try {
-            /*String content = CommonFunc.getDateTime() + " --- ECU to ODB sendCommand --- " + command + "\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
-
             outputStream.write((command).getBytes());
             outputStream.flush();
+
             Thread.sleep(1);
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,16 +79,16 @@ public class OBDConnect {
 
     private void readResponse() {
         try {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[4096];
             int bytesRead = inputStream.read(buffer);
             final String rawResponse = new String(buffer, 0, bytesRead);
+
+            /*String content = CommonFunc.getDateTimeMilliseconds() + " --- readResponse2 --- " + rawResponse + "\r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
 
             String response = getResponse(rawResponse);
             String resVal = CommonFunc.checkInputOnlyNumberAndAlphabet(response);
             if (!resVal.isEmpty()) {
-               /* String content = CommonFunc.getDateTime() + " --- ECU to ODB Response --- " + resVal + "\r\n";
-                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
-
                 OBDResponse.ResponseCalculator(resVal);
             }
         } catch (Exception e) {
@@ -141,30 +132,6 @@ public class OBDConnect {
         return result;
     }
 
-    /*private void getDataECUtoOBD() {
-        workerThread = new Thread(() -> {
-            while (reading) {
-                try {
-                    if (workerThread != null && !workerThread.isInterrupted()) {
-                        if (MyUtils.isDiagnosis) {
-                            continue;
-                        }
-                        if (inputStream != null)
-                            readResponse();
-                        SystemClock.sleep(10);
-                    } else {
-                        reading = false;
-                        String content = CommonFunc.getDateTime() + " --- Stop workerThread --- " + "\r\n";
-                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        workerThread.setPriority(Thread.MAX_PRIORITY);
-        workerThread.start();
-    }*/
     private void sendDataOBDtoECU() {
         commandThread = new Thread(() -> {
             while (running) {
@@ -174,16 +141,14 @@ public class OBDConnect {
                             continue;
                         }
 
-                        if (MyUtils.isEnumReal) {
-                            for (String[] info : MyUtils.pid_speed) {
-                                String msg = "01" + info[1];
-                                String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
-                                if (outputStream != null)
-                                    sendCommand(command);
-                                if (inputStream != null)
-                                    readResponse();
-                            }
-                            MyUtils.isEnumReal = false;
+                        for (String[] info : MyUtils.pid_speed) {
+                            String msg = "01" + info[1];
+                            String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
+                            if (outputStream != null)
+                                sendCommand(command);
+                            if (inputStream != null)
+                                readResponse();
+                            //SystemClock.sleep(1);
                         }
                         if (MyUtils.isEnumSec) {
                             for (String[] info : MyUtils.pid_second) {
@@ -193,7 +158,7 @@ public class OBDConnect {
                                     sendCommand(command);
                                 if (inputStream != null)
                                     readResponse();
-                                SystemClock.sleep(1);
+                                //SystemClock.sleep(1);
                             }
                             MyUtils.isEnumSec = false;
                         }
@@ -205,14 +170,12 @@ public class OBDConnect {
                                     sendCommand(command);
                                 if (inputStream != null)
                                     readResponse();
-                                SystemClock.sleep(1);
+                                //SystemClock.sleep(1);
                             }
                             MyUtils.isEnumInfo = false;
                         }
                     } else {
                         running = false;
-                        String content = CommonFunc.getDateTime() + " --- Stop commandThread --- " + "\r\n";
-                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -221,36 +184,6 @@ public class OBDConnect {
         });
         commandThread.setPriority(Thread.MAX_PRIORITY);
         commandThread.start();
-    }
-
-    public void closeedSocket(){
-        try {
-            running = false;
-            if (socket != null && socket.isConnected()) {
-                socket.close();
-                if (commandThread != null) {
-                    commandThread.interrupt();
-                    commandThread = null;
-                }
-                /*if (workerThread != null) {
-                    workerThread.interrupt();
-                    workerThread = null;
-                }*/
-            }
-            if (outputStream != null) {
-                outputStream.close();
-            }
-            if (inputStream != null) {
-                inputStream.close();
-            }
-            if (MyUtils.btSocket != null) {
-                MyUtils.btSocket.close();
-            }
-            outputStream = null;
-            inputStream = null;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void finishSocket(){

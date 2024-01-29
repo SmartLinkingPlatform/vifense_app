@@ -31,6 +31,7 @@ import com.obd2.dgt.ui.ListAdapter.LinkDevice.PairedItem;
 import com.obd2.dgt.ui.ListAdapter.LinkMethod.MethodAdapter;
 import com.obd2.dgt.ui.ListAdapter.LinkMethod.MethodItem;
 import com.obd2.dgt.ui.MainActivity;
+import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
 
 import java.util.ArrayList;
@@ -193,7 +194,12 @@ public class LinkInfoActivity extends AppBaseActivity {
                         showConnectDialog();
                     } else {
                         //OBD2 연결 끊기
-                        showDisconnectDialog();
+                        String msg = getString(R.string.finish_network_error);
+                        String btnText = getString(R.string.confirm_text);
+                        boolean isNetwork = CommonFunc.checkNetworkStatus(LinkInfoActivity.this, msg, btnText);
+                        if (isNetwork) {
+                            showDisconnectDialog();
+                        }
                     }
                 } else {
                     pairedItems.get(i).selected = false;

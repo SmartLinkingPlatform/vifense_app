@@ -97,7 +97,6 @@ public class MyUtils {
 
     public static boolean isEnumInfo = false;
     public static boolean isEnumSec = false;
-    public static boolean isEnumReal = false;
     public static String[][] pid_second = {
             {"ENGINE_LOAD", "04", "2"},         //엔진 부하
             {"ENGINE_RPM", "0C", "4"}           //엔진 RPM

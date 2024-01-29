@@ -30,30 +30,31 @@ public class OBDProtocol {
         boolean isProtocol = false;
 
         try {
-            //ATZ reset all
+            //ATZ 차량의 컴퓨터나 모듈을 재설정합니다
             //ATDP Describe the current Protocol
             //ATAT0-1-2 Adaptive Timing Off - adaptive Timing Auto1 - adaptive Timing Auto2
-            //ATE0-1 Echo Off - Echo On
-            //ATSP0 Set Protocol to Auto and save it
-            //ATMA Monitor All
-            //ATL1-0 Linefeeds On - Linefeeds Off
-            //ATH1-0 Headers On - Headers Off
-            //ATI Device infomation
+            //ATE0-1 Echo Off - Echo On ECHO를 끄거나 켭니다. ECHO가 켜져 있으면 명령을 보내고 받은 응답을 동시에 표시합니다.
+            //ATSP0 통신 프로토콜을 선택합니다.
+            //ATMA 모든 모니터링이 활성화되도록 설정합니다.
+            //ATL1-0 Linefeeds On - Linefeeds Off 라인 피드 문자의 사용 여부를 설정합니다.
+            //ATH1-0 Headers On - Headers Off 헤더를 설정합니다.
+            //ATI 장치 정보를 표시합니다.
             //ATS1-0 printing of Spaces On - printing of Spaces Off
             //ATAL Allow Long (>7 byte) messages
             //ATRD Read the stored data
             //ATSTFF Set time out to maximum
             //ATSTHH Set timeout to 4ms
+            //ATMT 테스트 결과를 모니터합니다.
 
-            String[] initializeCommands = new String[]{"ATZ", "ATL0", "ATE1", "ATH1", "ATAT0", "ATSTFF", "ATI", "ATDP"};
+            String[] initializeCommands = new String[]{"ATZ", "ATL1", "ATE0", "ATH1", "ATRD", "ATI", "ATDP"};
             for (String command : initializeCommands) {
                 sendCommand(command);
                 readResponse();
             }
-            Thread.sleep(100);
+            Thread.sleep(20);
             sendCommand(MyUtils.SEL_PROTOCOL);
             response = readResponse();
-            Thread.sleep(100);
+            Thread.sleep(20);
             if (response.contains("OK")) {
                 isProtocol = true;
             }
