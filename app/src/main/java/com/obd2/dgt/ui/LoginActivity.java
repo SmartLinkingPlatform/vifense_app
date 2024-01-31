@@ -31,6 +31,7 @@ import com.obd2.dgt.dbManage.TableInfo.CarInfoTable;
 import com.obd2.dgt.dbManage.TableInfo.CompanyTable;
 import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.TableInfo.DrivingTable;
 import com.obd2.dgt.dbManage.TableInfo.MessageInfoTable;
 import com.obd2.dgt.dbManage.TableInfo.MyInfoTable;
 import com.obd2.dgt.dbManage.TableInfo.ProtocolTable;
@@ -39,8 +40,11 @@ import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.Crypt;
 import com.obd2.dgt.utils.MyUtils;
 
+import org.json.JSONObject;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class LoginActivity extends AppBaseActivity {
     EditText login_id_text, login_pwd_text;
@@ -264,6 +268,7 @@ public class LoginActivity extends AppBaseActivity {
         ProtocolTable.getProtocolTable();
         MessageInfoTable.getMessageLastID();
         MessageInfoTable.getMessageInfoTable();
+        DrivingTable.getNotSentDrivingInfoTable();
     }
     @Override
     public void onBackPressed() {

@@ -29,7 +29,7 @@ public class SplashActivity extends AppBaseActivity {
         //read db - AppStatus table
         DBConnect m_DBCon = new DBConnect(MyUtils.mContext);
         int is_db = m_DBCon.createDatabase();
-        Toast.makeText(getApplicationContext(), R.string.app_version, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), R.string.app_version, Toast.LENGTH_SHORT).show();
         /*if (is_db == 1) {
             Toast.makeText(getApplicationContext(), "vifense db가 존재 합니다.", Toast.LENGTH_SHORT).show();
         } else if (is_db == 2) {

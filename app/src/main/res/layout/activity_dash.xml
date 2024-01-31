@@ -138,7 +138,7 @@
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="42sp" />
+                                                    android:textSize="48sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -252,7 +252,7 @@
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="42sp" />
+                                                    android:textSize="48sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -366,7 +366,7 @@
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="42sp" />
+                                                    android:textSize="48sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -485,7 +485,7 @@
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="42sp" />
+                                                    android:textSize="48sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -600,7 +600,7 @@
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="42sp" />
+                                                    android:textSize="48sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -715,7 +715,7 @@
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="42sp" />
+                                                    android:textSize="48sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -830,7 +830,7 @@
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="42sp" />
+                                                    android:textSize="48sp" />
                                             </FrameLayout>
 
                                             <FrameLayout
@@ -945,7 +945,7 @@
                                                     android:fontFamily="@font/digital_bold"
                                                     android:gravity="center"
                                                     android:textColor="@color/title_color"
-                                                    android:textSize="42sp" />
+                                                    android:textSize="48sp" />
                                             </FrameLayout>
 
                                             <FrameLayout

@@ -19,8 +19,8 @@ public class NetworkStatus {
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 NetworkCapabilities networkCapabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
-                downSpeed = networkCapabilities.getLinkDownstreamBandwidthKbps();
-                upSpeed = networkCapabilities.getLinkUpstreamBandwidthKbps();
+                //downSpeed = networkCapabilities.getLinkDownstreamBandwidthKbps();
+                //upSpeed = networkCapabilities.getLinkUpstreamBandwidthKbps();
                 if (networkCapabilities != null){
                     if(networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)){
                         networkName = "WIFI";
@@ -57,6 +57,7 @@ public class NetworkStatus {
 
         }
         catch (Exception e) {
+            returnData = false;
             e.printStackTrace();
         }
 

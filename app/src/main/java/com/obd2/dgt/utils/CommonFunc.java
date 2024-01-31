@@ -33,6 +33,14 @@ public class CommonFunc {
 
         return format.format(dateNow);
     }
+    public static String getPrevMonthDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH ,-1);
+        java.util.Date prevDate = cal.getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+
+        return formatter.format(prevDate);
+    }
     public static int getCurrentWeek() {
         Date currentDate = new Date();
 
@@ -73,7 +81,7 @@ public class CommonFunc {
             AlertDialog alertDialog = new AlertDialog.Builder(context).create();
             alertDialog.setMessage(msg);
             alertDialog.setCancelable(false);
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, btnText,
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, btnText,
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -376,4 +384,5 @@ public class CommonFunc {
         }
         return sub_res;
     }
+
 }

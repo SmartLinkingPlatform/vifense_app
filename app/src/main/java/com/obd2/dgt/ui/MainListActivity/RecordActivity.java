@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.TableInfo.DrivingTable;
+import com.obd2.dgt.network.NetworkStatus;
 import com.obd2.dgt.network.WebHttpConnect;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.DrivingList.DrivingAdapter;
@@ -57,10 +59,7 @@ public class RecordActivity extends AppBaseActivity {
     }
 
     private void requestReadDrivingInfo() {
-        String msg = getString(R.string.check_network_error);
-        String btnText = getString(R.string.confirm_text);
-        boolean isNetwork = CommonFunc.checkNetworkStatus(RecordActivity.this, msg, btnText);
-        if (isNetwork) {
+        /*if (NetworkStatus.getNetworkConnect()) {
             String driving_date = CommonFunc.getDate();
             //서버에 등록
             String[][] params = new String[][]{
@@ -70,7 +69,10 @@ public class RecordActivity extends AppBaseActivity {
             };
             CommonFunc.sendParamData(params);
             WebHttpConnect.onReadDrivingInfoRequest();
-        }
+        } else {*/
+            Map<String, ArrayList<JSONObject>> drivingInfo = DrivingTable.getDrivingInfoTable();
+            onSuccessDrivingInfo(drivingInfo);
+        //}
     }
 
     public void onSuccessDrivingInfo(Map<String, ArrayList<JSONObject>> info) {

@@ -391,7 +391,7 @@ public class WebHttpConnect {
                         JSONObject res = new JSONObject(response);
                         String msg = res.getString("msg");
                         if (msg.equals("ok")) {
-                            Toast.makeText(MyUtils.mContext, R.string.send_driving_data, Toast.LENGTH_LONG).show();
+                            MainActivity.getInstance().showEndDriving();
                             MyUtils.max_speed = 0;
                             //MyUtils.ecu_total_distance = 0;
                             //MyUtils.ecu_mileage = "0";
@@ -401,9 +401,31 @@ public class WebHttpConnect {
                             MyUtils.idling_time = 0;
                             //MyUtils.ecu_driving_time = "00:00";
                             MyUtils.is_driving = false;
+                            RealService.getInstance().stopParameters();
                             if (MainActivity.getInstance().isFinish) {
                                 MainActivity.getInstance().FinishApp();
                             }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.execute(httpCallPost);
+    }
+
+    public static void onNotSentDrivingInfoRequest() {
+        serverCallFunc(MyUtils.notSent_driving);
+        new HttpBodyRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                if (!response.isEmpty()) {
+                    try {
+                        JSONObject res = new JSONObject(response);
+                        String msg = res.getString("msg");
+                        if (msg.equals("ok")) {
+
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -13,6 +13,8 @@ import com.obd2.dgt.dbManage.DBConnect;
 import com.obd2.dgt.R;
 import com.obd2.dgt.ui.AppBaseActivity;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -33,6 +35,7 @@ public class MyUtils {
     public static String del_car = "/mobile.delCarInfo";
     public static String read_driving = "/mobile.readDriving";
     public static String save_driving = "/mobile.saveDriving";
+    public static String notSent_driving = "/mobile.notSentDriving";
     public static String ranking = "/mobile.ranking";
     public static String driving_ranking = "/mobile.drivingRanking";
     public static String mgs_list = "/mobile.messageList";
@@ -236,5 +239,6 @@ public class MyUtils {
 
     public static SharedPreferences sharedPreferences;
     public static boolean isDiagnosis = false;
+    public static ArrayList<JSONObject> not_sent_driving_info = new ArrayList<>();
 
 }

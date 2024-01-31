@@ -14,11 +14,18 @@ import androidx.core.app.NotificationCompat;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.btManage.OBDConnect;
+import com.obd2.dgt.dbManage.TableInfo.DrivingTable;
+import com.obd2.dgt.network.NetworkStatus;
 import com.obd2.dgt.network.WebHttpConnect;
+import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
 import com.obd2.dgt.ui.MainActivity;
 import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
 import com.obd2.dgt.utils.CommonFunc;
 import com.obd2.dgt.utils.MyUtils;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 public class RealService extends Service {
@@ -79,6 +86,7 @@ public class RealService extends Service {
                                 }
                             }
                             threadCnt = 0;
+                            sendNotSentDrivingInfo();
                         }
                         Thread.sleep(100); //10ms 주기
                         if (MyUtils.con_OBD) {
@@ -295,7 +303,7 @@ public class RealService extends Service {
         Thread.currentThread().interrupt();
     }
 
-    private void stopEngineStatus() {
+    public String[][] setParam(int status) {
         int driving_score = 100 + down_score_fast + down_score_quick + down_score_brake;
         String driving_date = CommonFunc.getDate();
         end_time = CommonFunc.getTime();
@@ -303,7 +311,9 @@ public class RealService extends Service {
         String[][] params = new String[][]{
                 {"driving_date", driving_date},
                 {"start_time", start_time},
+                {"start_place", ""},
                 {"end_time", end_time},
+                {"end_place", ""},
                 {"car_id", String.valueOf(MyUtils.car_id)},
                 {"user_id", String.valueOf(MyUtils.my_id)},
                 {"max_speed", String.valueOf(MyUtils.max_speed)},
@@ -315,14 +325,86 @@ public class RealService extends Service {
                 {"fast_time", String.valueOf(MyUtils.fast_speed_time)},
                 {"fast_cnt", String.valueOf(MyUtils.fast_speed_cnt)},
                 {"quick_cnt", String.valueOf(MyUtils.quick_speed_cnt)},
-                {"brake_cnt", String.valueOf(MyUtils.brake_speed_cnt)}
+                {"brake_cnt", String.valueOf(MyUtils.brake_speed_cnt)},
+                {"send_status", String.valueOf(status)}
         };
-        CommonFunc.sendParamData(params);
-        WebHttpConnect.onSaveDrivingInfoRequest();
-        stopParameters();
+        return params;
     }
 
-    private void stopParameters() {
+    private void stopEngineStatus() {
+        //내부 디비에 보관 된 주행 정보 에서 한달 이전 자료 들은 삭제
+        DrivingTable.deletePrevDrivingInfo(CommonFunc.getPrevMonthDate());
+
+        if (NetworkStatus.getNetworkConnect()) {
+            String content = CommonFunc.getDateTimeMilliseconds() + " --- stopEngineStatus() --- Connect network -> End Driving \r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+            if (DrivingTable.insertDrivingInfoTable(setParam(1)) != -1) {
+                content = CommonFunc.getDateTimeMilliseconds() + " --- stopEngineStatus() --- Connect network -> Save DrivingTable \r\n";
+                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+                CommonFunc.sendParamData(setParam(1));
+                WebHttpConnect.onSaveDrivingInfoRequest();
+            }
+        } else {
+            String content = CommonFunc.getDateTimeMilliseconds() + " --- stopEngineStatus() --- Disconnect network -> End Driving \r\n";
+            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+
+            if (DrivingTable.insertDrivingInfoTable(setParam(0)) != -1) {
+                content = CommonFunc.getDateTimeMilliseconds() + " --- stopEngineStatus() --- Disconnect network -> Save DrivingTable \r\n";
+                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
+                DrivingTable.getNotSentDrivingInfoTable();
+                MyUtils.max_speed = 0;
+                MyUtils.fast_speed_cnt = 0;
+                MyUtils.quick_speed_cnt = 0;
+                MyUtils.brake_speed_cnt = 0;
+                MyUtils.idling_time = 0;
+                MyUtils.is_driving = false;
+                MainActivity.getInstance().showEndDriving();
+                stopParameters();
+                if (MainActivity.getInstance().isFinish) {
+                    MainActivity.getInstance().FinishApp();
+                }
+            }
+        }
+    }
+
+    private void sendNotSentDrivingInfo() {
+        if (NetworkStatus.getNetworkConnect()) {
+            if (MyUtils.not_sent_driving_info.size() > 0) {
+                //서버로 전송 안된 주행 정보 전송 하기
+                for (JSONObject object : MyUtils.not_sent_driving_info) {
+                    try {
+                        String[][] params = new String[][]{
+                                {"driving_date", object.getString("driving_date")},
+                                {"start_time", object.getString("start_time")},
+                                {"start_place", object.getString("start_place")},
+                                {"end_time", object.getString("end_time")},
+                                {"end_place", object.getString("end_place")},
+                                {"car_id", object.getString("car_id")},
+                                {"user_id", object.getString("user_id")},
+                                {"max_speed", object.getString("max_speed")},
+                                {"average_speed", object.getString("average_speed")},
+                                {"mileage", object.getString("mileage")},
+                                {"driving_time", object.getString("driving_time")},
+                                {"idling_time", object.getString("idling_time")},
+                                {"driving_score", object.getString("driving_score")},
+                                {"fast_time", object.getString("fast_time")},
+                                {"fast_cnt", object.getString("fast_cnt")},
+                                {"quick_cnt", object.getString("quick_cnt")},
+                                {"brake_cnt", object.getString("brake_cnt")}
+                        };
+                        CommonFunc.sendParamData(params);
+                        WebHttpConnect.onNotSentDrivingInfoRequest();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                DrivingTable.updateDrivingInfoTable();
+                MyUtils.not_sent_driving_info.clear();
+            }
+        }
+    }
+
+    public void stopParameters() {
         prev_speed = 0;
         fuel_consumption = 0;
         idling_time = 0;

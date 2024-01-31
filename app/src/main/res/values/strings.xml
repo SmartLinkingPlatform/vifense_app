@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vifense</string>
-    <string name="app_version">Ver.0.240130.1</string>
+    <string name="app_version">Ver.0.240131.3</string>
     <string name="app_running">Vifense 앱이 실행 중 입니다.</string>
     <string name="app_restarting">Vifense 앱이 재실행 되었습니다.</string>
     <string name="user_id">아이디</string>
@@ -174,7 +174,6 @@
     <string name="company_list_error">회사 리스트 정보를 얻지 못하였습니다. 서버 연결 상태 혹은 회사 정보를 확인 하세요.</string>
     <string name="connected_server">서버에 연결 되었습니다.</string>
     <string name="finishing_app">앱 종료 중...</string>
-    <string name="finish_network_error">인터넷 연결이 되어 있지 않아 주행정보를 서버로 전송할수 없습니다. 인터넷 연결을 확인한 후 다시 시도하십시오.</string>
 
     <string name="week_1">일</string>
     <string name="week_2">월</string>

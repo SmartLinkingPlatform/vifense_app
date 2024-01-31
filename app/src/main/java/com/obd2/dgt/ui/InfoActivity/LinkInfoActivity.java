@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.TableInfo.DeviceInfoTable;
+import com.obd2.dgt.service.RealService;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.LinkDevice.DeviceAdapter;
 import com.obd2.dgt.ui.ListAdapter.LinkDevice.DeviceItem;
@@ -194,12 +195,7 @@ public class LinkInfoActivity extends AppBaseActivity {
                         showConnectDialog();
                     } else {
                         //OBD2 연결 끊기
-                        String msg = getString(R.string.finish_network_error);
-                        String btnText = getString(R.string.confirm_text);
-                        boolean isNetwork = CommonFunc.checkNetworkStatus(LinkInfoActivity.this, msg, btnText);
-                        if (isNetwork) {
-                            showDisconnectDialog();
-                        }
+                        showDisconnectDialog();
                     }
                 } else {
                     pairedItems.get(i).selected = false;
