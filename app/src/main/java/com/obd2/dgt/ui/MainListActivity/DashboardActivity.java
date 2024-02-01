@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -76,6 +78,7 @@ public class DashboardActivity extends AppBaseActivity {
     Dialog loadingDialog;
     Dialog errDialog;
     ImageView dlg_warning_img;
+    PointF displayRate = new PointF();
 
     private GestureDetector gestureDetector;
 
@@ -96,6 +99,7 @@ public class DashboardActivity extends AppBaseActivity {
         MyUtils.gaugeInfo = new ArrayList<>();
         MyUtils.showGauge = true;
 
+        getDisplaySizeRate();
         initLayout();
         RefreshGaugeLayout();
 
@@ -106,6 +110,16 @@ public class DashboardActivity extends AppBaseActivity {
                 return true;
             }
         });
+    }
+
+    //화면 크기 비율 얻기
+    private void getDisplaySizeRate() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        displayRate.x = size.x / (float)MyUtils.display_size.x;
+        displayRate.y = size.y / (float)MyUtils.display_size.y;
     }
 
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
@@ -127,8 +141,8 @@ public class DashboardActivity extends AppBaseActivity {
 
         dash_layout = findViewById(R.id.dash_layout);
 
-        int dp_width = (int) (170 * 3);
-        int dp_height = (int) (180 * 3);
+        int dp_width = (int) (170 * 3 * displayRate.x);
+        int dp_height = (int) (180 * 3 * displayRate.y);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(dp_width, dp_height);
 
         //속도 계기

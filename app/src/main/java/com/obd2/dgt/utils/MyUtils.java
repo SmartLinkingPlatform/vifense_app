@@ -241,4 +241,5 @@ public class MyUtils {
     public static boolean isDiagnosis = false;
     public static ArrayList<JSONObject> not_sent_driving_info = new ArrayList<>();
 
+    public static PointF display_size = new PointF(1080, 2115);
 }

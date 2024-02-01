@@ -40,9 +40,7 @@ public class PermissionSupport {
             POST_NOTIFICATIONS,
             FOREGROUND_SERVICE,
             RECEIVE_BOOT_COMPLETED,
-
     };
-
     private final String[] permissions2 = {
             BLUETOOTH,
             BLUETOOTH_ADMIN,
@@ -51,7 +49,14 @@ public class PermissionSupport {
             POST_NOTIFICATIONS,
             FOREGROUND_SERVICE,
             RECEIVE_BOOT_COMPLETED,
-
+    };
+    private final String[] permissions3 = {
+            BLUETOOTH,
+            BLUETOOTH_ADMIN,
+            ACCESS_COARSE_LOCATION,
+            ACCESS_FINE_LOCATION,
+            POST_NOTIFICATIONS,
+            RECEIVE_BOOT_COMPLETED,
     };
     private List permissionList;
 
@@ -73,7 +78,15 @@ public class PermissionSupport {
                     permissionList.add(pm);
                 }
             }
-        } else {
+        } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            for (String pm : permissions3) {
+                result = ContextCompat.checkSelfPermission(context, pm);
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    permissionList.add(pm);
+                }
+            }
+        }
+         else {
             for (String pm : permissions2) {
                 result = ContextCompat.checkSelfPermission(context, pm);
                 if (result != PackageManager.PERMISSION_GRANTED) {

@@ -334,23 +334,13 @@ public class RealService extends Service {
     private void stopEngineStatus() {
         //내부 디비에 보관 된 주행 정보 에서 한달 이전 자료 들은 삭제
         DrivingTable.deletePrevDrivingInfo(CommonFunc.getPrevMonthDate());
-
         if (NetworkStatus.getNetworkConnect()) {
-            String content = CommonFunc.getDateTimeMilliseconds() + " --- stopEngineStatus() --- Connect network -> End Driving \r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
             if (DrivingTable.insertDrivingInfoTable(setParam(1)) != -1) {
-                content = CommonFunc.getDateTimeMilliseconds() + " --- stopEngineStatus() --- Connect network -> Save DrivingTable \r\n";
-                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
                 CommonFunc.sendParamData(setParam(1));
                 WebHttpConnect.onSaveDrivingInfoRequest();
             }
         } else {
-            String content = CommonFunc.getDateTimeMilliseconds() + " --- stopEngineStatus() --- Disconnect network -> End Driving \r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
-
             if (DrivingTable.insertDrivingInfoTable(setParam(0)) != -1) {
-                content = CommonFunc.getDateTimeMilliseconds() + " --- stopEngineStatus() --- Disconnect network -> Save DrivingTable \r\n";
-                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
                 DrivingTable.getNotSentDrivingInfoTable();
                 MyUtils.max_speed = 0;
                 MyUtils.fast_speed_cnt = 0;
@@ -371,7 +361,8 @@ public class RealService extends Service {
         if (NetworkStatus.getNetworkConnect()) {
             if (MyUtils.not_sent_driving_info.size() > 0) {
                 //서버로 전송 안된 주행 정보 전송 하기
-                for (JSONObject object : MyUtils.not_sent_driving_info) {
+                ArrayList<JSONObject> driving_info = new ArrayList<>(MyUtils.not_sent_driving_info);
+                for (JSONObject object : driving_info) {
                     try {
                         String[][] params = new String[][]{
                                 {"driving_date", object.getString("driving_date")},
@@ -398,7 +389,6 @@ public class RealService extends Service {
                         e.printStackTrace();
                     }
                 }
-                DrivingTable.updateDrivingInfoTable();
                 MyUtils.not_sent_driving_info.clear();
             }
         }

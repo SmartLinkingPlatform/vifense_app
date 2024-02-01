@@ -74,7 +74,7 @@ public class SplashActivity extends AppBaseActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 100);
+        }, 1000);
     }
 
     public void gotoFail() {
