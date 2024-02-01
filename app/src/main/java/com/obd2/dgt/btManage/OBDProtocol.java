@@ -46,18 +46,32 @@ public class OBDProtocol {
             //ATSTHH Set timeout to 4ms
             //ATMT 테스트 결과를 모니터합니다.
 
-            String[] initializeCommands = new String[]{"ATZ", "ATL1", "ATE0", "ATH1", "ATRD", "ATI", "ATDP"};
+            String[] initializeCommands = new String[]{"ATZ", "ATI", "ATL1", "ATE0", "ATH1", "ATAL", "ATRD", "ATDP"};
             for (String command : initializeCommands) {
                 sendCommand(command);
                 readResponse();
             }
             Thread.sleep(20);
-            sendCommand(MyUtils.SEL_PROTOCOL);
+
+            String[] protocol_command = new String[] {MyUtils.SEL_PROTOCOL, MyUtils.SEL_PROTOCOL};
+            for (String command : protocol_command) {
+                sendCommand(command);
+                response = readResponse();
+
+                /*String content = CommonFunc.getDateTimeMilliseconds() + " --- " + MyUtils.SEL_PROTOCOL + " --- " + response + "\r\n";
+                CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
+
+                if (response.contains("OK")) {
+                    isProtocol = true;
+                    break;
+                }
+            }
+            /*sendCommand(MyUtils.SEL_PROTOCOL);
             response = readResponse();
             Thread.sleep(20);
             if (response.contains("OK")) {
                 isProtocol = true;
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }

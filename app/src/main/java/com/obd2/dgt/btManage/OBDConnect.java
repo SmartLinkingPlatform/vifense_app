@@ -77,13 +77,13 @@ public class OBDConnect {
         }
     }
 
-    private void readResponse() {
+    private void readResponse(String command) {
         try {
             byte[] buffer = new byte[4096];
             int bytesRead = inputStream.read(buffer);
             final String rawResponse = new String(buffer, 0, bytesRead);
 
-            /*String content = CommonFunc.getDateTimeMilliseconds() + " --- readResponse2 --- " + rawResponse + "\r\n";
+            /*String content = CommonFunc.getDateTimeMilliseconds() + " --- " + command + " --- " + rawResponse + "\r\n";
             CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);*/
 
             String response = getResponse(rawResponse);
@@ -147,7 +147,7 @@ public class OBDConnect {
                             if (outputStream != null)
                                 sendCommand(command);
                             if (inputStream != null)
-                                readResponse();
+                                readResponse(command);
                             //SystemClock.sleep(1);
                         }
                         if (MyUtils.isEnumSec) {
@@ -157,7 +157,7 @@ public class OBDConnect {
                                 if (outputStream != null)
                                     sendCommand(command);
                                 if (inputStream != null)
-                                    readResponse();
+                                    readResponse(command);
                                 //SystemClock.sleep(1);
                             }
                             MyUtils.isEnumSec = false;
@@ -169,7 +169,7 @@ public class OBDConnect {
                                 if (outputStream != null)
                                     sendCommand(command);
                                 if (inputStream != null)
-                                    readResponse();
+                                    readResponse(command);
                                 //SystemClock.sleep(1);
                             }
                             MyUtils.isEnumInfo = false;

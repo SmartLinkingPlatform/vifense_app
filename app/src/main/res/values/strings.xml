@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Vifense</string>
     <string name="app_version">Ver.1.240201.2</string>
-    <string name="app_running">Vifense 앱이 실행 중 입니다.</string>
-    <string name="app_restarting">Vifense 앱이 재실행 되었습니다.</string>
+    <string name="app_running">Vifense 어플이 실행 중 입니다.</string>
+    <string name="app_restarting">Vifense 어플이 재실행 되었습니다.</string>
     <string name="user_id">아이디</string>
     <string name="user_pwd">비밀번호</string>
     <string name="find_pwd">비밀번호 찾기</string>
@@ -173,7 +173,7 @@
     <string name="check_server_error">서버 연결에 실패 하였습니다.</string>
     <string name="company_list_error">회사 리스트 정보를 얻지 못하였습니다. 서버 연결 상태 혹은 회사 정보를 확인 하세요.</string>
     <string name="connected_server">서버에 연결 되었습니다.</string>
-    <string name="finishing_app">앱 종료 중...</string>
+    <string name="finishing_app">어플 종료 중...</string>
 
     <string name="week_1">일</string>
     <string name="week_2">월</string>
@@ -191,9 +191,9 @@
     <string name="safe_driving_scoring3">급가속, 급제동(1초에 15Km이상) 30회당 : -1점, 1일 최대 -2점</string>
     <string name="safe_driving_scoring4">기본 100점에서 차감 제도로 운영</string>
 
-    <string name="finish_app_title">앱을 종료</string>
-    <string name="finish_app_content">앱을 종료 하시겠습니까?</string>
-    <string name="permission_failue">저장소 권한이 거부 되었습니다. 앱을 다시 실행 하여 저장소 권한을 허용해주세요.</string>
+    <string name="finish_app_title">어플 종료</string>
+    <string name="finish_app_content">어플을 종료 하시겠습니까?</string>
+    <string name="permission_failue">저장소 권한이 거부 되었습니다. 어플을 다시 실행 하여 저장소 권한을 허용해주세요.</string>
     <string name="permission_failue1">저장소 권한이 거부되었습니다.</string>
     <string name="permission_storage_title">저장소 권한 설정</string>
     <string name="permission_storage_content">저장소 권한을 허용해주세요.</string>
