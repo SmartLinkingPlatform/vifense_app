@@ -22,10 +22,11 @@ public class DBConnect extends SQLiteOpenHelper {
     static String m_db_path = "";
     private SQLiteDatabase m_db = null;
     private String TAG = "DBConnect";
+    private static final int db_version = 1;
 
 
     public DBConnect(Context context) {
-        super(MyUtils.mContext, m_db_name, null, 1);
+        super(MyUtils.mContext, m_db_name, null, db_version);
         m_db_path = context.getFilesDir().getPath() + "/";
     }
 
@@ -62,6 +63,14 @@ public class DBConnect extends SQLiteOpenHelper {
         }
     }
 
+    private void deleteDatabase() {
+        try {
+            MyUtils.mContext.deleteDatabase(m_db_name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void copyDatabase() throws IOException {
         try {
             Resources r = MyUtils.mContext.getResources();
@@ -95,6 +104,7 @@ public class DBConnect extends SQLiteOpenHelper {
         try {
             String path = m_db_path + m_db_name;
             m_db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
+            m_db.setVersion(db_version);
         } catch (Exception e) {
             throw new Error("Unabel open databse.");
         }

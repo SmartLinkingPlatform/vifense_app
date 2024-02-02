@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vifense</string>
-    <string name="app_version">Ver.1.240201.2</string>
+    <string name="app_version">Ver.1.240202.2</string>
     <string name="app_running">Vifense 어플이 실행 중 입니다.</string>
     <string name="app_restarting">Vifense 어플이 재실행 되었습니다.</string>
     <string name="user_id">아이디</string>
@@ -87,6 +87,7 @@
     <string name="error_sel_company">소속사 정보가 없습니다.</string>
     <string name="loading_obd_data">데이터를 읽어 들이는 중입니다.</string>
     <string name="send_driving_data">주행이 종료 되었습니다.</string>
+    <string name="not_send_driving_data">주행정보 전송이 실패하였습니다.</string>
 
     <string name="mileage_month">월 주행 거리</string>
     <string name="mileage_today">오늘 주행 거리</string>

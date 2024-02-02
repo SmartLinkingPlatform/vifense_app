@@ -144,8 +144,9 @@ public class OBDConnect {
                         for (String[] info : MyUtils.pid_speed) {
                             String msg = "01" + info[1];
                             String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
-                            if (outputStream != null)
+                            if (outputStream != null) {
                                 sendCommand(command);
+                            }
                             if (inputStream != null)
                                 readResponse(command);
                             //SystemClock.sleep(1);
@@ -154,8 +155,10 @@ public class OBDConnect {
                             for (String[] info : MyUtils.pid_second) {
                                 String msg = "01" + info[1];
                                 String command = CommonFunc.checkInputOnlyNumberAndAlphabet(msg);
-                                if (outputStream != null)
+                                if (outputStream != null) {
                                     sendCommand(command);
+                                    sendCommand(command);
+                                }
                                 if (inputStream != null)
                                     readResponse(command);
                                 //SystemClock.sleep(1);

@@ -51,7 +51,7 @@ public class OBDProtocol {
                 sendCommand(command);
                 readResponse();
             }
-            Thread.sleep(20);
+            Thread.sleep(1);
 
             String[] protocol_command = new String[] {MyUtils.SEL_PROTOCOL, MyUtils.SEL_PROTOCOL};
             for (String command : protocol_command) {

@@ -406,6 +406,8 @@ public class WebHttpConnect {
                             if (MainActivity.getInstance().isFinish) {
                                 MainActivity.getInstance().FinishApp();
                             }
+                        } else {
+                            MainActivity.getInstance().showNotEndDriving();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

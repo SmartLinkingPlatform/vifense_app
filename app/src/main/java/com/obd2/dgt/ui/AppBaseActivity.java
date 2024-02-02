@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.obd2.dgt.R;
+import com.obd2.dgt.dbManage.DBConnect;
 import com.obd2.dgt.service.RealService;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
 import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
@@ -45,8 +47,21 @@ public class AppBaseActivity extends AppCompatActivity {
         if (MyUtils.mContext == null) {
             MyUtils.mContext = getContext();
         }
+        createDatabase();
         //화면 꺼짐 방지
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void createDatabase() {
+        //read db - AppStatus table
+        DBConnect m_DBCon = new DBConnect(getContext());
+        int is_db = m_DBCon.createDatabase();
+        MyUtils.db_connect = m_DBCon;
+        try {
+            SQLiteDatabase mDB = m_DBCon.getDatabase();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void onRLChangeLayout(Context currentLayout, Class<?> changeLayout) {

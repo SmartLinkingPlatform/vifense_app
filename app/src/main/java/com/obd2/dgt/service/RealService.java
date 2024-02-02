@@ -88,7 +88,7 @@ public class RealService extends Service {
                             threadCnt = 0;
                             sendNotSentDrivingInfo();
                         }
-                        Thread.sleep(100); //10ms 주기
+                        Thread.sleep(100); //100ms 주기
                         if (MyUtils.con_OBD) {
                             if (secCnt == 2) { //200ms 간격
                                 MyUtils.isEnumSec = true;
@@ -262,16 +262,16 @@ public class RealService extends Service {
             MyUtils.err_idx = 2;
         }
         if (speed_quick) {
-            if (cnt_quick == 1) {
+            //if (cnt_quick == 1) {
                 MyUtils.err_idx = 3;
-            }
-            cnt_quick++;
+            //}
+            //cnt_quick++;
         }
         if (speed_brake) {
-            if (cnt_brake == 1) {
+            //if (cnt_brake == 1) {
                 MyUtils.err_idx = 4;
-            }
-            cnt_brake++;
+            //}
+            //cnt_brake++;
         }
         if (!MyUtils.ecu_trouble_code.isEmpty()) {
             MyUtils.is_trouble = true;

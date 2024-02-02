@@ -26,24 +26,6 @@ public class SplashActivity extends AppBaseActivity {
         setContentView(R.layout.activity_splash);
         instance = this;
 
-        //read db - AppStatus table
-        DBConnect m_DBCon = new DBConnect(MyUtils.mContext);
-        int is_db = m_DBCon.createDatabase();
-        //Toast.makeText(getApplicationContext(), R.string.app_version, Toast.LENGTH_SHORT).show();
-        /*if (is_db == 1) {
-            Toast.makeText(getApplicationContext(), "vifense db가 존재 합니다.", Toast.LENGTH_SHORT).show();
-        } else if (is_db == 2) {
-            Toast.makeText(getApplicationContext(), "vifense db가 존재 하지 않습니다.", Toast.LENGTH_SHORT).show();
-        } else if (is_db == 0) {
-            Toast.makeText(getApplicationContext(), "vifense db 생성 오류 입니다.", Toast.LENGTH_SHORT).show();
-        }*/
-        MyUtils.db_connect = m_DBCon;
-        try {
-            m_DBCon.getDatabase();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
         splash_progress_layout = findViewById(R.id.splash_progress_layout);
 
         String msg = getString(R.string.check_network_error);

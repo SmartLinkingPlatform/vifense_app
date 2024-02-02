@@ -497,4 +497,14 @@ public class MainActivity extends AppBaseActivity {
             }
         });
     }
+    public void showNotEndDriving() {
+        isFinish = false;
+        progress_layout.setVisibility(View.GONE);
+
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(MyUtils.mContext, R.string.not_send_driving_data, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
