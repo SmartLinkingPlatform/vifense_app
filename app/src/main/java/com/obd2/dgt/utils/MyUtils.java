@@ -102,9 +102,9 @@ public class MyUtils {
     public static boolean isEnumSec = false;
     public static String[][] pid_second = {
             {"ENGINE_LOAD", "04", "2"},         //엔진 부하
-            {"ENGINE_RPM", "0C", "4"}           //엔진 RPM
     };
     public static String[][] pid_speed = {
+            {"ENGINE_RPM", "0C", "4"},           //엔진 RPM
             {"VEHICLE_SPEED", "0D", "2"}         //차량 속도
     };
     public static String[][] pid_info = {

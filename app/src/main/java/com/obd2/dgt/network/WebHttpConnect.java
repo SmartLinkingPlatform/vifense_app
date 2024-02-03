@@ -348,30 +348,32 @@ public class WebHttpConnect {
                 if (!response.isEmpty()) {
                     try {
                         JSONArray data = CommonFunc.AnalysisResponse(response);
-                        String temp_date = "";
-                        LinkedHashMap<String, ArrayList<JSONObject>> driving_info = new LinkedHashMap<>();
-                        ArrayList<JSONObject> infos = new ArrayList<>();
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject res = data.getJSONObject(i);
-                            String driving_date = res.getString("driving_date");
-                            if (infos.size() == 0) {
-                                infos.add(res);
-                            } else {
-                                if (driving_date.equals(temp_date)) {
-                                    infos.add(res);
-                                } else {
-                                    driving_info.put(temp_date, infos);
-                                    infos = new ArrayList<>();
-                                    infos.add(res);
-                                }
-                            }
-                            if (i == data.length() - 1) {
-                                driving_info.put(driving_date, infos);
-                            }
-                            temp_date = driving_date;
+                            String[][] params = new String[][]{
+                                    {"driving_date", res.getString("driving_date")},
+                                    {"start_time", res.getString("start_time")},
+                                    {"start_place", res.getString("start_place")},
+                                    {"end_time", res.getString("end_time")},
+                                    {"end_place", res.getString("end_place")},
+                                    {"car_id", res.getString("car_id")},
+                                    {"user_id", res.getString("user_id")},
+                                    {"max_speed", res.getString("max_speed")},
+                                    {"average_speed", res.getString("average_speed")},
+                                    {"mileage", res.getString("mileage")},
+                                    {"driving_time", res.getString("driving_time")},
+                                    {"idling_time", res.getString("idling_time")},
+                                    {"driving_score", res.getString("driving_score")},
+                                    {"fast_time", res.getString("fast_speed_time")},
+                                    {"fast_cnt", res.getString("fast_speed_cnt")},
+                                    {"quick_cnt", res.getString("quick_speed_cnt")},
+                                    {"brake_cnt", res.getString("brake_speed_cnt")},
+                                    {"send_status", "1"}
+                            };
+                            DrivingTable.insertDrivingInfoTable(params);
                         }
 
-                        RecordActivity.getInstance().onSuccessDrivingInfo(driving_info);
+                        RecordActivity.getInstance().onSuccessDrivingInfo();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

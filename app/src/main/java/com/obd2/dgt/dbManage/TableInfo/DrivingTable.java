@@ -13,6 +13,16 @@ import java.util.LinkedHashMap;
 public class DrivingTable {
     private static String table_name = "tb_drivingInfo";
 
+    public static int getDrivingInfoCount() {
+        int record_cnt = 0;
+        try {
+            Cursor cursor = MyUtils.db_connect.sqlSelect(table_name, "id", false);
+            record_cnt = cursor.getCount();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return record_cnt;
+    }
     public static LinkedHashMap<String, ArrayList<JSONObject>> getDrivingInfoTable() {
         LinkedHashMap<String, ArrayList<JSONObject>> driving_info = new LinkedHashMap<>();
         try {
@@ -109,8 +119,6 @@ public class DrivingTable {
                 }
             }
         } catch (Exception e) {
-            String content = CommonFunc.getDateTimeMilliseconds() + " --- getNotSentDrivingInfoTable() --- don't [" + table_name + "]\r\n";
-            CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
             e.printStackTrace();
         }
     }

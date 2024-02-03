@@ -136,7 +136,7 @@ public class RankingInfoActivity extends AppBaseActivity {
             }
         }
 
-        sel_date = month - 1;
+        //sel_date = month - 1;
         ranking_date_spinner = findViewById(R.id.ranking_date_spinner);
         CustomSpinnerAdapter dt_adapter = new CustomSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, selDates);
         ranking_date_spinner.setAdapter(dt_adapter);

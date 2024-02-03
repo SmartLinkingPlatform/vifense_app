@@ -2,6 +2,8 @@ package com.obd2.dgt.ui.MainListActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +40,7 @@ public class RecordActivity extends AppBaseActivity {
     LinkedHashMap<String, ArrayList<String[]>> driving_info = new LinkedHashMap<>();
     ArrayList<DrivingItem> drivingItems = new ArrayList<>();
     DrivingAdapter drivingAdapter;
+    FrameLayout progress_layout;
 
     float total_m_distance = 0;
     float total_d_distance = 0;
@@ -55,27 +58,41 @@ public class RecordActivity extends AppBaseActivity {
         setContentView(R.layout.activity_record);
         instance = this;
 
+        progress_layout = findViewById(R.id.progress_record_layout);
+        progress_layout.setVisibility(View.GONE);
+
         requestReadDrivingInfo();
     }
 
     private void requestReadDrivingInfo() {
-        /*if (NetworkStatus.getNetworkConnect()) {
-            String driving_date = CommonFunc.getDate();
-            //서버에 등록
-            String[][] params = new String[][]{
-                    {"car_id", String.valueOf(MyUtils.car_id)},
-                    {"user_id", String.valueOf(MyUtils.my_id)},
-                    {"driving_date", driving_date}
-            };
-            CommonFunc.sendParamData(params);
-            WebHttpConnect.onReadDrivingInfoRequest();
-        } else {*/
-            Map<String, ArrayList<JSONObject>> drivingInfo = DrivingTable.getDrivingInfoTable();
-            onSuccessDrivingInfo(drivingInfo);
-        //}
+        int driving_cnt = DrivingTable.getDrivingInfoCount();
+        if (driving_cnt == 0) {
+            if (NetworkStatus.getNetworkConnect()) {
+                progress_layout.setVisibility(View.VISIBLE);
+                String driving_date = CommonFunc.getDate();
+                //서버에 등록
+                String[][] params = new String[][]{
+                        {"car_id", String.valueOf(MyUtils.car_id)},
+                        {"user_id", String.valueOf(MyUtils.my_id)},
+                        {"driving_date", driving_date}
+                };
+                CommonFunc.sendParamData(params);
+                WebHttpConnect.onReadDrivingInfoRequest();
+            } else {
+                onSuccessDrivingInfo();
+            }
+        } else {
+            onSuccessDrivingInfo();
+        }
     }
 
-    public void onSuccessDrivingInfo(Map<String, ArrayList<JSONObject>> info) {
+    public void onSuccessDrivingInfo() {
+        progress_layout.setVisibility(View.GONE);
+        Map<String, ArrayList<JSONObject>> drivingInfo = DrivingTable.getDrivingInfoTable();
+        showDrivingInfo(drivingInfo);
+    }
+
+    public void showDrivingInfo(Map<String, ArrayList<JSONObject>> info) {
         //현재 날짜
         String current_date = CommonFunc.getDate();
         float m_distance = 0;
