@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.obd2.dgt.R;
 import com.obd2.dgt.dbManage.DBConnect;
+import com.obd2.dgt.dbManage.TableInfo.VersionTable;
 import com.obd2.dgt.service.RealService;
 import com.obd2.dgt.ui.InfoActivity.LinkInfoActivity;
 import com.obd2.dgt.ui.MainListActivity.DashboardActivity;
@@ -35,7 +36,7 @@ public class AppBaseActivity extends AppCompatActivity {
     Intent foregroundServiceIntent = null;
     private PermissionSupport permission;
     private PowerManager.WakeLock wakeLock;
-
+    SQLiteDatabase mDB;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -47,20 +48,39 @@ public class AppBaseActivity extends AppCompatActivity {
         if (MyUtils.mContext == null) {
             MyUtils.mContext = getContext();
         }
-        createDatabase();
         //화면 꺼짐 방지
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    private void createDatabase() {
+    public boolean createDatabase() {
         //read db - AppStatus table
         DBConnect m_DBCon = new DBConnect(getContext());
         int is_db = m_DBCon.createDatabase();
         MyUtils.db_connect = m_DBCon;
         try {
-            SQLiteDatabase mDB = m_DBCon.getDatabase();
+            mDB = m_DBCon.getDatabase();
+            if (mDB != null) {
+                VersionTable.getVersionTable();
+                int ver = mDB.getVersion();
+                //code에 적용한 디비 버젼과 sqlite db에 등록된 버젼이 같지 않으면
+                //현재 디비를 삭제하고 기초디비를 설치한다.
+                if (ver != MyUtils.DB_VERSION) {
+                    m_DBCon.deleteDatabase();
+                    m_DBCon.createDatabase();
+                    MyUtils.db_connect = m_DBCon;
+                }
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+        return true;
+    }
+
+    public void closeDatabase() {
+        if (mDB != null && mDB.isOpen()) {
+            mDB.close();
         }
     }
 

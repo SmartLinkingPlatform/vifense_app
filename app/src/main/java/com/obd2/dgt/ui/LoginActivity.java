@@ -70,12 +70,10 @@ public class LoginActivity extends AppBaseActivity {
         setContentView(R.layout.activity_login);
         instance = this;
 
-        //MyUtils.sharedPreferences = MyUtils.mContext.getSharedPreferences("info", Context.MODE_PRIVATE);
-        //CommonFunc.setInformationToSystem("isRun", "1");
-
         permissionCheck();
-        resetPhoneSetting();
-        if (!checkPermission()) {
+        if (createDatabase()) {
+            resetPhoneSetting();
+        /*if (!checkPermission()) {
             activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult( ActivityResult result ) {
@@ -92,34 +90,37 @@ public class LoginActivity extends AppBaseActivity {
                 }
             });
             requestFilePermission();
-        }
-        getTermsFile();
-        getDatabaseInfo();
-        getWindowsSize();
+        }*/
+            getTermsFile();
+            getDatabaseInfo();
+            getWindowsSize();
 
-        if (MyUtils.create_years.size() == 0) {
-            //년도
-            LocalDate now = null;
-            int year = 0;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                now = LocalDate.now();
-                year = now.getYear();
+            if (MyUtils.create_years.size() == 0) {
+                //년도
+                LocalDate now = null;
+                int year = 0;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    now = LocalDate.now();
+                    year = now.getYear();
+                }
+                for (int i = 1990; i <= year; i++) {
+                    MyUtils.create_years.add(String.valueOf(i));
+                }
             }
-            for (int i = 1990; i <= year; i++) {
-                MyUtils.create_years.add(String.valueOf(i));
-            }
-        }
 
-        initLayout();
+            initLayout();
 
-        if (!MyUtils.my_phone.isEmpty() && !MyUtils.my_pwd.isEmpty()) {
-            if (!MyUtils.new_login) {
-                String encode_pwd = Crypt.decrypt(MyUtils.my_pwd);
-                login_id_text.setText(MyUtils.my_phone);
-                login_pwd_text.setText(encode_pwd);
+            if (!MyUtils.my_phone.isEmpty() && !MyUtils.my_pwd.isEmpty()) {
+                if (!MyUtils.new_login) {
+                    String encode_pwd = Crypt.decrypt(MyUtils.my_pwd);
+                    login_id_text.setText(MyUtils.my_phone);
+                    login_pwd_text.setText(encode_pwd);
+                }
             }
+            MyUtils.new_login = false;
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.fail_database, Toast.LENGTH_LONG).show();
         }
-        MyUtils.new_login = false;
     }
 
     private void initLayout() {
@@ -284,7 +285,7 @@ public class LoginActivity extends AppBaseActivity {
 
 
 
-    private boolean checkPermission() {
+    /*private boolean checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return Environment.isExternalStorageManager();
         } else {
@@ -292,7 +293,7 @@ public class LoginActivity extends AppBaseActivity {
             int writeCheck = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
             return readCheck == PackageManager.PERMISSION_GRANTED && writeCheck == PackageManager.PERMISSION_GRANTED;
         }
-    }
+    }*/
 
     private void requestFilePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

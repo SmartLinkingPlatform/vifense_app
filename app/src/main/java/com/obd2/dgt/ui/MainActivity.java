@@ -48,6 +48,7 @@ public class MainActivity extends AppBaseActivity {
     TextView connect_device_text;
     TextView ranking_mileage_text, ranking_safety_text;
     TextView ranking_mileage_unit_text, ranking_safety_unit_text;
+    TextView app_and_db_version;
     RecyclerView mainmenu_recycleView;
     FrameLayout main_ranking_view_layout;
     ArrayList<MainListItem> mainListItems = new ArrayList<>();
@@ -183,6 +184,10 @@ public class MainActivity extends AppBaseActivity {
 
         progress_layout = findViewById(R.id.finish_progress_layout);
         progress_layout.setVisibility(View.GONE);
+
+        app_and_db_version = findViewById(R.id.app_and_db_version);
+        String str_version = getString(R.string.app_version) + "_" + MyUtils.DB_VERSION;
+        app_and_db_version.setText(str_version);
     }
 
     private MainListAdapter.ItemClickListener mainListListener = new MainListAdapter.ItemClickListener() {
@@ -479,6 +484,7 @@ public class MainActivity extends AppBaseActivity {
         progress_layout.setVisibility(View.GONE);
         //CommonFunc.setInformationToSystem("isRun", "0");
         try {
+            closeDatabase();
             RealService.getInstance().onTaskRemoved(RealService.serviceIntent);
             moveTaskToBack(true);
             finish();

@@ -22,7 +22,8 @@ public class DBConnect extends SQLiteOpenHelper {
     static String m_db_path = "";
     private SQLiteDatabase m_db = null;
     private String TAG = "DBConnect";
-    private static final int db_version = 1;
+    //Database version
+    private static final int db_version = 2;
 
 
     public DBConnect(Context context) {
@@ -63,9 +64,13 @@ public class DBConnect extends SQLiteOpenHelper {
         }
     }
 
-    private void deleteDatabase() {
+    public void deleteDatabase() {
+        String path = m_db_path + m_db_name;
         try {
-            MyUtils.mContext.deleteDatabase(m_db_name);
+            File f = new File(path);
+            if (f.exists()) {
+                boolean del = f.delete();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,10 +119,8 @@ public class DBConnect extends SQLiteOpenHelper {
         openDatabase();
         if (m_db != null && m_db.isOpen()) {
             return m_db;
-        } else {
-            getDatabase();
         }
-        return m_db;
+        return null;
     }
 
     public Cursor sqlSelect(String table) {

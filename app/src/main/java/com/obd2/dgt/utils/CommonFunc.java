@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
@@ -321,22 +320,6 @@ public class CommonFunc {
             e.printStackTrace();
         }
         MyUtils.sendRequestData = SendDataPackage.toString();
-    }
-
-    public static void setInformationToSystem(String keyName, String keyInfo){
-        SharedPreferences.Editor editor = MyUtils.sharedPreferences.edit();
-        editor.putString(keyName, keyInfo);
-        editor.apply();
-    }
-
-    public static int getInformationToSystem(String keyName){
-        int run = 0;
-        String str_run = MyUtils.sharedPreferences.getString(keyName, "");
-
-        if (!str_run.equals(""))
-            run = Integer.parseInt(str_run);
-
-        return run;
     }
 
     public static String checkInputOnlyNumberAndAlphabet(String textInput) {

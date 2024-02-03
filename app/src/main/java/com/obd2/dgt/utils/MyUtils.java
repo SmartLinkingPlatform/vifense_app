@@ -3,7 +3,6 @@ package com.obd2.dgt.utils;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.PointF;
 import android.os.Environment;
 import android.util.DisplayMetrics;
@@ -228,6 +227,7 @@ public class MyUtils {
     };
 
     public static String SEL_PROTOCOL = "AT SP0";
+    public static int DB_VERSION = 0;
     public static String[][] PROTOCOL_CUSTOM = {
             {"AT SP0", "AUTO"},
             {"AT SP3", "ISO 9141-2(5 baud)"},
@@ -237,7 +237,6 @@ public class MyUtils {
             {"AT SP7", "ISO 15765-4 CAN(29 bit)"}
     };
 
-    public static SharedPreferences sharedPreferences;
     public static boolean isDiagnosis = false;
     public static ArrayList<JSONObject> not_sent_driving_info = new ArrayList<>();
 

@@ -107,8 +107,6 @@ public class RealService extends Service {
                         if (interrupted) {
                             running = false;
                         }
-                        String content = CommonFunc.getDateTime() + " --- Stop MainThread --- " + "\r\n";
-                        CommonFunc.writeFile(MyUtils.StorageFilePath, "Vifense_Log.txt", content);
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
