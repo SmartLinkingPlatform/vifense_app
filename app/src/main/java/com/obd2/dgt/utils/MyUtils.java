@@ -1,6 +1,7 @@
 package com.obd2.dgt.utils;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.graphics.PointF;
@@ -241,4 +242,7 @@ public class MyUtils {
     public static ArrayList<JSONObject> not_sent_driving_info = new ArrayList<>();
 
     public static PointF display_size = new PointF(1080, 2115);
+    public static boolean finish_obd = false;
+    public static boolean isReconnect = false;
+    public static BluetoothDevice connectedDevice = null;
 }

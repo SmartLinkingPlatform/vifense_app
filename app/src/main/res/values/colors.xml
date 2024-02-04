@@ -34,5 +34,6 @@
     <color name="color_yellow">#FFFFFF00</color>
     <color name="color_cyan">#FF00FFFF</color>
     <color name="color_magenta">#FFFF00FF</color>
+    <color name="color_ranking">#FF4438</color>
 
 </resources>

@@ -191,6 +191,16 @@
                                     android:layout_height="match_parent"
                                     android:layout_weight="1">
 
+                                    <TextView
+                                        android:id="@+id/ranking_score_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_horizontal|center_vertical"
+                                        android:fontFamily="@font/antonio_bold"
+                                        android:gravity="center"
+                                        android:textColor="@color/color_ranking"
+                                        android:textSize="40sp" />
+
                                     <ImageView
                                         android:id="@+id/imageView8"
                                         android:layout_width="wrap_content"
@@ -702,4 +712,23 @@
             </FrameLayout>
         </FrameLayout>
     </LinearLayout>
+    <FrameLayout
+        android:id="@+id/progress_ranking_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.7"
+        android:background="@color/transparent"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progress_cycle"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progress_cycle"
+            android:progress="0" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

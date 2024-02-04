@@ -402,8 +402,10 @@ public class LinkInfoActivity extends AppBaseActivity {
                 });
                 ImageView dialog_two_ok_btn = dialog.findViewById(R.id.dialog_two_ok_btn);
                 dialog_two_ok_btn.setOnClickListener(view -> {
+                    MyUtils.finish_obd = false;
                     DeviceInfoTable.updateDeviceInfoTable(MyUtils.obd2_name, MyUtils.obd2_address, "1", "1");
                     SystemClock.sleep(300);
+                    MyUtils.connectedDevice = pairedItems.get(select_item).device;
                     MainActivity.getInstance().obdConnectDevice(pairedItems.get(select_item).device);
                     finish();
                     dialog.dismiss();

@@ -30,6 +30,7 @@ public class OBDConnect {
     @SuppressLint("MissingPermission")
     public void setConnectingOBD(BluetoothDevice obdDevice) {
         try {
+            MyUtils.isReconnect = false;
             this.obdDevice = obdDevice;
             MyUtils.mBluetoothAdapter.cancelDiscovery();
             socket = BtManager.connect(obdDevice, true);
@@ -38,6 +39,8 @@ public class OBDConnect {
                 running = true;
             } else {
                 MyUtils.con_OBD = false;
+                MyUtils.finish_obd = true;
+                MyUtils.isReconnect = true;
             }
         } catch (Exception e) {
             finishSocket();
@@ -189,6 +192,33 @@ public class OBDConnect {
         commandThread.start();
     }
 
+    public void setReconnectOBD(BluetoothDevice device) {
+        try {
+            running = false;
+            if (socket != null && socket.isConnected()) {
+                socket.close();
+                if (commandThread != null) {
+                    commandThread.interrupt();
+                    commandThread = null;
+                }
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (MyUtils.btSocket != null) {
+                MyUtils.btSocket.close();
+            }
+            outputStream = null;
+            inputStream = null;
+            MyUtils.isReconnect = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void finishSocket(){
         try {
             running = false;
@@ -198,10 +228,6 @@ public class OBDConnect {
                     commandThread.interrupt();
                     commandThread = null;
                 }
-                /*if (workerThread != null) {
-                    workerThread.interrupt();
-                    workerThread = null;
-                }*/
             }
             if (outputStream != null) {
                 outputStream.close();
@@ -218,6 +244,8 @@ public class OBDConnect {
             MyUtils.con_ECU = false;
             MyUtils.loaded_data = false;
             MyUtils.btSocket = null;
+            MyUtils.finish_obd = true;
+            MyUtils.isReconnect = false;
             MainActivity.getInstance().isConnecting = true;
         } catch (IOException e) {
             e.printStackTrace();

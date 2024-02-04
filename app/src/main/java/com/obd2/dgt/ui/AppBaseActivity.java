@@ -242,8 +242,22 @@ public class AppBaseActivity extends AppCompatActivity {
                 break;
             case BluetoothDevice.ACTION_ACL_DISCONNECTED:   //블루투스 기기 끊어짐
                 if (device.getAddress().equals(MyUtils.obd2_address)) {
-                    MyUtils.obdConnect.finishSocket();
-                    MainActivity.getInstance().showDisconnectedStatus(0);
+                    if (!MyUtils.finish_obd) {
+                        //주행 종료를 하지 않은 상태에서 블루투스가 끊어지는 경우 재연결 하기
+                        //속도가 0이고 RPM 이 10보다 작은 경우 차의 시동을 끈 상태로 판단하여 블루투스 연결을 끊는다.
+                        if (Integer.parseInt(MyUtils.ecu_vehicle_speed) == 0 && Integer.parseInt(MyUtils.ecu_engine_rpm) < 10) {
+                            MyUtils.obdConnect.finishSocket();
+                            MainActivity.getInstance().showDisconnectedStatus(0);
+                        } else {
+                            //차가 움직이는 상태에서는 재연결 한다.
+                            if (!MyUtils.isReconnect) {
+                                MyUtils.obdConnect.setReconnectOBD(device);
+                            }
+                        }
+                    } else {
+                        MyUtils.obdConnect.finishSocket();
+                        MainActivity.getInstance().showDisconnectedStatus(0);
+                    }
                 }
                 break;
             case BluetoothAdapter.ACTION_DISCOVERY_STARTED: //블루투스 기기 검색 시작

@@ -39,24 +39,24 @@ public class DrivingTable {
 
                     JSONObject res = new JSONObject();
                     res.put("id", cursor.getString(0));
-                    res.put("driving_date", cursor.getString(1));
-                    res.put("start_time", cursor.getString(2));
-                    res.put("start_place", cursor.getString(3));
-                    res.put("end_time", cursor.getString(4));
-                    res.put("end_place", cursor.getString(5));
-                    res.put("car_id", cursor.getString(6));
-                    res.put("user_id", cursor.getString(7));
-                    res.put("max_speed", cursor.getString(8));
-                    res.put("average_speed", cursor.getString(9));
-                    res.put("mileage", cursor.getString(10));
-                    res.put("driving_time", cursor.getString(11));
-                    res.put("idling_time", cursor.getString(12));
-                    res.put("driving_score", cursor.getString(13));
-                    res.put("fast_time", cursor.getString(14));
-                    res.put("fast_cnt", cursor.getString(15));
-                    res.put("quick_cnt", cursor.getString(16));
-                    res.put("brake_cnt", cursor.getString(17));
-                    res.put("send_status", cursor.getString(18));
+                    res.put("driving_date", cursor.getString(2));
+                    res.put("start_time", cursor.getString(3));
+                    res.put("start_place", cursor.getString(4));
+                    res.put("end_time", cursor.getString(5));
+                    res.put("end_place", cursor.getString(6));
+                    res.put("car_id", cursor.getString(7));
+                    res.put("user_id", cursor.getString(8));
+                    res.put("max_speed", cursor.getString(9));
+                    res.put("average_speed", cursor.getString(10));
+                    res.put("mileage", cursor.getString(11));
+                    res.put("driving_time", cursor.getString(12));
+                    res.put("idling_time", cursor.getString(13));
+                    res.put("driving_score", cursor.getString(14));
+                    res.put("fast_time", cursor.getString(15));
+                    res.put("fast_cnt", cursor.getString(16));
+                    res.put("quick_cnt", cursor.getString(17));
+                    res.put("brake_cnt", cursor.getString(18));
+                    res.put("send_status", cursor.getString(19));
 
                     String driving_date = res.getString("driving_date");
                     if (infos.size() == 0) {
@@ -96,24 +96,24 @@ public class DrivingTable {
 
                     JSONObject res = new JSONObject();
                     res.put("id", cursor.getString(0));
-                    res.put("driving_date", cursor.getString(1));
-                    res.put("start_time", cursor.getString(2));
-                    res.put("start_place", cursor.getString(3));
-                    res.put("end_time", cursor.getString(4));
-                    res.put("end_place", cursor.getString(5));
-                    res.put("car_id", cursor.getString(6));
-                    res.put("user_id", cursor.getString(7));
-                    res.put("max_speed", cursor.getString(8));
-                    res.put("average_speed", cursor.getString(9));
-                    res.put("mileage", cursor.getString(10));
-                    res.put("driving_time", cursor.getString(11));
-                    res.put("idling_time", cursor.getString(12));
-                    res.put("driving_score", cursor.getString(13));
-                    res.put("fast_time", cursor.getString(14));
-                    res.put("fast_cnt", cursor.getString(15));
-                    res.put("quick_cnt", cursor.getString(16));
-                    res.put("brake_cnt", cursor.getString(17));
-                    res.put("send_status", cursor.getString(18));
+                    res.put("driving_date", cursor.getString(2));
+                    res.put("start_time", cursor.getString(3));
+                    res.put("start_place", cursor.getString(4));
+                    res.put("end_time", cursor.getString(5));
+                    res.put("end_place", cursor.getString(6));
+                    res.put("car_id", cursor.getString(7));
+                    res.put("user_id", cursor.getString(8));
+                    res.put("max_speed", cursor.getString(9));
+                    res.put("average_speed", cursor.getString(10));
+                    res.put("mileage", cursor.getString(11));
+                    res.put("driving_time", cursor.getString(12));
+                    res.put("idling_time", cursor.getString(13));
+                    res.put("driving_score", cursor.getString(14));
+                    res.put("fast_time", cursor.getString(15));
+                    res.put("fast_cnt", cursor.getString(16));
+                    res.put("quick_cnt", cursor.getString(17));
+                    res.put("brake_cnt", cursor.getString(18));
+                    res.put("send_status", cursor.getString(19));
 
                     MyUtils.not_sent_driving_info.add(res);
                 }

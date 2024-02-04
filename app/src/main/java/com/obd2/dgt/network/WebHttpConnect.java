@@ -351,6 +351,7 @@ public class WebHttpConnect {
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject res = data.getJSONObject(i);
                             String[][] params = new String[][]{
+                                    {"admin_id", res.getString("admin_id")},
                                     {"driving_date", res.getString("driving_date")},
                                     {"start_time", res.getString("start_time")},
                                     {"start_place", res.getString("start_place")},
@@ -490,6 +491,7 @@ public class WebHttpConnect {
                         int quick = 0;
                         int brake = 0;
                         int total_time = 0;
+                        int driving_point = 100;
                         JSONObject res = new JSONObject(response);
                         String msg = res.getString("msg");
                         if (msg.equals("ok")) {
@@ -499,15 +501,18 @@ public class WebHttpConnect {
                             String lists = res.getString("lists");
                             JSONArray data = new JSONArray(lists);
                             int total_speed = 0;
+                            int total_score = 0;
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject object = data.getJSONObject(i);
                                 total_speed += object.getInt("average_speed");
                                 fast += object.getInt("fast_speed_cnt");
                                 quick += object.getInt("quick_speed_cnt");
                                 brake += object.getInt("brake_speed_cnt");
+                                total_score += object.getInt("driving_score");
                                 total_time += CommonFunc.calculateTime(object.getString("driving_time"));
                             }
                             avr_speed = total_speed / (float) data.length();
+                            driving_point = total_score / data.length();
                         }
                         String[] ranking_val = {
                                 mileage_score,
@@ -518,6 +523,7 @@ public class WebHttpConnect {
                                 String.valueOf(fast),
                                 String.valueOf(quick),
                                 String.valueOf(brake),
+                                String.valueOf(driving_point),
                         };
                         RankingInfoActivity.getInstance().setRankingValues(ranking_val);
                     } catch (Exception e) {

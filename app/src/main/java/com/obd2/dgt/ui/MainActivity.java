@@ -100,6 +100,7 @@ public class MainActivity extends AppBaseActivity {
             String driving_date = CommonFunc.getDate();
             //서버에 등록
             String[][] params = new String[][]{
+                    {"admin_id", String.valueOf(MyUtils.admin_id)},
                     {"car_id", String.valueOf(MyUtils.car_id)},
                     {"user_id", String.valueOf(MyUtils.my_id)},
                     {"driving_date", driving_date}
@@ -128,6 +129,40 @@ public class MainActivity extends AppBaseActivity {
             message_btn.setBackgroundResource(R.drawable.mail_btn_state);
         } else {
             message_btn.setBackgroundResource(R.drawable.mail_off);
+        }
+        DrivingTable.getNotSentDrivingInfoTable();
+        if (MyUtils.not_sent_driving_info.size() > 0) {
+            //서버로 전송 안된 주행 정보 전송 하기
+            ArrayList<JSONObject> driving_info = new ArrayList<>(MyUtils.not_sent_driving_info);
+            for (JSONObject object : driving_info) {
+                try {
+                    String[][] params = new String[][]{
+                            {"admin_id", String.valueOf(MyUtils.admin_id)},
+                            {"driving_date", object.getString("driving_date")},
+                            {"start_time", object.getString("start_time")},
+                            {"start_place", object.getString("start_place")},
+                            {"end_time", object.getString("end_time")},
+                            {"end_place", object.getString("end_place")},
+                            {"car_id", object.getString("car_id")},
+                            {"user_id", object.getString("user_id")},
+                            {"max_speed", object.getString("max_speed")},
+                            {"average_speed", object.getString("average_speed")},
+                            {"mileage", object.getString("mileage")},
+                            {"driving_time", object.getString("driving_time")},
+                            {"idling_time", object.getString("idling_time")},
+                            {"driving_score", object.getString("driving_score")},
+                            {"fast_time", object.getString("fast_time")},
+                            {"fast_cnt", object.getString("fast_cnt")},
+                            {"quick_cnt", object.getString("quick_cnt")},
+                            {"brake_cnt", object.getString("brake_cnt")}
+                    };
+                    CommonFunc.sendParamData(params);
+                    WebHttpConnect.onNotSentDrivingInfoRequest();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            MyUtils.not_sent_driving_info.clear();
         }
     }
 

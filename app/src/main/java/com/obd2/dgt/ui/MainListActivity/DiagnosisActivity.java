@@ -176,6 +176,8 @@ public class DiagnosisActivity extends AppBaseActivity {
             String result = "";
             while (isTest) {
                 try {
+                    if (MyUtils.btSocket == null)
+                        continue;
                     prog++;
                     if (prog == 1) {
                         new ObdResetCommand().run(MyUtils.btSocket.getInputStream(), MyUtils.btSocket.getOutputStream());

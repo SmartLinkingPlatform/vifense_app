@@ -83,6 +83,12 @@ public class RealService extends Service {
                                         stopEngineStatus();
                                         time = 0;
                                     }
+                                } else {
+                                    //주행 종료를 하지 않은 상태에서 블루투스가 끊어지는 경우 재연결 하기
+                                    if (MyUtils.isReconnect) {
+                                        MyUtils.obdConnect.setConnectingOBD(MyUtils.connectedDevice);
+                                        MyUtils.obdConnect.setConnectingECU();
+                                    }
                                 }
                             }
                             threadCnt = 0;
@@ -125,6 +131,7 @@ public class RealService extends Service {
     static int down_score_fast = 0;
     static int down_score_quick = 0;
     static int down_score_brake = 0;
+    static int add_score_speed = 0;
 
     //차량의 움직임 상태
     private void getDrivingStatus() {
@@ -136,15 +143,18 @@ public class RealService extends Service {
         int rpm = Integer.parseInt(MyUtils.ecu_engine_rpm);
 
         //속도가 0이상, 엔진부하가 0보다 크면 시동상태
-        if (speed >= 0 && load > 0) { //차량이 엔진이 작동 된 상태
+        if (speed >= 0 && load > 0) {
+            //차량이 엔진이 작동 된 상태
             if (MyUtils.showGauge) {
                 DashboardActivity.getInstance().startDashboardGauge();
             }
 
-            if (speed == 0) { //시동을 켠 상태에서 이동하지 않는 상태
+            if (speed == 0) {
+                //시동을 켠 상태에서 이동하지 않는 상태
                 idling_time++;
                 MyUtils.idling_time = idling_time;
-            } else { //차량이 이동하는 중
+            } else {
+                //차량이 이동하는 중
                 idling_time = 0;
                 if (MyUtils.max_speed < speed) {
                     MyUtils.max_speed = speed;
@@ -154,31 +164,33 @@ public class RealService extends Service {
                 }
             }
 
-            if (speed > 110) { //속도가 110 km을 초과한 경우
+            //속도가 110 km을 초과한 경우
+            if (speed > 110) {
                 speed_fast = true;
                 MyUtils.fast_speed_time++;
                 if (prev_speed < 110) {
                     MyUtils.fast_speed_cnt++;
+                    down_score_fast = down_score_fast - 2;
                 }
-                if (down_score_fast > -4)
-                    down_score_fast -= 2;
             }
-            if (speed - prev_speed > 15) { // 차량 속도가 1초내에 15km 이상 급가속 경우
+            // 차량 속도가 1초내에 15km 이상 급가속 경우
+            if (speed - prev_speed > 15) {
                 speed_quick = true;
                 MyUtils.quick_speed_cnt++;
+                //급가속 30회당 1점 감점
                 if (MyUtils.quick_speed_cnt >= 30) {
                     int cnt = MyUtils.quick_speed_cnt / 30;
-                    if (down_score_quick > -2)
-                        down_score_quick -= cnt;
+                    down_score_quick -= cnt;
                 }
             }
-            if (prev_speed - speed > 15) { // 차량 속도가 1초내에 15km 이상 급제동 경우
+            // 차량 속도가 1초내에 15km 이상 급제동 경우
+            if (prev_speed - speed > 15) {
                 speed_brake = true;
                 MyUtils.brake_speed_cnt++;
+                //급제동 30회당 1점 감점
                 if (MyUtils.brake_speed_cnt >= 30) {
                     int cnt = MyUtils.brake_speed_cnt / 30;
-                    if (down_score_brake > -2)
-                        down_score_brake -= cnt;
+                    down_score_brake -= cnt;
                 }
             }
             time++;
@@ -190,6 +202,11 @@ public class RealService extends Service {
             driving_distance += distance;
             average_speed = driving_distance / (time / (float)3600);
             MyUtils.ecu_mileage = String.valueOf(Math.round(driving_distance * 10) / 10.0);
+
+            //평균속도가 50km 이하 이면 1점 가점한다.
+            if (average_speed < 50) {
+                add_score_speed = 1;
+            }
         }
         prev_speed = speed;
     }
@@ -302,11 +319,12 @@ public class RealService extends Service {
     }
 
     public String[][] setParam(int status) {
-        int driving_score = 100 + down_score_fast + down_score_quick + down_score_brake;
+        int driving_score = 100 + down_score_fast + down_score_quick + down_score_brake + add_score_speed;
         String driving_date = CommonFunc.getDate();
         end_time = CommonFunc.getTime();
         //서버에 등록
         String[][] params = new String[][]{
+                {"admin_id", String.valueOf(MyUtils.admin_id)},
                 {"driving_date", driving_date},
                 {"start_time", start_time},
                 {"start_place", ""},
@@ -363,6 +381,7 @@ public class RealService extends Service {
                 for (JSONObject object : driving_info) {
                     try {
                         String[][] params = new String[][]{
+                                {"admin_id", String.valueOf(MyUtils.admin_id)},
                                 {"driving_date", object.getString("driving_date")},
                                 {"start_time", object.getString("start_time")},
                                 {"start_place", object.getString("start_place")},

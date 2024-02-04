@@ -23,7 +23,7 @@ public class DBConnect extends SQLiteOpenHelper {
     private SQLiteDatabase m_db = null;
     private String TAG = "DBConnect";
     //Database version
-    private static final int db_version = 2;
+    private static final int db_version = 3;
 
 
     public DBConnect(Context context) {
