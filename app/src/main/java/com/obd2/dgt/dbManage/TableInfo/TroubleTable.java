@@ -23,7 +23,7 @@ public class TroubleTable {
                     }
                     else
                         cursor.moveToNext();
-                    String[] info = new String[7];
+                    String[] info = new String[3];
                     info[0] = cursor.getString(0); //id
                     info[1] = cursor.getString(1); //code
                     info[2] = cursor.getString(2); //description

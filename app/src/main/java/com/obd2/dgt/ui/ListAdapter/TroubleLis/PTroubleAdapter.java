@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.obd2.dgt.R;
-import com.obd2.dgt.ui.InfoActivity.MessageActivity;
 import com.obd2.dgt.ui.MainListActivity.DiagnosisActivity;
 
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ public class PTroubleAdapter extends RecyclerView.Adapter<PTroubleAdapter.ViewHo
     private ArrayList<PTroubleItem> itemList;
     private LayoutInflater mInflater;
     Context mContext;
+    PTroubleAdapter.ItemClickListener mClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView item_trouble_code;
@@ -35,10 +35,11 @@ public class PTroubleAdapter extends RecyclerView.Adapter<PTroubleAdapter.ViewHo
         }
     }
 
-    public PTroubleAdapter(Context context, ArrayList<PTroubleItem> itemList) {
+    public PTroubleAdapter(Context context, ArrayList<PTroubleItem> itemList, PTroubleAdapter.ItemClickListener itemClickListener) {
         this.mInflater = LayoutInflater.from(context);
         this.itemList = itemList;
         this.mContext = context;
+        mClickListener = itemClickListener;
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -50,7 +51,7 @@ public class PTroubleAdapter extends RecyclerView.Adapter<PTroubleAdapter.ViewHo
     @NonNull
     @Override
     public PTroubleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_trouble, parent, false);
+        View view = mInflater.inflate(R.layout.item_trouble_past, parent, false);
         return new PTroubleAdapter.ViewHolder(view);
     }
 
@@ -60,6 +61,8 @@ public class PTroubleAdapter extends RecyclerView.Adapter<PTroubleAdapter.ViewHo
         holder.item_trouble_code.setText(itemList.get(position).code_num);
         holder.item_trouble_desc.setText(itemList.get(position).code_desc);
 
+        holder.trouble_delete_btn.setImageResource(R.drawable.close_state);
+        holder.trouble_delete_btn.setVisibility(View.VISIBLE);
         holder.trouble_delete_btn.setOnClickListener(view -> {
             DiagnosisActivity.getInstance().onPastTroubleDeleteClick(itemList.get(position).cid);
         });
@@ -67,7 +70,7 @@ public class PTroubleAdapter extends RecyclerView.Adapter<PTroubleAdapter.ViewHo
             @SuppressLint("ResourceAsColor")
             @Override
             public void onClick(View v) {
-
+                mClickListener.onItemClick(v, position);
             }
         });
     }

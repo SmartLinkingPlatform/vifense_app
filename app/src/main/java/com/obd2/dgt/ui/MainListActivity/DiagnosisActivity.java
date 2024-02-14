@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -26,10 +27,9 @@ import com.github.pires.obd.commands.control.TroubleCodesCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
 import com.github.pires.obd.commands.protocol.ObdResetCommand;
-import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
-import com.github.pires.obd.enums.ObdProtocols;
 import com.obd2.dgt.R;
 import com.obd2.dgt.btManage.Trouble;
+import com.obd2.dgt.btManage.TroubleCodes;
 import com.obd2.dgt.dbManage.TableInfo.TroubleTable;
 import com.obd2.dgt.ui.AppBaseActivity;
 import com.obd2.dgt.ui.ListAdapter.TroubleLis.CTroubleAdapter;
@@ -45,8 +45,6 @@ public class DiagnosisActivity extends AppBaseActivity {
     ImageView diag_prev_btn;
     ImageView diagnosis_btn;
     TextView diagnosis_btn_text;
-    ImageView current_trouble_search_btn;
-    ImageView past_trouble_search_btn;
     RecyclerView current_trouble_recycle_view;
     CTroubleAdapter cTroubleAdapter;
     ArrayList<CTroubleItem> cTroubleItems = new ArrayList<>();
@@ -82,16 +80,6 @@ public class DiagnosisActivity extends AppBaseActivity {
         diagnosis_btn_text = findViewById(R.id.diagnosis_btn_text);
         diagnosis_btn_text.setText(R.string.diagnosing_text);
 
-/*
-        current_trouble_search_btn = findViewById(R.id.current_trouble_search_btn);
-        current_trouble_search_btn.setOnClickListener(view -> onCurrentTroubleSearchClick());
-*/
-
-/*
-        past_trouble_search_btn = findViewById(R.id.past_trouble_search_btn);
-        past_trouble_search_btn.setOnClickListener(view -> onPastTroubleSearchClick());
-*/
-
         current_trouble_recycle_view = findViewById(R.id.current_trouble_recycle_view);
         LinearLayoutManager verticalLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -106,10 +94,13 @@ public class DiagnosisActivity extends AppBaseActivity {
         PTroubleItem item;
         for (int i = 0; i < MyUtils.troubleCodes.size(); i++) {
             String[] past_code = MyUtils.troubleCodes.get(i);
-            item = new PTroubleItem(Integer.getInteger(past_code[0]), past_code[1], past_code[2]);
+            int cid = Integer.parseInt(past_code[0]);
+            String str_code = past_code[1];
+            String str_description = past_code[2];
+            item = new PTroubleItem(cid, str_code, str_description);
             pTroubleItems.add(item);
         }
-        pTroubleAdapter = new PTroubleAdapter(getContext(), pTroubleItems);
+        pTroubleAdapter = new PTroubleAdapter(getContext(), pTroubleItems, pTroubleCodeListListener);
         past_trouble_recycle_view.setAdapter(pTroubleAdapter);
 
 
@@ -122,10 +113,10 @@ public class DiagnosisActivity extends AppBaseActivity {
         String[] codes = findCodes.split(",");
         CTroubleItem item;
         for (int i = 0; i < codes.length; i++) {
-            item = new CTroubleItem(TroubleTable.max_cid, codes[i], "");
-            cTroubleItems.add(item);
             String tDesc = "";
             tDesc = Trouble.TCodes.get(codes[i]);
+            item = new CTroubleItem(TroubleTable.max_cid, codes[i], tDesc);
+            cTroubleItems.add(item);
 
             String[][] fields = new String[][]{
                     {"code", codes[i]},
@@ -133,16 +124,27 @@ public class DiagnosisActivity extends AppBaseActivity {
             };
             TroubleTable.insertTroubleTable(fields);
         }
-        cTroubleAdapter = new CTroubleAdapter(getContext(), cTroubleItems, troubleCodeListListener);
+        cTroubleAdapter = new CTroubleAdapter(getContext(), cTroubleItems, cTroubleCodeListListener);
         current_trouble_recycle_view.setAdapter(cTroubleAdapter);
     }
 
-    private CTroubleAdapter.ItemClickListener troubleCodeListListener = new CTroubleAdapter.ItemClickListener() {
+    private CTroubleAdapter.ItemClickListener cTroubleCodeListListener = new CTroubleAdapter.ItemClickListener() {
         @SuppressLint({"ResourceAsColor", "NotifyDataSetChanged"})
         @Override
         public void onItemClick(View v, int position) {
             String url = "https://m.search.naver.com/search.naver?query=";
             url += cTroubleItems.get(position).code_num;
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        }
+    };
+    private PTroubleAdapter.ItemClickListener pTroubleCodeListListener = new PTroubleAdapter.ItemClickListener() {
+        @SuppressLint({"ResourceAsColor", "NotifyDataSetChanged"})
+        @Override
+        public void onItemClick(View v, int position) {
+            String url = "https://m.search.naver.com/search.naver?query=";
+            url += pTroubleItems.get(position).code_num;
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
@@ -168,6 +170,28 @@ public class DiagnosisActivity extends AppBaseActivity {
         finish();
     }
 
+    private void sendCommand(String command) {
+        try {
+            MyUtils.btSocket.getOutputStream().write((command).getBytes());
+            MyUtils.btSocket.getOutputStream().flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String readResponse() {
+        try {
+            byte[] buffer = new byte[4096];
+            int bytesRead = MyUtils.btSocket.getInputStream().read(buffer);
+            final String rawResponse = new String(buffer, 0, bytesRead);
+            Log.d("Trouble code", rawResponse);
+            return rawResponse;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
     boolean isTest = true;
     int prog = 0;
     class GetTroubleCodesTask extends AsyncTask<String, Integer, Boolean> {
@@ -177,7 +201,9 @@ public class DiagnosisActivity extends AppBaseActivity {
             while (isTest) {
                 try {
                     if (MyUtils.btSocket == null)
-                        continue;
+                        break;
+
+                    String command = "03\r\n";
                     prog++;
                     if (prog == 1) {
                         new ObdResetCommand().run(MyUtils.btSocket.getInputStream(), MyUtils.btSocket.getOutputStream());
@@ -186,21 +212,24 @@ public class DiagnosisActivity extends AppBaseActivity {
                     } else if (prog == 3) {
                         new LineFeedOffCommand().run(MyUtils.btSocket.getInputStream(), MyUtils.btSocket.getOutputStream());
                     } else if (prog == 4) {
-                        SystemClock.sleep(1000);
-                        //new SelectProtocolCommand(ObdProtocols.AUTO).run(MyUtils.btSocket.getInputStream(), MyUtils.btSocket.getOutputStream());
+                        sendCommand(command);
+                        result = readResponse();
                     } else if (prog == 5) {
-                        ModifiedTroubleCodesObdCommand tcoc = new ModifiedTroubleCodesObdCommand();
-                        tcoc.run(MyUtils.btSocket.getInputStream(), MyUtils.btSocket.getOutputStream());
-                        result = tcoc.getFormattedResult();
+                        TroubleCodes tcodes = new TroubleCodes();
+                        sendCommand(command);
+                        result = tcodes.getFormattedResult(readResponse());
                         isTest = false;
                     }
-                    progressBar.setProgress(prog);
+                    runOnUiThread(() -> {
+                        progressBar.setProgress(prog);
+                    });
                     SystemClock.sleep(1000);
                 } catch (Exception e) {
                     isTest = false;
                     e.printStackTrace();
                 }
             }
+
             MyUtils.isDiagnosis = false;
 
             if (!result.isEmpty()) {
@@ -208,19 +237,22 @@ public class DiagnosisActivity extends AppBaseActivity {
                 String[] res_codes = result.split("\n");
                 ArrayList<String> arrayList = new ArrayList<>();
                 int i = 0;
-                for(String item : res_codes){
-                    if(!arrayList.contains(item) && !item.isEmpty()) {
+                for (String item : res_codes) {
+                    if (!arrayList.contains(item) && !item.isEmpty()) {
                         arrayList.add(item);
                         if (i == 0)
                             codes = item;
                         else
-                            codes += ", " + item;
+                            codes += "," + item;
                         i++;
                     }
                 }
                 dlg_text = codes;
-                if (!codes.isEmpty())
-                    setCurrentTroubleCodeList(codes);
+                if (!codes.isEmpty()) {
+                    runOnUiThread(() -> {
+                        setCurrentTroubleCodeList(dlg_text);
+                    });
+                }
             } else {
                 dlg_text = getString(R.string.non_trouble_codes);
             }

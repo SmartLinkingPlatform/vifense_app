@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.obd2.dgt.R;
-import com.obd2.dgt.ui.ListAdapter.LinkDevice.DeviceAdapter;
 
 import java.util.ArrayList;
 
@@ -25,13 +24,11 @@ public class CTroubleAdapter extends RecyclerView.Adapter<CTroubleAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView item_trouble_code;
         public TextView item_trouble_desc;
-        public ImageView trouble_delete_btn;
 
         public ViewHolder(View v) {
             super(v);
-            item_trouble_code = v.findViewById(R.id.item_trouble_code);
-            item_trouble_desc = v.findViewById(R.id.item_trouble_desc);
-            trouble_delete_btn = v.findViewById(R.id.trouble_delete_btn);
+            item_trouble_code = v.findViewById(R.id.item_ctrouble_code);
+            item_trouble_desc = v.findViewById(R.id.item_ctrouble_desc);
         }
     }
 
@@ -51,7 +48,7 @@ public class CTroubleAdapter extends RecyclerView.Adapter<CTroubleAdapter.ViewHo
     @NonNull
     @Override
     public CTroubleAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.item_trouble, parent, false);
+        View view = mInflater.inflate(R.layout.item_trouble_current, parent, false);
         return new CTroubleAdapter.ViewHolder(view);
     }
 
