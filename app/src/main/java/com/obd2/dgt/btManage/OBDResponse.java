@@ -11,7 +11,6 @@ import com.obd2.dgt.btManage.PIDsFormulas.VEHICLE_SPEED;
 import com.obd2.dgt.utils.MyUtils;
 
 public class OBDResponse {
-    private final static String MOD_ONE_PREFIX = "41";
     private static String firstHex = null;
     private static String secondHex = null;
     private static String thirdHex = null;
@@ -82,7 +81,7 @@ public class OBDResponse {
                 .replaceAll("\r", "")
                 .replaceAll("\n", "")
                 .replaceAll(">", "");
-        if (response.startsWith(MOD_ONE_PREFIX)) {
+        if (response.startsWith(MyUtils.MOD_ONE_PREFIX)) {
             result = clearResponse.substring(2);
         } else result = clearResponse;
         return result;

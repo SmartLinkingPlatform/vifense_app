@@ -18,8 +18,6 @@ public class OBDConnect {
     private OutputStream outputStream = null; // 블루투스에 데이터를 출력하기 위한 출력 스트림
     private InputStream inputStream = null; // 블루투스에 데이터를 입력하기 위한 입력 스트림
     private Thread commandThread = null; // 문자열 수신에 사용되는 쓰레드
-    private final String MOD_PREFIX = "41";
-    private final String MOD_PREFIX2 = "7E8";
     boolean running = false;
 
     BluetoothDevice obdDevice;
@@ -114,8 +112,8 @@ public class OBDConnect {
         res = res.replaceAll("\\s", "");
         res = res.replaceAll(">", "");
         res = res.replaceAll("SEARCHING...", "");
-        if (res.contains(MOD_PREFIX)) {
-            int index = res.indexOf(MOD_PREFIX);
+        if (res.contains(MyUtils.MOD_ONE_PREFIX)) {
+            int index = res.indexOf(MyUtils.MOD_ONE_PREFIX);
             res = res.substring(index, res.length());
             result = CommonFunc.getResponseValue(res);
         }

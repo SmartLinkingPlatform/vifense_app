@@ -227,6 +227,9 @@ public class MyUtils {
             R.string.fuel_type_17, R.string.fuel_type_18, R.string.fuel_type_19, R.string.fuel_type_20
     };
 
+    public static String MOD_HEADER = "7E8";
+    public static String MOD_ONE_PREFIX = "41";
+    public static String MOD_THREE_PREFIX = "43";
     public static String SEL_PROTOCOL = "AT SP0";
     public static int DB_VERSION = 0;
     public static String[][] PROTOCOL_CUSTOM = {

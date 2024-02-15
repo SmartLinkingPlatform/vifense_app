@@ -1,6 +1,7 @@
 package com.obd2.dgt.btManage;
 
 import com.obd2.dgt.utils.CommonFunc;
+import com.obd2.dgt.utils.MyUtils;
 
 public class TroubleCodes {
     char[] dtcLetters = {'P', 'C', 'B', 'U'};
@@ -13,7 +14,7 @@ public class TroubleCodes {
         int startIndex = 0;//Header size.
 
         StringBuilder canOneFrame = new StringBuilder();
-        result = result.replaceAll("7E8", "");
+        result = result.replaceAll(MyUtils.MOD_HEADER, "");
         String[] values = result.split("[\r\r]");
         for (String val : values) {
             val = val.replaceAll(" ", "");
@@ -26,8 +27,8 @@ public class TroubleCodes {
             }
         }
 
-        if (canOneFrame.toString().contains("43")) {
-            int index = canOneFrame.indexOf("43") + 2;
+        if (canOneFrame.toString().contains(MyUtils.MOD_THREE_PREFIX)) {
+            int index = canOneFrame.indexOf(MyUtils.MOD_THREE_PREFIX) + 2;
             String res = canOneFrame.substring(index);
             String c_cnt = res.substring(0, 2);
             index = canOneFrame.indexOf(c_cnt) + 2;
@@ -60,8 +61,7 @@ public class TroubleCodes {
         String workingData;
         int startIndex = 0;//Header size.
 
-        String canOneFrame = result.replaceAll("[\r\n]", "");
-        canOneFrame = result.replaceAll("7E8", "");
+        String canOneFrame = result.replaceAll("[\r\n]", "");s
         int canOneFrameLength = canOneFrame.length();
         if (canOneFrameLength <= 16 && canOneFrameLength % 4 == 0) {//CAN(ISO-15765) protocol one frame.
             workingData = canOneFrame;//43yy{codes}
